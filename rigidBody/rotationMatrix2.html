@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>回転行列</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+今回は、回転行列\(R\)が具体的にどんな形をしているのかを考えてみる。<br>
+
+\begin{align}
+	\bm{v}' = R_z(\theta) \bm{v}
+\end{align}
+\(R_z(\theta)\)を、\(z\)軸周り右ねじの方向に\(\theta\)回転させる回転行列とする。
+このとき、各軸方向の基底ベクトル\(\e{x},\e{y},\e{z}\)がどのように回転するのか
+を見てみよう。
+\begin{align}
+	R_z(\theta) \e{x}
+	&=
+	\cos\theta \e{x}
+	+ \sin\theta \e{y} \\
+%
+	R_z(\theta) \e{y}
+	&=
+	-\sin\theta \e{x}
+	+ \cos\theta \e{y} \\
+%
+	R_z(\theta) \e{z}
+	&=
+	\e{z}
+\end{align}
+\(\e{z}\)は当然変化しない。さて、基底ベクトルがどのように変換されるのかが分かれば、
+線形代数を学んだ人にとってはもう簡単な話だろう？
+\begin{align}
+	R_z(\theta)
+	&=
+	\left[
+	\begin{array}{ccc}
+		R_{z,xx} & R_{z,xy} & R_{z,xz} \\
+		R_{z,yx} & R_{z,yy} & R_{z,yz} \\
+		R_{z,zx} & R_{z,zy} & R_{z,zz}
+	\end{array}
+	\right]
+\end{align}
+というふうにおくと、
+\begin{align}
+	R_z(\theta)\e{x}
+	&=
+	\cos\theta\e{x} +\sin\theta\e{y} \\
+%
+	\left[
+	\begin{array}{c}
+		R_{z,xx} \\ R_{z,yx} \\ R_{z,zx}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		\cos\theta \\ \sin\theta \\ 0
+	\end{array}
+	\right] \\[3mm]
+%
+%
+	R_z(\theta)\e{y}
+	&=
+	-\sin\theta\e{x} +\cos\theta\e{y} \\
+%
+	\left[
+	\begin{array}{c}
+		R_{z,xy} \\ R_{z,yy} \\ R_{z,zy}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		-\sin\theta \\ \cos\theta \\ 0
+	\end{array}
+	\right] \\[3mm]
+%
+%
+	R_z(\theta)\e{z}
+	&=
+	\e{z} \\
+%
+	\left[
+	\begin{array}{c}
+		R_{z,xz} \\ R_{z,yz} \\ R_{z,zz}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		0 \\ 0 \\ 1
+	\end{array}
+	\right] \\[3mm]
+%
+%
+	R_z(\theta)
+	&=
+	\left[
+	\begin{array}{ccc}
+		\cos\theta & -\sin\theta & 0 \\
+		\sin\theta & \cos\theta & 0 \\
+		0 & 0 & 1
+	\end{array}
+	\right]
+\end{align}
+となる。\(x,y\)軸周りの回転についても同様だ。こんな調子で基底ベクトルの
+任意の回転変換を9つの数値で規定する行列を回転行列という。
+\begin{align}
+	R
+	&=
+	\left[
+	\begin{array}{ccc}
+		R_{xx} & R_{xy} & R_{xz} \\
+		R_{yx} & R_{yy} & R_{yz} \\
+		R_{zx} & R_{zy} & R_{zz}
+	\end{array}
+	\right]
+\end{align}
+しかし、回転行列では2つ問題がある。第1に9つも数値を使わないと回転を表現できないことである。
+これでは情報量が多く、メモリ資源が限られている環境では望ましくないことがある。第2に、
+ただ9つの数値をもつ行列が必ずしも回転行列とは限らないと言うことである。つまり、計算誤差
+等で回転行列の条件\(RR\T =E\)から外れた行列で処理していった場合、回転体が変形していって
+しまう。これはかなり致命的な問題である。従って、これらの問題を解決する、回転行列をパラ
+メータの組を用いて表現する幾つかの手法を紹介していく。
+</body>
+</html>

@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>モデルの慣性モーメントテンソルを計算する方法</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+さあ、いよいよ慣性モーメントテンソル\(I\) を計算していく。基本的な流れは前回までと
+全く同じだ。要はGaussの定理を利用して計算するだけだ。（白目）
+\begin{align}
+	I
+	&= \sum_{\xi ,\eta=x,y,z} I_{\xi\eta} \e{\xi}\e{\eta} \\
+	I_{\xi\eta}
+	&= \int_V \rho (r^2\delta_{\xi\eta} -\xi\eta) \,\d V
+\end{align}
+もう少し各成分でどういう計算しているのか分かり易く書くと、
+\begin{align}
+	\left[ \begin{array}{ccc}
+		I_{xx} & I_{xy} & I_{xz} \\
+		I_{yx} & I_{yy} & I_{yz} \\
+		I_{zx} & I_{zy} & I_{zz}
+	\end{array} \right]
+	=
+	\rho
+	\left[ \begin{array}{ccc}
+		\int_V (y^2 +z^2) \,\d V
+		&
+		-\int_V xy \,\d V
+		&
+		-\int_V xz \,\d V \\
+	%
+		-\int_V yx \,\d V
+		&
+		\int_V (x^2 +z^2) \,\d V
+		&
+		-\int_V yz \,\d V \\
+	%
+		-\int_V zx \,\d V
+		&
+		-\int_V zy \,\d V
+		&
+		\int_V (x^2 +y^2) \,\d V
+	\end{array} \right]
+\end{align}
+となる。つまり\(\xi,\eta\) の全ての組について、\(\int_V \xi\eta\,\d V\) を計算
+できればいいことが分かる。
+\begin{align}
+	\int_V x^2 \, \d V
+	&=
+	\int_V \div\left(\frac{1}{3}x^3 \e{x}\right)\,\d V \\
+	&=
+	\frac{1}{3}
+	\int_{\partial V} x^3 \e{x} \cdot \d \bm{S} \\
+	&=
+	\frac{1}{3}
+	\sum_i
+	\int_{\partial V_i} x^3 \e{x} \cdot \d \bm{S}_i \\
+	&=
+	\frac{1}{3}
+	\sum_i
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	x^3 \cdot
+	(
+		(y_{i1} -y_{i0})
+		(z_{i2} -z_{i0})
+		-
+		(z_{i1} -z_{i0})
+		(y_{i2} -y_{i0})
+	) \\
+	&=
+	\frac{1}{3}
+	\sum_i
+	(
+		(y_{i1} -y_{i0})
+		(z_{i2} -z_{i0})
+		-
+		(z_{i1} -z_{i0})
+		(y_{i2} -y_{i0})
+	)
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	x^3 \\
+%
+%
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	x^3
+	&=
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	(
+		x_{i0}
+		+ (x_{i1} -x_{i0}) u_i
+		+ (x_{i2} -x_{i0}) v_i
+	)^3 \\
+	&=
+	\int_0^1 \d u_i
+	\left[
+		\frac{1}{4(x_{i2} -x_{i0})}
+		(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+			+ (x_{i2} -x_{i0}) v_i
+		)^4
+	\right]_{v_i=0}^{v_i=1-u_i} \\
+	&=
+	\frac{1}{4(x_{i2} -x_{i0})}
+	\int_0^1 \d u_i
+	\left(
+		(
+			x_{i2}
+			+ (x_{i1} -x_{i2}) u_i
+		)^4
+		-
+		(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+		)^4
+	\right) \\
+	&=
+	\frac{1}{4(x_{i2} -x_{i0})}
+	\left[
+		\frac{1}{5(x_{i1} -x_{i2})}
+		(
+			x_{i2}
+			+ (x_{i1} -x_{i2}) u_i
+		)^5
+		-
+		\frac{1}{5(x_{i1} -x_{i0})}
+		(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+		)^5
+	\right]_0^1 \\
+	&=
+	\frac{1}{20(x_{i2} -x_{i0})}
+	\left(
+		\frac{1}{x_{i1} -x_{i2}}
+		\left(
+			x_{i1}^5
+			- x_{i2}^5
+		\right)
+		-
+		\frac{1}{x_{i1} -x_{i0}}
+		\left(
+			x_{i1}^5
+			- x_{i0} ^5
+		\right)
+	\right) \\
+	&=
+	\frac{1}{20(x_{i2} -x_{i0})}
+	\left(
+		\begin{array}{l}
+			x_{i1}^4
+			+ x_{i1}^3 x_{i2}
+			+ x_{i1}^2 x_{i2}^2
+			+ x_{i1} x_{i2}^3
+			+ x_{i2}^4 \\
+			\quad
+			- x_{i1}^4
+			- x_{i1}^3 x_{i0}
+			- x_{i1}^2 x_{i0}^2
+			- x_{i1} x_{i0}^3
+			- x_{i0}^4
+		\end{array}
+	\right) \\
+	&=
+	\frac{1}{20}
+	\left(
+		x_{i1}^3
+		+ x_{i1}^2 (x_{i2} +x_{i0})
+		+ x_{i1} (x_{i2}^2 +x_{i2}x_{i0} +x_{i0}^2)
+		+ x_{i2}^3 +x_{i2}^2 x_{i0} +x_{i2}x_{i0}^2 +x_{i0}^3
+	\right)
+%
+%
+%
+\end{align}
+\begin{align}
+%
+%
+%
+	\int_V xy \,\d V
+	&=
+	\int_V \div\left( xyz \e{z} \right) \,\d V \\
+	&=
+	\int_{\partial V} xyz \e{z} \cdot \d \bm{S} \\
+	&=
+	\sum_i
+	\int_{\partial V_i} xyz \e{z} \cdot \d \bm{S}_i \\
+	&=
+	\sum_i
+	(
+		(x_{i1} -x_{i0})
+		(y_{i2} -y_{i0})
+		-
+		(y_{i1} -y_{i0})
+		(x_{i2} -x_{i0})
+	)
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i xyz \\
+%
+	\int_V yz \,\d V
+	&=
+	\sum_i
+	(
+		(y_{i1} -y_{i0})
+		(z_{i2} -z_{i0})
+		-
+		(z_{i1} -z_{i0})
+		(y_{i2} -y_{i0})
+	)
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i yzx \\
+%
+	\int_V zx \,\d V
+	&=
+	\sum_i
+	(
+		(z_{i1} -z_{i0})
+		(x_{i2} -x_{i0})
+		-
+		(x_{i1} -x_{i0})
+		(z_{i2} -z_{i0})
+	)
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i zxy \\
+%
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i xyz
+	&=
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	\left(
+	\begin{array}{l}
+		(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+			+ (x_{i2} -x_{i0}) v_i
+		) \\
+		\quad\cdot
+		(
+			y_{i0}
+			+ (y_{i1} -y_{i0}) u_i
+			+ (y_{i2} -y_{i0}) v_i
+		) \\
+		\qquad\cdot
+		(
+			z_{i0}
+			+ (z_{i1} -z_{i0}) u_i
+			+ (z_{i2} -z_{i0}) v_i
+		)
+	\end{array}
+	\right) \\[3mm]
+	&=
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	\left(
+	\begin{array}{l}
+	%
+	%v_i 0次
+		(x_{i0} +(x_{i1} -x_{i0})u_i)
+		(y_{i0} +(y_{i1} -y_{i0})u_i)
+		(z_{i0} +(z_{i1} -z_{i0})u_i) \\
+	%
+	%v_i 1次
+		+
+		\left(
+		\begin{array}{l}
+			(x_{i2} -x_{i0})
+			(y_{i0} +(y_{i1} -y_{i0})u_i)
+			(z_{i0} +(z_{i1} -z_{i0})u_i) \\
+			+
+			(x_{i0} +(x_{i1} -x_{i0})u_i)
+			(y_{i2} -y_{i0})
+			(z_{i0} +(z_{i1} -z_{i0})u_i) \\
+			+
+			(x_{i0} +(x_{i1} -x_{i0})u_i)
+			(y_{i0} +(y_{i1} -y_{i0})u_i)
+			(z_{i2} -z_{i0})
+		\end{array}
+		\right) v_i \\
+	%
+	%v_i 2次
+		+
+		\left(
+		\begin{array}{l}
+			(x_{i0} +(x_{i1} -x_{i0})u_i)
+			(y_{i2} -y_{i0})
+			(z_{i2} -z_{i0}) \\
+			+
+			(x_{i2} -x_{i0})
+			(y_{i0} +(y_{i1} -y_{i0})u_i)
+			(z_{i2} -z_{i0}) \\
+			+
+			(x_{i2} -x_{i0})
+			(y_{i2} -y_{i0})
+			(z_{i0} +(z_{i1} -z_{i0})u_i)
+		\end{array}
+		\right) v_i^2 \\
+	%
+	%v_i 3次
+		+
+		(x_{i2} -x_{i0})
+		(y_{i2} -y_{i0})
+		(z_{i2} -z_{i0}) v_i^3
+	\end{array}
+	\right) \\[3mm]
+	&=
+	\int_0^1 \d u_i
+	\left[
+	\begin{array}{l}
+	%
+	%v_i 0次
+		(x_{i0} +(x_{i1} -x_{i0})u_i)
+		(y_{i0} +(y_{i1} -y_{i0})u_i)
+		(z_{i0} +(z_{i1} -z_{i0})u_i)
+		\cdot v_i \\
+	%
+	%v_i 1次
+		+
+		\left(
+		\begin{array}{l}
+			(x_{i2} -x_{i0})
+			(y_{i0} +(y_{i1} -y_{i0})u_i)
+			(z_{i0} +(z_{i1} -z_{i0})u_i) \\
+			+
+			(x_{i0} +(x_{i1} -x_{i0})u_i)
+			(y_{i2} -y_{i0})
+			(z_{i0} +(z_{i1} -z_{i0})u_i) \\
+			+
+			(x_{i0} +(x_{i1} -x_{i0})u_i)
+			(y_{i0} +(y_{i1} -y_{i0})u_i)
+			(z_{i2} -z_{i0})
+		\end{array}
+		\right) \cdot\frac{1}{2}v_i^2 \\
+	%
+	%v_i 2次
+		+
+		\left(
+		\begin{array}{l}
+			(x_{i0} +(x_{i1} -x_{i0})u_i)
+			(y_{i2} -y_{i0})
+			(z_{i2} -z_{i0}) \\
+			+
+			(x_{i2} -x_{i0})
+			(y_{i0} +(y_{i1} -y_{i0})u_i)
+			(z_{i2} -z_{i0}) \\
+			+
+			(x_{i2} -x_{i0})
+			(y_{i2} -y_{i0})
+			(z_{i0} +(z_{i1} -z_{i0})u_i)
+		\end{array}
+		\right) \cdot\frac{1}{3}v_i^3 \\
+	%
+	%v_i 3次
+		+
+		(x_{i2} -x_{i0})
+		(y_{i2} -y_{i0})
+		(z_{i2} -z_{i0}) \cdot\frac{1}{4}v_i^4
+	\end{array}
+	\right]_{v_i=0}^{v_i=1-u_i} \\[3mm]
+	&=
+	\int_0^1 \d u_i
+	\left(
+	\begin{array}{l}
+	%
+	%v_i 0次
+		\left(
+		\begin{array}{l}
+			x_{i0} y_{i0} z_{i0} \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i1} -x_{i0}) y_{i0}z_{i0} \\
+				+ x_{i0}(y_{i1} -y_{i0})z_{i0} \\
+				+ x_{i0}y_{i0}(z_{i1} -z_{i0})
+			\end{array}
+			\right) u_i \\
+			+
+			\left(
+			\begin{array}{l}
+				x_{i0}(y_{i1} -y_{i0})(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})y_{i0}(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})(y_{i1} -y_{i0})z_{i0}
+			\end{array}
+			\right) u_i^2 \\
+			+
+			(x_{i1} -x_{i0})
+			(y_{i1} -y_{i0})
+			(z_{i1} -z_{i0}) u_i^3
+		\end{array}
+		\right) \cdot(1-u_i) \\
+	%
+	%v_i 1次
+		+
+		\left(
+		\begin{array}{l}
+			\left(
+				(x_{i2} -x_{i0}) y_{i0}z_{i0}
+				+ x_{i0}(y_{i2} -y_{i0})z_{i0}
+				+ x_{i0}y_{i0}(z_{i2} -z_{i0})
+			\right) \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i2} -x_{i0})y_{i0}(z_{i1} -z_{i0})
+				+ (x_{i2} -x_{i0})(y_{i1} -y_{i0})z_{i0} \\
+				+ x_{i0}(y_{i2} -y_{i0})(z_{i1} -z_{i0})
+				+ (x_{i1} -x_{i0})(y_{i2} -y_{i0})z_{i0} \\
+				+ x_{i0}(y_{i1} -y_{i0})(z_{i2} -z_{i0})
+				+ (x_{i1} -x_{i0})y_{i0}(z_{i2} -z_{i0})
+			\end{array}
+			\right) u_i \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i2} -x_{i0})(y_{i1} -y_{i0})(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})(y_{i2} -y_{i0})(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})(y_{i1} -y_{i0})(z_{i2} -z_{i0})
+			\end{array}
+			\right) u_i^2
+		\end{array}
+		\right) \cdot\frac{1}{2}(1-u_i)^2 \\
+	%
+	%v_i 2次
+		+
+		\left(
+		\begin{array}{l}
+			\left(
+			\begin{array}{l}
+				x_{i0} (y_{i2} -y_{i0})(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})y_{i0}(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})(y_{i2} -y_{i0})z_{i0}
+			\end{array}
+			\right) \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i1} -x_{i0})(y_{i2} -y_{i0})(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})(y_{i1} -y_{i0})(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})(y_{i2} -y_{i0})(z_{i1} -z_{i0})
+			\end{array}
+			\right) u_i
+		\end{array}
+		\right) \cdot\frac{1}{3}(1-u_i)^3 \\
+	%
+	%v_i 3次
+		+
+		(x_{i2} -x_{i0})
+		(y_{i2} -y_{i0})
+		(z_{i2} -z_{i0}) \cdot\frac{1}{4}(1-u_i)^4
+	\end{array}
+	\right)
+\end{align}
+ここで、
+\begin{align}
+	\int_0^1 \d u_i (1-u_i)
+	&=
+	\left[
+		u_i -\frac{1}{2} u_i^2
+	\right]_0^1 \\
+	&=
+	\frac{1}{2} \\
+%
+	\int_0^1 \d u_i u_i (1-u_i)
+	&=
+	\left[
+		\frac{1}{2} u_i^2
+		- \frac{1}{3} u_i^3
+	\right]_0^1 \\
+	&=
+	\frac{1}{6} \\
+%
+	\int_0^1 \d u_i u_i^2 (1-u_i)
+	&=
+	\left[
+		\frac{1}{3} u_i^3 -\frac{1}{4} u_i^4
+	\right]_0^1 \\
+	&=
+	\frac{1}{12} \\
+%
+	\int_0^1 \d u_i u_i^3 (1-u_i)
+	&=
+	\left[
+		\frac{1}{4} u_i^4 -\frac{1}{5} u_i^5
+	\right]_0^1 \\
+	&=
+	\frac{1}{20} \\
+%
+	\int_0^1 \d u_i (1-u_i)^2
+	&=
+	\left[
+		-\frac{1}{3} (1-u_i)^3
+	\right]_0^1 \\
+	&=
+	\frac{1}{3} \\
+%
+	\int_0^1 \d u_i u_i (1-u_i)^2
+	&=
+	\left[
+		\frac{1}{2} u_i^2 -\frac{2}{3}u_i^3 +\frac{1}{4} u_i^4
+	\right]_0^1 \\
+	&=
+	\frac{1}{12} \\
+%
+	\int_0^1 \d u_i u_i^2 (1-u_i)^2
+	&=
+	\left[
+		\frac{1}{3} u_i^3 -\frac{2}{4} u_i^4 +\frac{1}{5} u_i^5
+	\right]_0^1 \\
+	&=
+	\frac{1}{30} \\
+%
+	\int_0^1 \d u_i (1-u_i)^3
+	&=
+	\left[
+		-\frac{1}{4} (1-u_i)^4
+	\right]_0^1 \\
+	&=
+	\frac{1}{4} \\
+%
+	\int_0^1 \d u_i u_i (1-u_i)^3
+	&=
+	\int_1^0 (-\d w) (1-w)w^3
+	\qquad (w = 1-u_i) \\
+	&=
+	\left[
+		\frac{1}{4} w^4 -\frac{1}{5} w^5
+	\right]_0^1 \\
+	&=
+	\frac{1}{20} \\
+%
+	\int_0^1 \d u_i (1-u_i)^4
+	&=
+	\left[
+		-\frac{1}{5} (1-u_i)^5
+	\right]_0^1 \\
+	&=
+	\frac{1}{5}
+\end{align}
+であるから、この定積分を代入して、
+\begin{align}
+	&=
+	\left\{
+	\begin{array}{l}
+	%
+	%v_i 0次
+		\left(
+		\begin{array}{l}
+			x_{i0} y_{i0} z_{i0} \cdot \frac{1}{2} \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i1} -x_{i0}) y_{i0}z_{i0} \\
+				+ x_{i0}(y_{i1} -y_{i0})z_{i0} \\
+				+ x_{i0}y_{i0}(z_{i1} -z_{i0})
+			\end{array}
+			\right) \cdot \frac{1}{6} \\
+			+
+			\left(
+			\begin{array}{l}
+				x_{i0}(y_{i1} -y_{i0})(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})y_{i0}(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})(y_{i1} -y_{i0})z_{i0}
+			\end{array}
+			\right) \cdot \frac{1}{12} \\
+			+
+			(x_{i1} -x_{i0})
+			(y_{i1} -y_{i0})
+			(z_{i1} -z_{i0}) \cdot \frac{1}{20}
+		\end{array}
+		\right) \\
+	%
+	%v_i 1次
+		+
+		\left(
+		\begin{array}{l}
+			\left(
+				(x_{i2} -x_{i0}) y_{i0}z_{i0}
+				+ x_{i0}(y_{i2} -y_{i0})z_{i0}
+				+ x_{i0}y_{i0}(z_{i2} -z_{i0})
+			\right) \cdot \frac{1}{3} \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i2} -x_{i0})y_{i0}(z_{i1} -z_{i0})
+				+ (x_{i2} -x_{i0})(y_{i1} -y_{i0})z_{i0} \\
+				+ x_{i0}(y_{i2} -y_{i0})(z_{i1} -z_{i0})
+				+ (x_{i1} -x_{i0})(y_{i2} -y_{i0})z_{i0} \\
+				+ x_{i0}(y_{i1} -y_{i0})(z_{i2} -z_{i0})
+				+ (x_{i1} -x_{i0})y_{i0}(z_{i2} -z_{i0})
+			\end{array}
+			\right) \cdot \frac{1}{12} \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i2} -x_{i0})(y_{i1} -y_{i0})(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})(y_{i2} -y_{i0})(z_{i1} -z_{i0}) \\
+				+ (x_{i1} -x_{i0})(y_{i1} -y_{i0})(z_{i2} -z_{i0})
+			\end{array}
+			\right) \cdot \frac{1}{30}
+		\end{array}
+		\right) \cdot\frac{1}{2} \\
+	%
+	%v_i 2次
+		+
+		\left(
+		\begin{array}{l}
+			\left(
+			\begin{array}{l}
+				x_{i0} (y_{i2} -y_{i0})(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})y_{i0}(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})(y_{i2} -y_{i0})z_{i0}
+			\end{array}
+			\right) \cdot \frac{1}{4} \\
+			+
+			\left(
+			\begin{array}{l}
+				(x_{i1} -x_{i0})(y_{i2} -y_{i0})(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})(y_{i1} -y_{i0})(z_{i2} -z_{i0}) \\
+				+ (x_{i2} -x_{i0})(y_{i2} -y_{i0})(z_{i1} -z_{i0})
+			\end{array}
+			\right) \cdot \frac{1}{20}
+		\end{array}
+		\right) \cdot\frac{1}{3} \\
+	%
+	%v_i 3次
+		+
+		(x_{i2} -x_{i0})
+		(y_{i2} -y_{i0})
+		(z_{i2} -z_{i0}) \cdot\frac{1}{4}\cdot\frac{1}{5}
+	\end{array}
+	\right\} \\[3mm]
+%
+%
+%
+	&=
+	\left\{
+	\begin{array}{l}
+	%
+	%v_i 0次
+		\left(
+		\begin{array}{l}
+			\frac{1}{5}
+			x_{i0} y_{i0} z_{i0}
+			+
+			\frac{1}{20}
+			x_{i0} y_{i0} z_{i1}
+			+
+			\frac{1}{20}
+			x_{i0} y_{i1} z_{i0}
+			+
+			\frac{1}{30}
+			x_{i0} y_{i1} z_{i1} \\
+			+
+			\frac{1}{20}
+			x_{i1} y_{i0} z_{i0}
+			+
+			\frac{1}{30}
+			x_{i1} y_{i0} z_{i1}
+			+
+			\frac{1}{30}
+			x_{i1} y_{i1} z_{i0}
+			+
+			\frac{1}{20}
+			x_{i1} y_{i1} z_{i1}
+		\end{array}
+		\right) \\
+	%
+	%v_i 1次
+		+
+		\left(
+		\begin{array}{l}
+			-
+			\frac{3}{5}
+			x_{i0} y_{i0} z_{i0}
+			-
+			\frac{1}{10}
+			x_{i0} y_{i0} z_{i1}
+			+
+			\frac{1}{5}
+			x_{i0} y_{i0} z_{i2}
+			-
+			\frac{1}{10}
+			x_{i0} y_{i1} z_{i0} \\
+			-
+			\frac{1}{30}
+			x_{i0} y_{i1} z_{i1}
+			+
+			\frac{1}{20}
+			x_{i0} y_{i1} z_{i2}
+			+
+			\frac{1}{5}
+			x_{i0} y_{i2} z_{i0}
+			+
+			\frac{1}{20}
+			x_{i0} y_{i2} z_{i1} \\
+			-
+			\frac{1}{10}
+			x_{i1} y_{i0} z_{i0}
+			-
+			\frac{1}{30}
+			x_{i1} y_{i0} z_{i1}
+			+
+			\frac{1}{20}
+			x_{i1} y_{i0} z_{i2}
+			-
+			\frac{1}{30}
+			x_{i1} y_{i1} z_{i0} \\
+			+
+			\frac{1}{30}
+			x_{i1} y_{i1} z_{i2}
+			+
+			\frac{1}{20}
+			x_{i1} y_{i2} z_{i0}
+			+
+			\frac{1}{30}
+			x_{i1} y_{i2} z_{i1}
+			+
+			\frac{1}{5}
+			x_{i2} y_{i0} z_{i0} \\
+			+
+			\frac{1}{20}
+			x_{i2} y_{i0} z_{i1}
+			+
+			\frac{1}{20}
+			x_{i2} y_{i1} z_{i0}
+			+
+			\frac{1}{30}
+			x_{i2} y_{i1} z_{i1}
+		\end{array}
+		\right) \cdot\frac{1}{2} \\
+	%
+	%v_i 2次
+		+
+		\left(
+		\begin{array}{l}
+			\frac{3}{5}
+			x_{i0} y_{i0} z_{i0}
+			+
+			\frac{1}{20}
+			x_{i0} y_{i0} z_{i1}
+			-
+			\frac{2}{5}
+			x_{i0} y_{i0} z_{i2}
+			+
+			\frac{1}{20}
+			x_{i0} y_{i1} z_{i0} \\
+			-
+			\frac{1}{20}
+			x_{i0} y_{i1} z_{i2}
+			-
+			\frac{2}{5}
+			x_{i0} y_{i2} z_{i0}
+			-
+			\frac{1}{20}
+			x_{i0} y_{i2} z_{i1}
+			+
+			\frac{1}{5}
+			x_{i0} y_{i2} z_{i2} \\
+			+
+			\frac{1}{20}
+			x_{i1} y_{i0} z_{i0}
+			-
+			\frac{1}{20}
+			x_{i1} y_{i0} z_{i2}
+			-
+			\frac{1}{20}
+			x_{i1} y_{i2} z_{i0}
+			+
+			\frac{1}{20}
+			x_{i1} y_{i2} z_{i2} \\
+			-
+			\frac{2}{5}
+			x_{i2} y_{i0} z_{i0}
+			-
+			\frac{1}{20}
+			x_{i2} y_{i0} z_{i1}
+			+
+			\frac{1}{5}
+			x_{i2} y_{i0} z_{i2}
+			-
+			\frac{1}{20}
+			x_{i2} y_{i1} z_{i0} \\
+			+
+			\frac{1}{20}
+			x_{i2} y_{i1} z_{i2}
+			+
+			\frac{1}{5}
+			x_{i2} y_{i2} z_{i0}
+			+
+			\frac{1}{20}
+			x_{i2} y_{i2} z_{i1}
+		\end{array}
+		\right) \cdot\frac{1}{3} \\
+	%
+	%v_i 3次
+		+
+		\left(
+		\begin{array}{l}
+			-x_{i0}y_{i0}z_{i0}
+			+x_{i0}y_{i0}z_{i2}
+			+x_{i0}y_{i2}z_{i0}
+			-x_{i0}y_{i2}z_{i2} \\
+			+x_{i2}y_{i0}z_{i0}
+			-x_{i2}y_{i0}z_{i2}
+			-x_{i2}y_{i2}z_{i0}
+			+x_{i2}y_{i2}z_{i2}
+		\end{array}
+		\right) \cdot\frac{1}{20}
+	\end{array}
+	\right\} \\[3mm]
+%
+%
+	&=
+	\left\{
+	\begin{array}{l}
+		\left(
+			\frac{1}{5} -\frac{3}{10} +\frac{1}{5} -\frac{1}{20}
+		\right) x_{i0}y_{i0}z_{i0}
+		+
+		\left(
+			\frac{1}{20} -\frac{1}{20} +\frac{1}{60}
+		\right) x_{i0}y_{i0}z_{i1}
+		+
+		\left(
+			\frac{1}{10} -\frac{2}{15} +\frac{1}{20}
+		\right) x_{i0}y_{i0}z_{i2} \\
+		+
+		\left(
+			\frac{1}{20} -\frac{1}{20} +\frac{1}{60}
+		\right) x_{i0}y_{i1}z_{i0}
+		+
+		\left(
+			\frac{1}{30} -\frac{1}{60}
+		\right) x_{i0}y_{i1}z_{i1}
+		+
+		\left(
+			\frac{1}{40} -\frac{1}{60}
+		\right) x_{i0}y_{i1}z_{i2} \\
+		+
+		\left(
+			\frac{1}{10} -\frac{2}{15} +\frac{1}{20}
+		\right) x_{i0}y_{i2}z_{i0}
+		+
+		\left(
+			\frac{1}{40} -\frac{1}{60}
+		\right) x_{i0}y_{i2}z_{i1}
+		+
+		\left(
+			\frac{1}{15} -\frac{1}{20}
+		\right) x_{i0}y_{i2}z_{i2} \\
+		+
+		\left(
+			\frac{1}{20} -\frac{1}{20} +\frac{1}{60}
+		\right) x_{i1}y_{i0}z_{i0}
+		+
+		\left(
+			\frac{1}{30} -\frac{1}{60}
+		\right) x_{i1}y_{i0}z_{i1}
+		+
+		\left(
+			\frac{1}{40} -\frac{1}{60}
+		\right) x_{i1}y_{i0}z_{i2} \\
+		+
+		\left(
+			\frac{1}{30} -\frac{1}{60}
+		\right) x_{i1}y_{i1}z_{i0}
+		+
+		\left(
+			\frac{1}{20}
+		\right) x_{i1}y_{i1}z_{i1}
+		+
+		\left(
+			\frac{1}{60}
+		\right) x_{i1}y_{i1}z_{i2} \\
+		+
+		\left(
+			\frac{1}{40} -\frac{1}{60}
+		\right) x_{i1}y_{i2}z_{i0}
+		+
+		\left(
+			\frac{1}{60}
+		\right) x_{i1}y_{i2}z_{i1}
+		+
+		\left(
+			\frac{1}{60}
+		\right) x_{i1}y_{i2}z_{i2} \\
+		+
+		\left(
+			\frac{1}{10} -\frac{2}{15} +\frac{1}{20}
+		\right) x_{i2}y_{i0}z_{i0}
+		+
+		\left(
+			\frac{1}{40} -\frac{1}{60}
+		\right) x_{i2}y_{i0}z_{i1}
+		+
+		\left(
+			\frac{1}{15} -\frac{1}{20}
+		\right) x_{i2}y_{i0}z_{i2} \\
+		+
+		\left(
+			\frac{1}{40} -\frac{1}{60}
+		\right) x_{i2}y_{i1}z_{i0}
+		+
+		\left(
+			\frac{1}{60}
+		\right) x_{i2}y_{i1}z_{i1}
+		+
+		\left(
+			\frac{1}{60}
+		\right) x_{i2}y_{i1}z_{i2} \\
+		+
+		\left(
+			\frac{1}{15} -\frac{1}{20}
+		\right) x_{i2}y_{i2}z_{i0}
+		+
+		\left(
+			\frac{1}{60}
+		\right) x_{i2}y_{i2}z_{i1}
+		+
+		\left(
+			\frac{1}{20}
+		\right) x_{i2}y_{i2}z_{i2}
+	\end{array}
+	\right\} \\
+	&=
+	\frac{1}{120}
+	\left\{
+	\begin{array}{l}
+		6 x_{i0}y_{i0}z_{i0}
+		+
+		2 x_{i0}y_{i0}z_{i1}
+		+
+		2 x_{i0}y_{i0}z_{i2} \\
+		+
+		2 x_{i0}y_{i1}z_{i0}
+		+
+		2 x_{i0}y_{i1}z_{i1}
+		+
+		x_{i0}y_{i1}z_{i2} \\
+		+
+		2 x_{i0}y_{i2}z_{i0}
+		+
+		x_{i0}y_{i2}z_{i1}
+		+
+		2 x_{i0}y_{i2}z_{i2} \\
+		+
+		2 x_{i1}y_{i0}z_{i0}
+		+
+		2 x_{i1}y_{i0}z_{i1}
+		+
+		x_{i1}y_{i0}z_{i2} \\
+		+
+		2 x_{i1}y_{i1}z_{i0}
+		+
+		6 x_{i1}y_{i1}z_{i1}
+		+
+		2 x_{i1}y_{i1}z_{i2} \\
+		+
+		x_{i1}y_{i2}z_{i0}
+		+
+		2 x_{i1}y_{i2}z_{i1}
+		+
+		2 x_{i1}y_{i2}z_{i2} \\
+		+
+		2 x_{i2}y_{i0}z_{i0}
+		+
+		x_{i2}y_{i0}z_{i1}
+		+
+		2 x_{i2}y_{i0}z_{i2} \\
+		+
+		x_{i2}y_{i1}z_{i0}
+		+
+		2 x_{i2}y_{i1}z_{i1}
+		+
+		2 x_{i2}y_{i1}z_{i2} \\
+		+
+		2 x_{i2}y_{i2}z_{i0}
+		+
+		2 x_{i2}y_{i2}z_{i1}
+		+
+		6 x_{i2}y_{i2}z_{i2}
+	\end{array}
+	\right\}
+\end{align}
+...えっと、まとめると
+\begin{align}
+	\int_V x^2 \,\d V
+	&=
+	\frac{1}{60}
+	\sum_i
+	(
+		S_x^+ +S_x^-
+	)
+	\cdot I_{x^3} \\
+%
+%
+	\int_V y^2 \,\d V
+	&=
+	\frac{1}{60}
+	\sum_i
+	(
+		S_y^+ +S_y^-
+	)
+	\cdot I_{y^3} \\
+%
+%
+	\int_V z^2 \,\d V
+	&=
+	\frac{1}{60}
+	\sum_i
+	(
+		S_z^+ +S_z^-
+	)
+	\cdot I_{z^3} \\
+%
+%
+	\int_V xy \,\d V
+	&=
+	\frac{1}{120}
+	\sum_i
+	\left(
+		S_z^+ +S_z^-
+	\right) I_{xyz} \\
+%
+%
+	\int_V yz \,\d V
+	&=
+	\frac{1}{120}
+	\sum_i
+	\left(
+		S_x^+ +S_x^-
+	\right) I_{xyz} \\
+%
+%
+	\int_V zx \,\d V
+	&=
+	\frac{1}{120}
+	\sum_i
+	\left(
+		S_y^+ +S_y^-
+	\right) I_{xyz} \\
+%
+%
+%
+\end{align}
+\begin{align}
+	\left(
+	\begin{array}{l}
+		S_x^+
+		&=
+		y_{i1}z_{i2} +y_{i0}z_{i1} +y_{i2}z_{i0} \\
+	%
+		S_x^-
+		&=
+		-y_{i1}z_{i0} -y_{i0}z_{i2} -y_{i2}z_{i1} \\
+	%
+		S_y^+
+		&=
+		z_{i1}x_{i2} +z_{i0}x_{i1} +z_{i2}x_{i0} \\
+	%
+		S_y^-
+		&=
+		-z_{i1}x_{i0} -z_{i0}x_{i2} -z_{i2}x_{i1} \\
+	%
+		S_z^+
+		&=
+		x_{i1}y_{i2} +x_{i0}y_{i1} +x_{i2}y_{i0} \\
+	%
+		S_z^-
+		&=
+		-x_{i1}y_{i0} -x_{i0}y_{i2} -x_{i2}y_{i1} \\
+	%
+		I_{x^3}
+		&=
+		x_{i1}^3
+		+ x_{i1}^2 (x_{i2} +x_{i0})
+		+ x_{i1} (x_{i2}^2 +x_{i2}x_{i0} +x_{i0}^2)
+		+ x_{i2}^3 +x_{i2}^2 x_{i0} +x_{i2}x_{i0}^2 +x_{i0}^3 \\
+	%
+		I_{y^3}
+		&=
+		y_{i1}^3
+		+ y_{i1}^2 (y_{i2} +y_{i0})
+		+ y_{i1} (y_{i2}^2 +y_{i2}y_{i0} +y_{i0}^2)
+		+ y_{i2}^3 +y_{i2}^2 y_{i0} +y_{i2}y_{i0}^2 +y_{i0}^3 \\
+	%
+		I_{z^3}
+		&=
+		z_{i1}^3
+		+ z_{i1}^2 (z_{i2} +z_{i0})
+		+ z_{i1} (z_{i2}^2 +z_{i2}z_{i0} +z_{i0}^2)
+		+ z_{i2}^3 +z_{i2}^2 z_{i0} +z_{i2}z_{i0}^2 +z_{i0}^3 \\
+	%
+		I_{xyz}
+		&=
+		\left\{
+		\begin{array}{l}
+			6 x_{i0}y_{i0}z_{i0}
+			+
+			2 x_{i0}y_{i0}z_{i1}
+			+
+			2 x_{i0}y_{i0}z_{i2}
+			+
+			2 x_{i0}y_{i1}z_{i0}
+			+
+			2 x_{i0}y_{i1}z_{i1}
+			+
+			x_{i0}y_{i1}z_{i2} \\
+			+
+			2 x_{i0}y_{i2}z_{i0}
+			+
+			x_{i0}y_{i2}z_{i1}
+			+
+			2 x_{i0}y_{i2}z_{i2}
+			+
+			2 x_{i1}y_{i0}z_{i0}
+			+
+			2 x_{i1}y_{i0}z_{i1}
+			+
+			x_{i1}y_{i0}z_{i2} \\
+			+
+			2 x_{i1}y_{i1}z_{i0}
+			+
+			6 x_{i1}y_{i1}z_{i1}
+			+
+			2 x_{i1}y_{i1}z_{i2}
+			+
+			x_{i1}y_{i2}z_{i0}
+			+
+			2 x_{i1}y_{i2}z_{i1}
+			+
+			2 x_{i1}y_{i2}z_{i2} \\
+			+
+			2 x_{i2}y_{i0}z_{i0}
+			+
+			x_{i2}y_{i0}z_{i1}
+			+
+			2 x_{i2}y_{i0}z_{i2}
+			+
+			x_{i2}y_{i1}z_{i0}
+			+
+			2 x_{i2}y_{i1}z_{i1}
+			+
+			2 x_{i2}y_{i1}z_{i2} \\
+			+
+			2 x_{i2}y_{i2}z_{i0}
+			+
+			2 x_{i2}y_{i2}z_{i1}
+			+
+			6 x_{i2}y_{i2}z_{i2}
+		\end{array}
+		\right\}
+	\end{array}
+	\right)
+\end{align}
+...なんだこれ(困惑())。まあ、いつも通り実装しよう。<br>
+
+
+とりあえずこれで、力学的に重要な体積(0階テンソル)、重心(1階テンソル)、
+慣性モーメント(2階テンソル)の全てを計算できるようになった。しかしこれ、もし3階テンソル量を
+求めることになっていたら流石にぶん投げそうだな...何せ、3*3*3*3通りの項が\(u_i,v_i\) の積分の時に
+出てくるだろうから....
+
+</body>
+</html>

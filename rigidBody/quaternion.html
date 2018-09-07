@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>クォータニオン</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+$$
+	\newcommand{\i}{\bm{i}}
+	\newcommand{\j}{\bm{j}}
+	\newcommand{\k}{\bm{k}}
+$$
+クォータニオンとは複素数が1つの虚数単位を持つのに対して、3つの虚数単位をもつ数のことである。
+\begin{align}
+	\bm{q}
+	&=
+	w + x\i +y\j +z\k
+\end{align}
+ここで\(w,x,y,z\)が実数で、\(\i,\j,\k\)が虚数単位であって、
+\begin{align}
+	\i^2 = \j^2 = \k^2 = -1 \\
+	\i\j = -\j\i = \k
+\end{align}
+である。上の式から分かる通り、クォータニオンは積が可換ではない。(行列と同じように積の順番を変えることが
+できない)また、クォータニオンの虚数部をベクトルと見て
+\begin{align}
+	\bm{q}
+	=
+	w + \bm{v} \\
+	(\bm{v} = (x,y,z))
+\end{align}
+と表示することがある。また、共役クォータニオン\(\bm{q}^\ast\)を
+\begin{align}
+	\bm{q}^\ast
+	&=
+	w -\bm{v} \\
+	&=
+	w -x\i -y\j -z\k
+\end{align}
+とする。また、ノルム\(\|\bm{q}\|\)を
+\begin{align}
+	\|\bm{q}\|
+	&=
+	\sqrt{\bm{q}\bm{q}^\ast}
+	=
+	\sqrt{\bm{q}^\ast \bm{q}} \\
+	&=
+	\sqrt{w^2 +x^2 +y^2 +z^2}
+\end{align}
+とする。特に、\(\|\bm{q}\|=1\)のクォータニオンを単位クォータニオンという。
+\begin{align}
+	\bm{q}^{-1}
+	&=
+	\frac{1}{\bm{q}} \\
+	&=
+	\frac{\bm{q}^\ast}{\bm{q}\bm{q}^\ast} \\
+	&=
+	\frac{\bm{q}^\ast}{\|\bm{q}\|^2}
+\end{align}
+は、\(\bm{q}\)の逆クォータニオンという。すなわち、\(\bm{q}\bm{q}^{-1}=\bm{q}^{-1}\bm{q}=1\)である。
+単位クォータニオンの逆クォータニオンは共役クォータニオンである。<br>
+
+さて、複素数が二次元での回転を表すように、クォータニオンは三次元の回転を表現する。
+\begin{align}
+	\bm{q}
+	&=
+	\cos\frac{\theta}{2} +\bm{n}\sin\frac{\theta}{2}
+\end{align}
+とする。このとき、\(\|\bm{q}\|=1\)である。\(\bm{r}=x\i +y\j +z\k,\bm{r}'=x'\i +y'\j +z'\k\)として
+\begin{align}
+	\bm{r}'
+	&=
+	\bm{q}\bm{r}\bm{q}^\ast \\
+	&=
+	(\bm{r}\cdot\bm{n})\bm{n}
+	+
+	(\bm{r} -(\bm{r}\cdot\bm{n})\bm{n}) \cos\theta
+	+
+	\bm{n}\times\bm{r}\sin\theta
+\end{align}
+は、\(\bm{r}\)を\(\bm{n}\)を右ねじの方向として\(\theta\)回転させたベクトルである。この変換は
+\(\bm{r}\)に関して線形変換であるので、行列\(R\)を用いて
+\begin{align}
+	\bm{r}'
+	&=
+	R\bm{r}
+\end{align}
+と書き直せる。具体的な形は
+\begin{align}
+	R
+	&=
+	\left[
+	\begin{array}{ccc}
+		q_0^2 +q_1^2 -q_2^2 -q_3^2 & 2(q_1 q_2 -q_0 q_3) & 2(q_1 q_3 +q_0 q_2) \\
+		2(q_1 q_2 +q_0 q_3) & q_0^2 -q_1^2 +q_2^2 -q_3^2 & 2(q_2 q_3 -q_0 q_1) \\
+		2(q_1 q_3 -q_0 q_2) & 2(q_2 q_3 +q_0 q_1) & q_0^2 -q_1^2 -q_2^2 +q_3^2
+	\end{array}
+	\right]
+\end{align}
+となる。ここでも角速度\(\bm{\omega}\)との関係をみる。
+\begin{align}
+	\dot{R}R\T
+	&=
+	\bm{\omega}\times
+\end{align}
+であることを思い出す。
+\begin{align}
+	\dot{R}
+	&=
+	2
+	\left[
+	\begin{array}{ccc}
+		q_0 \dot{q_0} +q_1 \dot{q_1} -q_2 \dot{q_2} -q_3 \dot{q_3}
+			& \dot{q_1} q_2 +q_1 \dot{q_2} -\dot{q_0} q_3 -q_0 \dot{q_3}
+			& \dot{q_1} q_3 +q_1 \dot{q_3} +\dot{q_0} q_2 +q_0 \dot{q_2} \\
+		\dot{q_1} q_2 +q_1 \dot{q_2} +\dot{q_0} q_3 +q_0 \dot{q_3}
+			& q_0 \dot{q_0} -q_1 \dot{q_1} +q_2 \dot{q_2} -q_3 \dot{q_3}
+			& \dot{q_2} q_3 +q_2 \dot{q_3} -\dot{q_0} q_1 -q_0 \dot{q_1} \\
+		\dot{q_1} q_3 +q_1 \dot{q_3} -\dot{q_0} q_2 -q_0 \dot{q_2}
+			& \dot{q_2} q_3 +q_2 \dot{q_3} +\dot{q_0} q_1 +q_0 \dot{q_1}
+			& q_0 \dot{q_0} -q_1 \dot{q_1} -q_2 \dot{q_2} +q_3 \dot{q_3}
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	\omega_x
+	&=
+	2\left(
+	\begin{array}{l}
+		(\dot{q_1} q_3 +q_1 \dot{q_3} -\dot{q_0} q_2 -q_0 \dot{q_2})
+			\cdot 2(q_1 q_2 +q_0 q_3) \\
+		+
+		(\dot{q_2} q_3 +q_2 \dot{q_3} +\dot{q_0} q_1 +q_0 \dot{q_1})
+			\cdot (q_0^2 -q_1^2 +q_2^2 -q_3^2) \\
+		+
+		(q_0 \dot{q_0} -q_1 \dot{q_1} -q_2 \dot{q_2} +q_3 \dot{q_3})
+			\cdot 2(q_2 q_3 -q_0 q_1)
+	\end{array}
+	\right) \\
+%
+%
+	\omega_y
+	&=
+	2\left(
+	\begin{array}{l}
+		(q_0 \dot{q_0} +q_1 \dot{q_1} -q_2 \dot{q_2} -q_3 \dot{q_3})
+			\cdot 2(q_1 q_3 -q_0 q_2) \\
+		+
+		(\dot{q_1} q_2 +q_1 \dot{q_2} -\dot{q_0} q_3 -q_0 \dot{q_3})
+			\cdot 2(q_2 q_3 +q_0 q_1) \\
+		+
+		(\dot{q_1} q_3 +q_1 \dot{q_3} +\dot{q_0} q_2 +q_0 \dot{q_2})
+			\cdot (q_0^2 -q_1^2 -q_2^2 +q_3^2)
+	\end{array}
+	\right) \\
+%
+%
+	\omega_z
+	&=
+	2\left(
+	\begin{array}{l}
+		(\dot{q_1} q_2 +q_1 \dot{q_2} +\dot{q_0} q_3 +q_0 \dot{q_3})
+			\cdot (q_0^2 +q_1^2 -q_2^2 -q_3^2) \\
+		+
+		(q_0 \dot{q_0} -q_1 \dot{q_1} +q_2 \dot{q_2} -q_3 \dot{q_3})
+			\cdot 2(q_1 q_2 -q_0 q_3) \\
+		+
+		(\dot{q_2} q_3 +q_2 \dot{q_3} -\dot{q_0} q_1 -q_0 \dot{q_1})
+			\cdot 2(q_1 q_3 +q_0 q_2)
+	\end{array}
+	\right)
+\end{align}
+\begin{align}
+	\bm{\omega}
+	&=
+	2\left[
+	\begin{array}{cccc}
+		-q_1 q_2^2 - q_0^2 q_1 -q_1^3 -q_1 q_3^2 &
+		q_0 q_3^2 +q_0^3 +q_0 q_2^2 +q_0 q_1^2 &
+		-q_0^2 q_3 -q_1^2 q_3 -q_3^3 -q_2^2 q_3 &
+		q_1^2 q_2 +q_0^2 q_2 +q_2^3 +q_2 q_3^2 \\
+	%
+		-q_0^2 q_2 -q_2 q_3^2 -q_1^2 q_2 -q_2^3 &
+		q_1^2 q_3 +q_2^2 q_3 +q_0^2 q_3 +q_3^3 &
+		q_0 q_2^2 +q_0 q_1^2 +q_0^3 +q_0 q_3^2 &
+		-q_1 q_3^2 -q_0^2 q_1 -q_1^3 -q_1 q_2^2 \\
+	%
+		-q_0^2 q_3 -q_1^2 q_3 -q_2^2 q_3 -q_3^3 &
+		-q_0^2 q_2 -q_1^2 q_2 -q_2^3 -q_2 q_3^2 &
+		q_0^2 q_1 +q_1^3 +q_1 q_2^2 +q_1 q_3^2 &
+		q_0^3 +q_0 q_1^2 +q_0 q_2^2 +q_0 q_3^2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{q_0} \\ \dot{q_1} \\ \dot{q_2} \\ \dot{q_3}
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	\bm{\omega}
+	&=
+	2\left[
+	\begin{array}{cccc}
+		-q_1 & q_0 & -q_3 & q_2 \\
+		-q_2 & q_3 & q_0 & -q_1 \\
+		-q_3 & -q_2 & q_1 & q_0
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{q_0} \\ \dot{q_1} \\ \dot{q_2} \\ \dot{q_3}
+	\end{array}
+	\right]
+\end{align}<br>
+
+今度はクォータニオンの時間変化\(\dot{\bm{q}}\)を角速度\(\bm{\omega}\)で表現する。
+\(\bm{q}(t_1,t_2)\)を時刻\(t_1\)から\(t_2\)への回転変化を表すとする。クォータニオンの積が
+回転の合成を表すことを意識すると
+\begin{align}
+	\bm{q}(0,t+\d t)
+	=
+	\bm{q}(t,t+\d t) \bm{q}(0,t)
+	=
+	\bm{q}(0,t) +\frac{\d \bm{q}}{\d t}(0,t) \d t
+\end{align}
+一番右側の式はテイラー展開で近似したものであることに注意すること。ここで、時刻\(t\)から
+\(t+\d t\)に回転する時の回転角度を\(\d\theta\)、回転軸を\(\bm{n}\)とすると、
+\begin{align}
+	\bm{q}(t,t+\d t)
+	&=
+	\cos\frac{\d\theta}{2} +\bm{n}\sin\frac{\d\theta}{2} \\
+	&=
+	1+\frac{1}{2}\bm{n} \d\theta \\
+	&=
+	1+\frac{1}{2}\bm{n} \frac{\d\theta}{\d t} \d t \\
+	&=
+	1+\frac{1}{2}\bm{\omega} \d t
+\end{align}
+であるから、
+\begin{align}
+	\bm{q}(t,t+\d t)\bm{q}(0,t)
+	&=
+	\bm{q}(0,t) +\frac{\d\bm{q}}{\d t} \d t \\
+%
+	\left(
+		1+\frac{1}{2}\bm{\omega} \d t
+	\right) \bm{q}(0,t)
+	&=
+	\bm{q}(0,t) +\frac{\d\bm{q}}{\d t} \d t \\
+%
+	\dot{\bm{q}}
+	&=
+	\frac{1}{2}\bm{\omega}\bm{q}(0,t)
+\end{align}
+\(\bm{\omega}=\omega_x\i +\omega_y\j +\omega_z\k,\bm{q}=q_0 +q_1\i +q_2\j +q_3\k\)であり、
+虚数単位同士の積の式を考えれば、
+\begin{align}
+	\left[
+	\begin{array}{c}
+		\dot{q_0} \\ \dot{q_1} \\ \dot{q_2} \\ \dot{q_3}
+	\end{array}
+	\right]
+	&=
+	\frac{1}{2}
+	\left[
+	\begin{array}{cccc}
+		-\omega_x q_1 -\omega_y q_2 -\omega_z q_3 \\
+		\omega_x q_0 +\omega_y q_3 -\omega_z q_2 \\
+		-\omega_x q_3 +\omega_y q_0 +\omega_z q_1 \\
+		\omega_x q_2 -\omega_y q_1 +\omega_z q_0
+	\end{array}
+	\right] \\
+	&=
+	\frac{1}{2}
+	\left[
+	\begin{array}{ccc}
+		-q_1 & -q_2 & -q_3 \\
+		q_0 & q_3 & -q_2 \\
+		-q_3 & q_0 & q_1 \\
+		q_2 & -q_1 & q_0
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\omega_x \\ \omega_y \\ \omega_z
+	\end{array}
+	\right]
+\end{align}
+差分によって、次のステップでの回転状態\(\bm{q}(t+\d t)\)を計算する時はこれに加えて
+\begin{align}
+	\|\bm{q} \|^2
+	&= 1 \\
+%
+	q_0^2 +q_1^2 +q_2^2 +q_3^2
+	&= 1 \\
+\end{align}
+という制約条件も考慮して差分をとるべきだ。
+
+クォータニオンが回転を表すこと…https://qiita.com/kenjihiranabe/items/945232fbde58fab45681
+クォータニオンは回転を合成した後、正規化すれば少なくとも回転の変換であることが
+維持される。メリットデメリット…http://akanenatu.blog101.fc2.com/blog-entry-21.html
+
+オイラー角についての解説…http://irobutsu.a.la9.jp/mybook/ykwkrAM/sim/EulerAngle.html
+ジンバルロックは、オイラー角の変化率と角速度が1対1対応しなくなることに対応
+クォータニオンの解説…http://www.mss.co.jp/technology/report/pdf/18-07.pdf（クォータニオン計算便利ノート）
+クォータニオンとオイラー角の両方に関する解説…ftp://ftp.oreilly.co.jp/9784873113777/g3d_sample03.pdf
+
+</body>
+</html>

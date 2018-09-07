@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>拘束力と運動方程式---衝突</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+$$
+$$
+\newcommand{\in}{{\rm in}}
+\newcommand{\out}{{\rm out}}
+\newcommand{\bef}{{\rm Bef.}}
+\newcommand{\aft}{{\rm Aft.}}
+$$
+剛体の壁との衝突前後での変化を考えてみる。剛体内の衝突する点を\(\bm{r}_c\)、その時に受ける力を
+\(\lambda \bm{n}\)とする。ここで\(\bm{n}\)は、衝突点における壁の単位法線ベクトルである。（壁の外を向く）
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		m_c E & O & \cdots & O \\
+		O & m_1 E & \cdots & O \\
+		\vdots & \vdots & \ddots & \vdots \\
+		O & O & \cdots & m_{n-1} E
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\ddot{\bm{r}_c} \\
+		\ddot{\bm{r}_1} \\
+		\vdots \\
+		\ddot{\bm{r}_{n-1}}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{c}
+		\bm{f}_c^\out \\
+		\bm{f}_1^\out \\
+		\vdots \\
+		\bm{f}_{n-1}^\out
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\bm{f}_c^\in \\
+		\bm{f}_1^\in \\
+		\vdots \\
+		\bm{f}_{n-1}^\in
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\lambda \bm{n} \\
+		O \\
+		\vdots \\
+		O
+	\end{array}
+	\right]
+\end{align}
+内力\(\bm{f}_i^\in\)は前回述べた方法で消すと、
+\begin{align}
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cc}
+			M & O \\
+			O & I_g
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_g} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right)
+	=
+	\left[
+	\begin{array}{c}
+		\bm{F}^\out \\ \bm{\tau}_g^\out
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\lambda \bm{n} \\
+		\bm{r}_{cg}\times (\lambda \bm{n})
+	\end{array}
+	\right]
+\end{align}
+衝突直前から直後まで、上の式を時間積分してやると（姿勢\(R\)が変化しない、すなわち\(I_g\)が
+変化しない、加えて、外力の項が衝突の力の項に比べて微小であるとすると）
+\begin{align}
+	\int_{\bef}^{\aft}
+		\frac{\d}{\d t}(M\dot{\bm{r}_g}) \d t
+	&=
+	\int_{\bef}^{\aft}
+		(\bm{F}^\out +\lambda \bm{n}) \d t \\[2mm]
+%
+	M \dot{\bm{r}_{g,A}}
+	-
+	M \dot{\bm{r}_{g,B}}
+	&=
+	\bm{F}^\out \Delta t
+	+
+	\Lambda \bm{n}
+	=
+	\Lambda \bm{n}
+\end{align}
+\begin{align}
+	\int_{\bef}^{\aft}
+		\frac{\d}{\d t} (I_g \bm{\omega}) \d t
+	&=
+	\int_{\bef}^{\aft}
+		(\bm{\tau}_g^\out +\bm{r}_{cg}\times(\lambda\bm{n})) \d t \\[2mm]
+%
+	I_g \bm{\omega}_A
+	-
+	I_g \bm{\omega}_B
+	&=
+	\bm{\tau}_g^\out \Delta t
+	+
+	\bm{r}_{cg}\times(\Lambda \bm{n})
+	=
+	\bm{r}_{cg}\times(\Lambda \bm{n})
+\end{align}
+\begin{align}
+	\left(
+		\int_{\bef}^{\aft} \lambda \d t
+		=
+		\Lambda
+	\right)
+\end{align}
+変数を全て求めるのに\(\dot{r}_g\)の3成分、\(\bm{\omega}\)の3成分、\(\Lambda\)の
+1成分で7つの方程式が必要になる。がしかし、上の式では6本しかない。そこで経験式を
+1本導入する。高校物理で習った反発係数\(e\)に関する式だ。
+\begin{align}
+	\frac{
+		\dot{\bm{r}_{c,A}} \cdot \bm{n}
+	}{
+		\dot{\bm{r}_{c,B}} \cdot \bm{n}
+	}
+	&=
+	-e \\
+%
+	\frac{
+		(\dot{\bm{r}_{g,A}} +\bm{\omega}_A \times \bm{r}_{cg}) \cdot\bm{n}
+	}{
+		(\dot{\bm{r}_{g,B}} +\bm{\omega}_B \times \bm{r}_{cg}) \cdot\bm{n}
+	}
+	&=
+	-e
+\end{align}
+これら3つ(7本)の式を使って\(\dot{\bm{r}_{g,A}},\bm{\omega}_A,\Lambda\)を求めていく。
+始めに\(\dot{\bm{r}_{g,A}},\bm{\omega}_A\)を\(\Lambda\)を使ってついて解き、
+それを反発係数の式に代入して\(\Lambda\)を求める。
+\begin{align}
+	\dot{\bm{r}_{g,A}}
+	&=
+	\dot{\bm{r}_{g,B}}
+	+
+	\frac{\Lambda}{M} \bm{n} \\
+%
+%
+	\bm{\omega}_A
+	&=
+	\bm{\omega}_B
+	+
+	\Lambda
+	I_g^{-1} (\bm{r}_{cg}\times \bm{n}) \\[3mm]
+%
+%
+\end{align}
+\begin{align}
+	\frac{
+		\left\{
+			\left(
+				\dot{\bm{r}_{g,B}}
+				+ \frac{\Lambda}{M}\bm{n}
+			\right)
+			+
+			(
+				\bm{\omega}_B
+				+ \Lambda I_g^{-1}(\bm{r}_{cg}\times\bm{n})
+			)
+			\times \bm{r}_{cg}
+		\right\} \cdot\bm{n}
+	}{
+		(
+			\dot{\bm{r}_{g,B}}
+			+
+			\bm{\omega}_B \times \bm{r}_{cg}
+		) \cdot\bm{n}
+	}
+	&=
+	-e \\
+%
+%
+	1+
+	\Lambda
+	\frac{
+		\frac{1}{M}
+		+
+		(
+			(I_g^{-1}(\bm{r}_{cg}\times\bm{n}))
+			\times\bm{r}_{cg}
+		)\cdot\bm{n}
+	}{
+		(
+			\dot{\bm{r}_{g,B}}
+			+
+			\bm{\omega}_B \times \bm{r}_{cg}
+		)\cdot\bm{n}
+	}
+	&=
+	-e \\
+%
+%
+	\Lambda
+	&=
+	-(e+1)
+	\frac{
+		(
+			\dot{\bm{r}_{g,B}}
+			+
+			\bm{\omega}_B \times\bm{r}_{cg}
+		)\cdot\bm{n}
+	}{
+		\frac{1}{M}
+		+
+		(
+			(
+				I_g^{-1}(\bm{r}_{cg}\times\bm{n})
+			)\times\bm{r}_{cg}
+		)\cdot\bm{n}
+	}
+\end{align}
+これで壁との衝突後の速度、角速度を求めることができる。なお、運動する物体間の衝突は
+相対速度を考えれば、上の式を応用することで求めることができる。<br>
+
+しかし、ここで1つ問題が残る。「衝突した」と判定する方法だ。単に時間発展させていくだけ
+では衝突したかどうかは分からない。衝突したと判定する方法によって衝突と判定し、
+その上で今回の式を使うことになる。<br>
+
+ということで、衝突判定については以下のページで述べていく。ちょっと長くなってしまうから
+番外編ということで。
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>剛体の運動計算---</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+さてさて、剛体の一般的な方程式を求めていこう。
+
+剛体を沢山の質点の集まりだと考えてみると、Newtonの運動方程式から次が成立する。
+\begin{align}
+	\left\{
+	\begin{array}{ccc}
+		m_1 \ddot{\bm{r}_1}
+		&=& \bm{f}_1 +\bm{f}_1^c \\
+		m_2 \ddot{\bm{r}_2}
+		&=& \bm{f}_2 +\bm{f}_2^c \\
+		\vdots
+		&=& \vdots \\
+		m_n \ddot{\bm{r}_n}
+		&=& \bm{f}_n +\bm{f}_n^c
+	\end{array}
+	\right.
+\end{align}
+ここで、\(m_i,\ddot{\bm{r}_i},\bm{f}_i^c\) は
+それぞれ、質量、位置ベクトル、質点にかかる拘束力である。
+質点にかかる力を拘束力とそれ以外に分解しているのである。
+これを行列の形に変形して、
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		m_1 & 0 & \cdots & 0 \\
+		0 & m_2 & \cdots & 0 \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots & m_n
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\ddot{\bm{r}_1} \\
+		\ddot{\bm{r}_2} \\
+		\vdots \\
+		\ddot{\bm{r}_n}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		\bm{f}_1 \\
+		\bm{f}_2 \\
+		\vdots \\
+		\bm{f}_n
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\bm{f}_1^c \\
+		\bm{f}_2^c \\
+		\vdots \\
+		\bm{f}_n^c
+	\end{array}
+	\right]
+\end{align}
+
+この方程式は\(n\) 個の質点の3つの座標からなる\(3n\) 本の
+連立微分方程式である。(恐らく)原理的にはこの連立方程式を直接
+解くことによっても剛体の運動を記述することはできるだろう。
+だが、計算量と記憶量が半端じゃないのでこれを直接解くことは
+しない。<br>
+
+じゃあ何をするのかというと2つほど新しい(？)考え方をここで
+導入してこの式をもう少し簡単にする。1つは回転行列、もう1つ
+はダランベールの原理及び拘束力の性質である。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

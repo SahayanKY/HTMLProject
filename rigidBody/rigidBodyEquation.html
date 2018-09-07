@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>剛体の運動計算---事始め</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+今回からは剛体の運動方程式を議論していく。<br>
+
+剛体の運動方程式と言うと次のような式を思い浮かべる人が多いんじゃないだろうか
+\begin{align}
+	M\ddot{\bm{r}_G} &= \bm{F} \\
+	I \dot{\omega} &= N
+\end{align}
+ここで、\(M,\bm{r}_G,\bm{F},I,\dot{\omega},N\) はそれぞれ、剛体の全質量、
+重心位置、全外力、慣性モーメント、角速度、トルクである。確かに、この式は剛体の運動方程式である。
+...え？議論するまでもない？<br>
+
+よくよく考えてみてほしい。上の式では回転運動が1つの面上に束縛されている。しかし、
+一般の回転運動はそんなことはない。角速度ベクトルの意味を知っている人なら想像しやすいだろうか。
+角速度ベクトルは、上の式のように1つの方向のみを向いている、なんてことは一般にない。<br>
+
+加えて、重心以外の点で束縛条件が与えられた場合はどのようにして解けばいいのだろうか。
+ある点が束縛されることによって、\(\bm{F}\) には束縛力の項が加わるはずである
+(そうでなければ束縛されない)。その束縛力はどのようにして求めればいいのだろうか。<br>
+
+今回からは、そんな、もっと一般的な剛体の運動を考えていきたい。
+</body>
+</html>

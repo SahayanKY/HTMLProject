@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>モデルの重心を計算する方法</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+今回はモデルの重心の計算をしてみる。ただし、質量密度\(\rho\) はモデル毎に一定とする。
+まあ、何か材質が与えられたモデルに対して計算することが殆どだと思うから、大抵の場合は
+これで十分だろう。
+<br>
+
+さて、具体的な計算方法は体積を求めた時と殆ど同じだ。Gaussの定理を利用していく。
+<br>
+
+\begin{align}
+	\bm{G}
+	&= \frac{\int_V \rho \bm{r} \, \d V}{\int_V \rho \, \d V} \\
+	&= \frac{\rho}{\rho V} \int_V \bm{r} \, \d V \\
+	&= \frac{1}{V} \sum_{\xi=x,y,z} \int_V \xi\e{\xi} \, \d V \\
+	&=
+	\frac{1}{V}
+	\sum_{\xi} \left(
+		\int_V \xi \, \d V
+	\right) \e{\xi}
+\end{align}
+ここで、体積\(V\) は前回既に求めてあるからいいだろう。つまり今回の場合、
+\(\div\bm{v}=x,y,z\) となるような\(\bm{v}\) をそれぞれ考えればいい。
+<br>
+
+\(\div\bm{v}=x\) となる\(\bm{v}\) としては\(\frac{1}{2} x^2\e{x}\)が考えられる。
+別に\(xy\e{y}\) でもいいのだが、前者の方が結局積分しやすい。
+<br>
+
+よし、計算していこう。
+\begin{align}
+	\int_V x \, \d V
+	&= \int_V \div\bm{v} \, \d V \\
+	&= \int_{\partial V} \bm{v} \cdot \d \bm{S} \\
+	&=
+	\sum_i
+	\int_{\partial V_i} \bm{v} \cdot \d \bm{S_i} \\
+	&=
+	\sum_i
+	\int_{\partial V_i} \frac{1}{2} x^2 \e{x} \cdot \d \bm{S_i} \\
+	&=
+	\frac{1}{2}
+	\sum_i
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+		x^2
+		\cdot
+		\left(
+			(y_{i1} -y_{i0})
+			(z_{i2} -z_{i0})
+			-
+			(z_{i1} -z_{i0})
+			(y_{i2} -y_{i0})
+		\right) \\
+	&=
+	\frac{1}{2}
+	\sum_i
+	\left(
+		(y_{i1} -y_{i0})
+		(z_{i2} -z_{i0})
+		-
+		(z_{i1} -z_{i0})
+		(y_{i2} -y_{i0})
+	\right)
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+		x^2 \\[3mm]
+%
+%
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+		x^2
+	&=
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+			+ (x_{i2} -x_{i0}) v_i
+		\right)^2 \\
+	&=
+	\int_0^1 \d u_i
+	\left[
+		\frac{1}{3(x_{i2} -x_{i0})}
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+			+ (x_{i2} -x_{i0}) v_i
+		\right)^3
+	\right]_{v_i=0}^{v_i=1-u_i} \\
+	&=
+	\frac{1}{3(x_{i2} -x_{i0})}
+	\int_0^1 \d u_i
+	\left(
+		\left(
+			x_{i2}
+			+ (x_{i1} -x_{i2}) u_i
+		\right)^3
+		-
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+		\right)^3
+	\right) \\
+	&=
+	\frac{1}{3(x_{i2} -x_{i0})}
+	\left[
+		\frac{1}{4(x_{i1} -x_{i2})}
+		\left(
+			x_{i2}
+			+ (x_{i1} -x_{i2}) u_i
+		\right)^4
+		-
+		\frac{1}{4(x_{i1} -x_{i0})}
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+		\right)^4
+	\right]_0^1 \\
+	&=
+	\frac{1}{3(x_{i2} -x_{i0})}
+	\left(
+		\frac{1}{4(x_{i1} -x_{i2})}
+		\left(
+			x_{i1}^4
+			- x_{i2}^4
+		\right)
+		-
+		\frac{1}{4(x_{i1} -x_{i0})}
+		\left(
+			x_{i1}^4
+			- x_{i0}^4
+		\right)
+	\right) \\
+	&=
+	\frac{1}{12(x_{i2} -x_{i0})}
+	\left(
+		x_{i1}^3
+		+ x_{i1}^2 x_{i2}
+		+ x_{i1} x_{i2}^2
+		+ x_{i2}^3
+		- x_{i1}^3
+		- x_{i1}^2 x_{i0}
+		- x_{i1} x_{i0}^2
+		- x_{i0} ^3
+	\right) \\
+	&=
+	\frac{1}{12(x_{i2} -x_{i0})}
+	\left(
+		x_{i1}^2
+		\left(
+			x_{i2}
+			- x_{i0}
+		\right)
+		+
+		x_{i1}
+		\left(
+			x_{i2}^2
+			- x_{i0}^2
+		\right)
+		+
+		x_{i2}^3
+		- x_{i0}^3
+	\right) \\
+	&=
+	\frac{1}{12}
+	\left(
+		x_{i1}^2
+		+
+		x_{i1}
+		\left(
+			x_{i2}
+			+ x_{i0}
+		\right)
+		+
+		x_{i2}^2
+		+ x_{i2} x_{i0}
+		+ x_{i0}^2
+	\right) \\
+	&=
+	\frac{1}{12}
+	\left(
+		x_{i0}^2
+		+ x_{i1}^2
+		+ x_{i2}^2
+		+ x_{i0} x_{i1}
+		+ x_{i1} x_{i2}
+		+ x_{i2} x_{i0}
+	\right) \\[3mm]
+%
+%
+	\therefore
+	\int_V x \, \d V
+	&=
+	\frac{1}{24}
+	\sum_i
+	\left(
+		\left(
+			y_{i1} -y_{i0}
+		\right)
+		\left(
+			z_{i2} -z_{i0}
+		\right)
+		-
+		\left(
+			z_{i1} -z_{i0}
+		\right)
+		\left(
+			y_{i2} -y_{i0}
+		\right)
+	\right)
+	\left(
+		x_{i0}^2
+		+ x_{i1}^2
+		+ x_{i2}^2
+		+ x_{i0} x_{i1}
+		+ x_{i1} x_{i2}
+		+ x_{i2} x_{i0}
+	\right) \\
+	&=
+	\frac{1}{24}
+	\left(
+		\begin{array}{l}
+		\sum_i
+		\left(
+			y_{i0} z_{i1}
+			+ y_{i1} z_{i2}
+			+ y_{i2} z_{i0}
+		\right)
+		\left(
+			x_{i0}^2
+			+ x_{i1}^2
+			+ x_{i2}^2
+			+ x_{i0} x_{i1}
+			+ x_{i1} x_{i2}
+			+ x_{i2} x_{i0}
+		\right) \\
+		\qquad
+		-
+		\sum_i
+		\left(
+			y_{i0} z_{i2}
+			+ y_{i1} z_{i0}
+			+ y_{i2} z_{i1}
+		\right)
+		\left(
+			x_{i0}^2
+			+ x_{i1}^2
+			+ x_{i2}^2
+			+ x_{i0} x_{i1}
+			+ x_{i1} x_{i2}
+			+ x_{i2} x_{i0}
+		\right)
+		\end{array}
+	\right) \\
+%
+%
+	\int_V y \,\d V
+	&=
+	\frac{1}{24}
+	\left(
+		\begin{array}{l}
+		\sum_i
+		\left(
+			z_{i0} x_{i1}
+			+ z_{i1} x_{i2}
+			+ z_{i2} x_{i0}
+		\right)
+		\left(
+			y_{i0}^2
+			+ y_{i1}^2
+			+ y_{i2}^2
+			+ y_{i0} y_{i1}
+			+ y_{i1} y_{i2}
+			+ y_{i2} y_{i0}
+		\right) \\
+		\qquad
+		-
+		\sum_i
+		\left(
+			z_{i0} x_{i2}
+			+ z_{i1} x_{i0}
+			+ z_{i2} x_{i1}
+		\right)
+		\left(
+			y_{i0}^2
+			+ y_{i1}^2
+			+ y_{i2}^2
+			+ y_{i0} y_{i1}
+			+ y_{i1} y_{i2}
+			+ y_{i2} y_{i0}
+		\right)
+		\end{array}
+	\right) \\
+%
+%
+	\int_V z \,\d V
+	&=
+	\frac{1}{24}
+	\left(
+		\begin{array}{l}
+		\sum_i
+		\left(
+			x_{i0} y_{i1}
+			+ x_{i1} y_{i2}
+			+ x_{i2} y_{i0}
+		\right)
+		\left(
+			z_{i0}^2
+			+ z_{i1}^2
+			+ z_{i2}^2
+			+ z_{i0} z_{i1}
+			+ z_{i1} z_{i2}
+			+ z_{i2} z_{i0}
+		\right) \\
+		\qquad
+		-
+		\sum_i
+		\left(
+			x_{i0} y_{i2}
+			+ x_{i1} y_{i0}
+			+ x_{i2} y_{i1}
+		\right)
+		\left(
+			z_{i0}^2
+			+ z_{i1}^2
+			+ z_{i2}^2
+			+ z_{i0} z_{i1}
+			+ z_{i1} z_{i2}
+			+ z_{i2} z_{i0}
+		\right)
+		\end{array}
+	\right)
+\end{align}
+今回は結構長い式が出てきたな....まあ、次回はさらに酷いんですけどね(白目)<br>
+
+それじゃあ実装していこう。<br>
+
+前回と同じモデル、穴の空いた板で理論値と計算値の比較をしてみると、
+重心x理論値:0.047268960028909572789750402478388 m
+重心x計算値:0.04724922158558131 m
+
+重心y理論値:0.031986807303202032159306828319593 m
+重心y計算値:0.031998453150447956 m
+
+重心z理論値:0.0015000000000000000000000000000000 m
+重心z計算値:0.0014999999888183528 m
+
+今回もそれなりによく計算結果が一致している。この実装でひとまず問題なさそうだ。
+
+</body>
+</html>

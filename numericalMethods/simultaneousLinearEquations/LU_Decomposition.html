@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>連立方程式の解法---LU分解</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+$$
+連立方程式を素早く解く方法の一つにLU分解が存在する。LU分解では
+下三角行列\(L\)(lower triangular)と上三角行列\(U\)(upper triangular)の積に
+係数行列を変換する。具体的には
+\begin{align}
+	A\bm{x} = \bm{b} \\
+	LU \bm{x} = \bm{b} \\
+	(A = LU)
+\end{align}
+である。なぜそんなことをするのかと言うと、係数行列が三角行列の場合は非常に
+簡単に解くことができるからである。
+\begin{align}
+	\left\{
+	\begin{array}{ccc}
+		L \bm{y} &=& \bm{b} \\
+		U \bm{x} &=& \bm{y}
+	\end{array}
+	\right. \\
+\end{align}
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		l_{11} & 0 & \cdots & 0 \\
+		l_{21} & l_{22} & \cdots & 0 \\
+		\vdots & \vdots & \ddots & \vdots \\
+		l_{n1} & l_{n2} & \cdots & l_{nn}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		y_1 \\ y_2 \\ \vdots \\ y_n
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ \vdots \\ b_n
+	\end{array}
+	\right] \\
+%
+	\left[
+	\begin{array}{c}
+		y_1 \\ y_2 \\ \vdots \\ y_n
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		\frac{1}{l_{11}}\cdot b_1 \\
+		\frac{1}{l_{22}}\left( b_2 -l_{21}y_1 \right) \\
+		\vdots \\
+		\frac{1}{l_{nn}}\left( b_n -\sum_{i=1}^{n-1} l_{ni} y_i \right)
+	\end{array}
+	\right]
+\end{align}
+上の式で\(\bm{y}\)を求め、\(U\bm{x}=\bm{y}\)に代入して、同様にして\(\bm{x}\)を求める。
+一度\(L\)と\(U\)が求まれば、かなり簡単に解けることが分かると思う。が、問題は\(L\)と
+\(U\)をどうやって求めるのか、分解の計算量はいくらかというところだ。<br>
+
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & \cdots & a_{1n} \\
+		a_{21} & a_{22} & \cdots & a_{2n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} & a_{n2} & \cdots & a_{nn}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		l_{11} & 0 & \cdots & 0 \\
+		l_{21} & l_{22} & \cdots & 0 \\
+		\vdots & \vdots & \ddots & \vdots \\
+		l_{n1} & l_{n2} & \cdots & l_{nn}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		u_{11} & u_{12} & \cdots & u_{1n} \\
+		0 & u_{22} & \cdots & u_{2n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots & u_{nn}
+	\end{array}
+	\right]
+\end{align}
+\(A\)の要素は\(n^2\)個、つまり\(n^2\)本の方程式が得られるが、\(L\)と\(U\)で\(n^2+n\)個の
+変数について解かなければならない。つまり、方程式の数が不足しており、その分\(L\)と\(U\)には
+自由度がある。そこで、差の\(n\)個分については勝手に決めて求める。決め方は大体次の2つである。
+<ul>
+	<li>ドゥーリトル法…\(L\)の対角成分を全て1にする</li>
+	<li>クラウト法…\(U\)の対角成分を全て1にする</li>
+</ul>
+
+今回は\(L\)の対角成分を1として進めていく。
+
+\(n\times n\)行列\(A_n\)（下付の\(n\)は、\(n\times n\)行列であることを表す）を\(L_n\)と
+\(U_n\)に分解することを考える。\(A_n\)の\((i,j)\)成分を\(a_{ij}^n\)とする。
+\begin{align}
+	A_n
+	&=
+	L_n U_n \\
+%
+%
+	\left[
+	\begin{array}{cccc}
+		a_{11}^n & a_{12}^n & \cdots & a_{1n}^n \\
+		a_{21}^n & a_{22}^n & \cdots & a_{2n}^n \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1}^n & a_{n2}^n & \cdots & a_{nn}^n
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c|ccc}
+		1 & 0 & \cdots & 0 \\ \hline
+		l_{21} & & &  \\
+		\vdots & & L_{n-1} & \\
+		l_{n1} & & &
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|ccc}
+		u_{11} & u_{12} & \cdots & u_{1n} \\ \hline
+		0 & & & \\
+		\vdots & & U_{n-1} & \\
+		0 & & &
+	\end{array}
+	\right] \\
+%
+	&=
+	\left[
+	\begin{array}{c|c}
+		u_{11} &
+	%
+			\begin{array}{ccc}
+			 u_{12} & \cdots & u_{1n}
+			\end{array} \\ \hline
+	%
+		\begin{array}{c}
+			l_{21} u_{11} \\
+			\vdots \\
+			l_{n1} u_{11}
+		\end{array} &
+	%
+			\left[
+			\begin{array}{c}
+				l_{21} \\ \vdots \\ l_{n1}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{ccc}
+				u_{12} & \cdots & u_{1n}
+			\end{array}
+			\right]
+			+
+			L_{n-1} U_{n-1}
+	\end{array}
+	\right]
+\end{align}
+右辺の各ブロック毎に両辺を比較していくと
+\begin{align}
+	u_{1j} &= a_{1j}^n \quad (j=1,2,\cdots ,n) \\
+%
+	l_{i1} &= \frac{a_{i1}^n}{u_{11}} \quad (i=2,3,\cdots ,n) \\
+%
+	\left[
+	\begin{array}{cccc}
+		a_{22}^n & a_{23}^n & \cdots & a_{2n}^n \\
+		a_{32}^n & a_{33}^n & \cdots & a_{3n}^n \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n2}^n & a_{n3}^n & \cdots & a_{nn}^n
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		l_{21} \\ l_{31} \\ \vdots \\ l_{n1}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		u_{12} & u_{13} & \cdots & u_{1n}
+	\end{array}
+	\right]
+	+
+	L_{n-1} U_{n-1} \\
+%
+	A_{n-1}
+	&=
+	L_{n-1} U_{n-1} \\
+%
+	a_{ij}^{n-1}
+	&=
+	a_{i+1,j+1}^n -l_{i+1,1} u_{1,j+1}
+\end{align}
+次は\(L_{n-1}\)のなかに\(L_{n-2}\)、\(U_{n-1}\)のなかに\(U_{n-2}\)をおいて、
+\(A_{n-2}=L_{n-2} U_{n-2}\)と作っていき、\(A_1 = L_1 U_1\)まで続けていく。
+そして最後は
+\begin{align}
+	A_1
+	&=
+	L_1 U_1 \\
+%
+%
+	\left[
+		a_{11}^1
+	\right]
+	&=
+	\left[
+		1
+	\right]
+	\left[
+		u_{nn}
+	\right] \\
+%
+%
+	u_{nn}
+	&=
+	a_{11}^1
+\end{align}
+となる。このような調子で分解していく。<br>
+
+基本はこの考え方でいい。だが、これまでの議論だけだと例外が生じることがある。先程、
+\begin{align}
+	l_{i1}
+	=
+	\frac{a_{i1}^n}{u_{11}} \quad (i = 2,3,\cdots ,n)
+\end{align}
+という式が出てきた。もし、\(u_{11}\)が0だと計算が破綻してしまうことが分かると思う。
+また、誤差の観点から考えても、できるだけ絶対値の大きい数で割りたいところだ。<br>
+
+また、上の議論では多少分かり易くするための配慮として、\(A_n\)から新たな行列\(A_{n-1}\)
+を作っていくように記述したが、これではメモリ資源が限られている計算機では不利になることが
+ある。<br>
+
+まあ、ここら辺の議論はpart2にて。<br>
+
+
+http://www.yamamo10.jp/yamamoto/lecture/2006/5E/Linear_eauations/LinearEquations.pdf
+http://www.ritsumei.ac.jp/~hirai/edu/2017/algorithm/handout/linear_8up.pdf
+
+
+</body>
+</html>

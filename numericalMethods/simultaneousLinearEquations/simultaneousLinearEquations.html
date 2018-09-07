@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>連立方程式の解法</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+$$
+今回からは、連立方程式を計算する方法について考えていく。読者は線形代数は習っただろうか？この話題では
+線形代数の知識がちょくちょく出てくるので思い出しながら（時には復習しながら）追っていってほしい。
+まあ、線形代数が連立方程式の解法を研究する過程で発生したものだから仕方がない。<br>
+
+ところで、どうして連立方程式の数値計算法が必要なのだろうか。どうして重要なのだろうか。
+未知数が3とか6程度の方程式ならそんな大袈裟な物言いをするほどのものではないだろう。
+じゃあ、未知数が10000以上の方程式はどうだろうか？いやいや、そんなに沢山の未知数、一体どこから
+湧くというのか。……だが実際、10000以上の未知数を相手にすることは多い。<br>
+
+例えば、偏微分方程式の数値計算ではよく起こる。微分方程式をコンピュータが（辛うじて）解ける
+連立方程式の問題へと帰着させることで、未知数10000となる。この場合の未知数は、空間の各点における
+物理量(速度や密度、温度など)などである。偏微分方程式の問題を解くことが重要なのは言うまでもないだろう。
+例えば、流体力学のNavier–Stokesの方程式や電磁気学のMaxwell方程式など、物理的に、工学的に重要な
+方程式の多くは偏微分方程式であるのだから。
+
+さて、一次の連立方程式は以下のように書き表すことができる。なお、これより係数行列\(A\)は正則である、
+すなわち解\(\bm{x}\)は一意に求まるとする。
+\begin{align}
+	\left\{
+	\begin{array}{c}
+		a_{11} x_1 + a_{12} x_2 + \cdots + a_{1n}x_n = b_1 \\
+		a_{21} x_1 + a_{22} x_2 + \cdots + a_{2n}x_n = b_2 \\
+		\vdots \\
+		a_{n1} x_1 + a_{n2} x_2 + \cdots + a_{nn}x_n = b_n \\
+	\end{array}
+	\right.
+\end{align}
+\begin{align}
+	A \bm{x}
+	=
+	\bm{b}
+\end{align}
+\begin{align}
+	A
+	&=
+	\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & \cdots & a_{1n} \\
+		a_{21} & a_{22} & \cdots & a_{2n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} & a_{n1} & \cdots & a_{nn}
+	\end{array}
+	\right] &
+%
+%
+	\bm{x}
+	&=
+	\left[
+	\begin{array}{c}
+		x_1 \\ x_2 \\ \vdots \\ x_n
+	\end{array}
+	\right] &
+%
+%
+	\bm{b}
+	&=
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ \vdots \\ b_n
+	\end{array}
+	\right]
+\end{align}
+
+この方程式を解く方法として線形代数では主に3つの方法を習ったことだろう。
+<ul>
+	<li>逆行列\(A^{-1}\)を方程式の左側からかける</li>
+	<li>クラメールの公式を用いる</li>
+	<li>ガウスの消去法（掃き出し法）を用いて\(A\)を単位行列に変形し、解く</li>
+</ul>
+しかし、先の2つの方法は数値計算の効率から見てとてもじゃないが採用できない。
+というのも計算量が大きすぎる。<br>
+
+逆行列を計算するのに以下の方法がある。
+\begin{align}
+	\begin{array}{cccc|cccc}
+		a_{11} & a_{12} & \cdots & a_{1n} & 1 & 0 & \cdots & 0 \\
+		a_{21} & a_{22} & \cdots & a_{2n} & 0 & 1 & \cdots & 0 \\
+		\vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+		a_{n1} & a_{n2} & \cdots & a_{nn} & 0 & 0 & \cdots & 1
+	\end{array}
+\end{align}
+上のように行列を並べ、ガウスの消去法を用いて左側の行列を単位行列へと変形していき、
+その結果、右側に得られる行列を逆行列とする方法である。だが、これを計算するのに
+大量の値の記憶と処理をしなければならない。加えて、
+\begin{align}
+	\begin{array}{cccc|c}
+		a_{11} & a_{12} & \cdots & a_{1n} & b_1 \\
+		a_{21} & a_{22} & \cdots & a_{2n} & b_2 \\
+		\vdots & \vdots & \ddots & \vdots & \vdots \\
+		a_{n1} & a_{n2} & \cdots & a_{nn} & b_n
+	\end{array}
+\end{align}
+を計算した方が結局効率がいい。<br>
+
+逆行列を求める他の方法には、余因子行列を利用した求め方もある。だが、これは2つ目の
+クラメールの公式にも通じるが、行列式\(|A|\)は\(n\)が大きくなるにつれて計算量が非常
+に大きくなる(\(O(n!)\))。
+従って、一般に行列式を利用した数値計算法は殆どない（固有値問題などにおいても）。
+ということで、先の2つは数値計算に用いられることはない。<br>
+
+じゃあ、全ての連立方程式の問題は、ガウスの消去法で三角行列（単位行列）に変形して
+解かれているのかというと、そうではない。実は色々な解法が考案されてきた。<br>
+
+大別すると、2通りの解き方に分かれる。
+<ul>
+	<li>
+		直接法…係数行列を解きやすい行列へと直接変形して解く。
+		丸め誤差や桁落ちが無ければ、厳密解が得られる。
+		<ul>
+			<li>ガウスの消去法及び後退代入</li>
+			<li>ガウス・ジョルダン法</li>
+			<li>LU分解</li>
+			<li>コレスキー分解</li>
+		</ul>
+	</li>
+	<li>
+		反復法…真の解に徐々に近づけていく
+		従って、得られた解はある程度の誤差を持つ。
+		<ul>
+			<li>ヤコビ法</li>
+			<li>ガウス・ザイデル法</li>
+			<li>SOR法</li>
+		</ul>
+	</li>
+	<li>
+		その他…共役勾配法
+	</li>
+</ul>
+
+次回からはこれらの手法の解説をしていく。<br>
+
+参考文献
+http://www.yamamo10.jp/yamamoto/lecture/2006/5E/index.html<br>
+http://www.az.cs.is.nagoya-u.ac.jp/class/comp-sys/na_chap_6.pdf
+
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>連立方程式の解法---LU分解その2</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+$$
+前回に引き続き、LU分解について考えていく。<br>
+
+前回の最後、LU分解の過程において0で割る状況を回避する必要があることについて触れた。
+所謂、ピボット選択の問題である。<br>
+
+LU分解の場合、行列の行の入れ替えの問題はちょっと複雑だ。少しややこしい計算をしないと
+「なんとなく」すら理解しにくい。というのも、行を入れ替えると、それまで出ていた分解結果
+も入れ替える必要が出てくるからだ。そうすると今度は、分解結果が下三角行列や上三角行列で
+なくなってしまうのではないのだろうか、...と色々とわかりにくい。<br>
+
+本題に入る前に、置換行列\(P_{ij}\)について確認しておく。
+\begin{align}
+\newcommand{\v}{\vdots}
+\renewcommand{\d}{\ddots}
+\newcommand{\c}{\cdots}
+	P_{ij}
+	=
+	\left[
+	\begin{array}{ccccccc}
+		1	&	&	&	&	&	& \\
+			&\d	& 	& 	& 	&	& \\
+			& 	& 0 &\c & 1 & 	& \\
+			& 	&\v &\d &\v & 	& \\
+			& 	& 1 &\c	& 0 & 	& \\
+			& 	& 	& 	& 	&\d	& \\
+			& 	& 	& 	& 	&	& 1
+	\end{array}
+	\right]
+\end{align}
+この行列を左からかけることで、\(i\)行目と\(j\)行目の入れ替えが起こる。
+今後、\(i\)行目と\(j\)行目を入れ替える\(n\times n\)行列を\(P_{n;ij}\)
+と書くことにする。例えば、
+\begin{align}
+	P_{4;12}A_4
+	&=
+	\left[
+	\begin{array}{cccc}
+		0 & 1 & 0 & 0 \\
+		1 & 0 & 0 & 0 \\
+		0 & 0 & 1 & 0 \\
+		0 & 0 & 0 & 1
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & a_{13} & a_{14} \\
+		a_{21} & a_{22} & a_{23} & a_{24} \\
+		a_{31} & a_{32} & a_{33} & a_{34} \\
+		a_{41} & a_{42} & a_{43} & a_{44}
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{cccc}
+		a_{21} & a_{22} & a_{23} & a_{24} \\
+		a_{11} & a_{12} & a_{13} & a_{14} \\
+		a_{31} & a_{32} & a_{33} & a_{34} \\
+		a_{41} & a_{42} & a_{43} & a_{44}
+	\end{array}
+	\right]
+\end{align}
+となる。また、置換行列は正則行列なので、逆行列\(P_{n;ij}\)が存在する。<br>
+
+さて、下の行列をLU分解する例を参考に考えていこう。
+\begin{align}
+	A_4
+	=
+	\left[
+	\begin{array}{cccc}
+		0 & 1 & 4 & -6 \\
+		8 & 1 & 6 & -2 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right]
+\end{align}
+早速、0で割ることになるのが分かると思う。LU分解は連立方程式を解くための解法なので、
+行の入れ替えは自由にやっていい。第1列の中で最も大きい8をもつ第2行と入れ替えるため、
+\(P_{4;12}\)を左乗して
+\begin{align}
+	P_{4;12} A_4
+	=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right]
+\end{align}
+これを\(L'_4\)と\(U'_4\)の積で一旦置くと（これから置換の度に"\('\)"が増えていくので注意）
+\begin{align}
+	P_{4;12} A_4
+	&=
+	L'_4 U'_4
+	=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array} &
+	%
+			L'_3
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			U'_3
+	\end{array}
+	\right] \\
+%
+%
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		u'_{11}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\left[
+			\begin{array}{c}
+				l'_{21} \\ l'_{31} \\ l'_{41}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array}
+			\right]
+			+
+			L'_3 U'_3
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	&\left\{
+		\begin{array}{ll}
+			u'_{11}=8 & l'_{21}=0 \\
+			u'_{12}=1 & l'_{31}=-\frac{1}{4} \\
+			u'_{13}=6 & l'_{41}=\frac{1}{2} \\
+			u'_{14}=-2 &
+		\end{array}
+	\right. \\
+%
+%
+	A_3
+	&=
+	L'_3 U'_3 \\
+	&=
+	\left[
+	\begin{array}{ccc}
+		1 & 4 & -6 \\
+		0 & 0 & 3 \\
+		-2 & -2 & 4
+	\end{array}
+	\right]
+	-
+	\left[
+	\begin{array}{c}
+		0 \\ -\frac{1}{4} \\ \frac{1}{2}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{ccc}
+		1 & 6 & -2
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{ccc}
+		1 & 4 & -6 \\
+		\frac{1}{4} & \frac{3}{2} & \frac{5}{2} \\
+		-\frac{5}{2} & -5 & 5
+	\end{array}
+	\right]
+\end{align}
+次はこの\(A_3\)の第1行と第3行を入れ替えてLU分解を行う。
+\begin{align}
+	P_{3;13} A_3
+	&=
+	L''_3 U''_3
+	=
+	P_{3;13} L'_3 U'_3
+	=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{cc}
+				0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			l''_{32} \\ l''_{42}
+		\end{array} &
+	%
+			L''_2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0
+		\end{array} &
+	%
+			U''_2
+	\end{array}
+	\right] \\
+%
+%
+	\left[
+	\begin{array}{ccc}
+		-\frac{5}{2} & -5 & 5 \\
+		\frac{1}{4} & \frac{3}{2} & \frac{5}{2} \\
+		1 & 4 & -6
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array} \\ \hline
+	%
+	%
+		u''_{22}
+		\left[
+		\begin{array}{c}
+			l''_{32} \\ l''_{42}
+		\end{array}
+		\right] &
+	%
+			\left[
+			\begin{array}{c}
+				l''_{32} \\ l''_{42}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array}
+			\right]
+			+
+			L''_2 U''_2
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	&\left\{
+	\begin{array}{ll}
+		u''_{22}=-\frac{5}{2} & l''_{32}=-\frac{1}{10} \\
+		u''_{23}=-5 & l''_{42}=-\frac{2}{5} \\
+		u''_{24}=5 & \\
+	\end{array}
+	\right. \\
+%
+%
+	A_2
+	&=
+	L''_2 U''_2 \\
+	&=
+	\left[
+	\begin{array}{cc}
+		\frac{3}{2} & \frac{5}{2} \\
+		4 & -6
+	\end{array}
+	\right]
+	-
+	\left[
+	\begin{array}{c}
+		-\frac{1}{10} \\ -\frac{2}{5}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cc}
+		-5 & 5
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{cc}
+		1 & 3 \\
+		2 & -4
+	\end{array}
+	\right]
+\end{align}
+続いて、この\(A_2\)の第1行と第2行を入れ替えてLU分解を行う。
+\begin{align}
+	P_{2;12} A_2
+	&=
+	L'''_2 U'''_2
+	=
+	P_{2;12} L''_2 U''_2
+	=
+	\left[
+	\begin{array}{c|c}
+		1 & 0 \\ \hline
+		l'''_{43} & 1
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'''_{33} & u'''_{34} \\ \hline
+		0 & u'''_{44}
+	\end{array}
+	\right] \\
+%
+%
+	\left[
+	\begin{array}{cc}
+		2 & -4 \\
+		1 & 3
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c|c}
+		u'''_{33} & u'''_{34} \\ \hline
+		l'''_{43} u'''_{33} & l'''_{43} u'''_{34} +u'''_{44}
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	&\left\{
+	\begin{array}{ll}
+		u'''_{33}=2 & l'''_{43}=\frac{1}{2} \\
+		u'''_{34}=-4 & u'''_{44}=5
+	\end{array}
+	\right.
+\end{align}
+さて、ここまで、何をどうしたいのかが分かりにくい式変形が続いたと思う。元の行列\(A_4\)は
+どこいった？と感じる人もいるだろう。ここからは今までの流れを逆走していく。具体的に言うと、
+\(A_4\)と\(L'''_2\)、\(U'''_2\)の関係を導く。
+\begin{align}
+	L''_2 U''_2
+	=
+	P_{2;12}^{-1} L'''_2 U'''_2
+\end{align}
+より、
+\begin{align}
+	P_{3;13} L'_3 U'_3
+&=
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array} \\ \hline
+	%
+	%
+		u''_{22}
+		\left[
+		\begin{array}{c}
+			l''_{32} \\ l''_{42}
+		\end{array}
+		\right] &
+	%
+			\left[
+			\begin{array}{c}
+				l''_{32} \\ l''_{42}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array}
+			\right]
+			+
+			P_{2;12}^{-1} L'''_2 U'''_2
+	\end{array}
+	\right] \\
+%
+%
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{cc}
+				0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0
+		\end{array} &
+	%
+			P_{2;12}
+	\end{array}
+	\right]
+	P_{3;13} L'_3 U'_3
+&=
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array} \\ \hline
+	%
+	%
+		u''_{22} P_{2;12}
+		\left[
+		\begin{array}{c}
+			l''_{32} \\ l''_{42}
+		\end{array}
+		\right] &
+	%
+			P_{2;12}
+			\left[
+			\begin{array}{c}
+				l''_{32} \\ l''_{42}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array}
+			\right]
+			+
+			L'''_2 U'''_2
+	\end{array}
+	\right] \\
+%
+%
+	P_{3;23} P_{3;13} L'_3 U'_3
+&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{cc}
+				0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{2;12}
+		\left[
+		\begin{array}{c}
+			l''_{32} \\ l''_{42}
+		\end{array}
+		\right] &
+	%
+			L'''_2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0
+		\end{array} &
+	%
+			U'''_2
+	\end{array}
+	\right] \\
+%
+%
+	L'_3 U'_3
+&=
+	P_{3;13}^{-1} P_{3;23}^{-1}
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{cc}
+				0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{2;12}
+		\left[
+		\begin{array}{c}
+			l''_{32} \\ l''_{42}
+		\end{array}
+		\right] &
+	%
+			L'''_2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0
+		\end{array} &
+	%
+			U'''_2
+	\end{array}
+	\right]
+\end{align}
+ここで、
+\begin{align}
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{cc}
+				0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0
+		\end{array} &
+	%
+			P_{2;12}
+	\end{array}
+	\right]
+	=
+	P_{3;23}
+\end{align}
+を用いている。さらに遡って、
+\begin{align}
+	P_{4;12} A_4
+&=
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		u'_{11}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\left[
+			\begin{array}{c}
+				l'_{21} \\ l'_{31} \\ l'_{41}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array}
+			\right]
+			+
+			P_{3;13}^{-1} P_{3;23}^{-1}
+			\left[
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array}
+				\right] &
+			%
+					L'''_2
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					U'''_2
+			\end{array}
+			\right]
+	\end{array}
+	\right]
+\end{align}
+
+
+
+
+
+
+
+
+</body>
+</html>

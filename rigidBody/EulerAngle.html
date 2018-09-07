@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>オイラー角</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+\(x\)軸、\(y\)軸、\(z\)軸周りの回転を表す回転行列をそれぞれ\(R_x,R_y,R_z\)とすると
+\begin{align}
+	R_x
+	=
+	\left[
+	\begin{array}{ccc}
+		1 & 0 & 0 \\
+		0 & \cos\theta & -\sin\theta \\
+		0 & \sin\theta & \cos\theta
+	\end{array}
+	\right],\qquad
+%
+%
+	R_y
+	=
+	\left[
+	\begin{array}{ccc}
+		\cos\theta & 0 & \sin\theta \\
+		0 & 1 & 0 \\
+		-\sin\theta & 0 & \cos\theta
+	\end{array}
+	\right] ,\qquad
+%
+%
+	R_z
+	=
+	\left[
+	\begin{array}{ccc}
+		\cos\theta & -\sin\theta & 0 \\
+		\sin\theta & \cos\theta & 0 \\
+		0 & 0 & 1
+	\end{array}
+	\right]
+\end{align}
+これらを組み合わせることによって、
+任意の回転を表現できる。例えば、以下のように組み合わせることで表現する場合がある。
+\begin{align}
+	R(\bm{\theta})
+	&=
+	R_z(\theta_3) R_x(\theta_2) R_z(\theta_1)
+	\qquad (\bm{\theta}=(\theta_1,\theta_2,\theta_3)\T)
+\end{align}
+このように、各軸周りに\(\theta_1,\theta_2,\theta_3\)と回転させて、任意の回転を
+表現する手法をオイラー角という。だが、このオイラー角による表現では
+いくらか問題がある。その大きな問題として、ジンバルロックが挙げられる。
+
+\begin{align}
+	\dot{R}(t) R\T (t)
+	&=
+	\bm{\omega}(t) \times
+\end{align}
+であることを思い出して、角速度\(\bm{\omega}\)と\(\dot{\bm{\theta}}\)の関係式を
+求めてみる。<br>
+
+\begin{align}
+	R(\bm{\theta})
+	&=
+	R_z(\theta_3) R_x(\theta_2) R_z(\theta_1) \\
+	&=
+	\left[
+	\begin{array}{ccc}
+		\cos\theta_3 & -\sin\theta_3 & 0 \\
+		\sin\theta_3 & \cos\theta_3 & 0 \\
+		0 & 0 & 1
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{ccc}
+		1 & 0 & 0 \\
+		0 & \cos\theta_2 & -\sin\theta_2 \\
+		0 & \sin\theta_2 & \cos\theta_2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{ccc}
+		\cos\theta_1 & -\sin\theta_1 & 0 \\
+		\sin\theta_1 & \cos\theta_1 & 0 \\
+		0 & 0 & 1
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{ccc}
+		\cos\theta_3 & -\cos\theta_2 \sin\theta_3 & \sin\theta_2 \sin\theta_3 \\
+		\sin\theta_3 & \cos\theta_2 \cos\theta_3 & -\sin\theta_2 \cos\theta_3 \\
+		0 & \sin\theta_2 & \cos\theta_2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{ccc}
+		\cos\theta_1 & -\sin\theta_1 & 0 \\
+		\sin\theta_1 & \cos\theta_1 & 0 \\
+		0 & 0 & 1
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{ccc}
+		\cos\theta_1 \cos\theta_3 -\sin\theta_1 \cos\theta_2 \sin\theta_3 &
+			-\sin\theta_1 \cos\theta_3 -\cos\theta_1 \cos\theta_2 \sin\theta_3 &
+			\sin\theta_2 \sin\theta_3 \\
+		\cos\theta_1 \sin\theta_3 +\sin\theta_1 \cos\theta_2 \cos\theta_3 &
+			-\sin\theta_1 \sin\theta_3 +\cos\theta_1 \cos\theta_2 \cos\theta_3 &
+			-\sin\theta_2 \cos\theta_3 \\
+		\sin\theta_1 \sin\theta_2 &
+			\cos\theta_1 \sin\theta_2 &
+			\cos\theta_2
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	\omega_x
+%
+	&=
+	\frac{\d}{\d t}(\sin\theta_1 \sin\theta_2) (\cos\theta_1 \sin\theta_3 +\sin\theta_1 \cos\theta_2 \cos\theta_3) \\
+	&\qquad
+	+\frac{\d}{\d t}(\cos\theta_1 \sin\theta_2) (-\sin\theta_1\sin\theta_3 +\cos\theta_1 \cos\theta_2 \cos\theta_3) \\
+	&\qquad
+	+\frac{\d}{\d t}(\cos\theta_2) (-\sin\theta_2 \cos\theta_3) \\
+%
+	&=
+	\sin\theta_2 \sin\theta_3 \dot{\theta_1}
+	+
+	\cos\theta_3 \dot{\theta_2} \\
+%
+%
+	\omega_y
+	&=
+	-\sin\theta_2 \cos\theta_3 \dot{\theta_1}
+	+\sin\theta_3 \dot{\theta_2} \\
+%
+%
+	\omega_z
+	&=
+	\cos\theta_2 \dot{\theta_1}
+	+ \dot{\theta_3} \\
+%
+%
+	\bm{\omega}
+	&=
+	\left[
+	\begin{array}{ccc}
+		\sin\theta_2 \sin\theta_3 & \cos\theta_3 & 0 \\
+		-\sin\theta_2 \cos\theta_3 & \sin\theta_3 & 0 \\
+		\cos\theta_2 & 0 & 1
+	\end{array}
+	\right]
+	\bm{\dot{\theta}}
+\end{align}
+ここで、\(\theta_2 =0,\pi\)のとき、
+\begin{align}
+	\bm{\omega}
+	&=
+	\left[
+	\begin{array}{ccc}
+		0 & \cos\theta_3 & 0 \\
+		0 & \sin\theta_3 & 0 \\
+		1 & 0 & 1
+	\end{array}
+	\right]
+	\bm{\dot{\theta}}
+\end{align}
+となるが、行列が正則になっていないのが分かると思う。つまり、逆行列が存在しない、\(\bm{\omega}\)と
+\(\bm{\dot{\theta}}\)が１対１に対応しなくなる。(これをジンバルロックという文献もあるが、つながりが
+よく分からない)<br>
+
+この問題を解決する方法としてクォータニオン(四元数)を用いる場合がある。次回はこのクォータニオンを
+解説していく。
+
+</body>
+</html>

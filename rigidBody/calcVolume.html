@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>モデルの体積を計算する方法</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+多数の三角形で表現されたモデルの体積を計算したい。分かっているのは
+それら三角形の頂点の座標のみである。
+
+ここで、ベクトル解析でおなじみのGaussの発散定理を利用する。
+\begin{align}
+	\int_V \div\bm{v}\, \d V
+	&= \int_{\partial V} \bm{v} \cdot \d \bm{S} \tag{1}
+\end{align}
+
+体積\(V\)は\(\nabla\cdot\bm{v}\) が 1 となるような\(\bm{v}\) を考えると
+\begin{align}
+	V
+	&= \int_V \d V \\
+	&= \int_V \div\bm{v} \, \d V \\
+	&= \int_{\partial V} \bm{v} \cdot \d \bm{S} \tag{2}
+\end{align}
+という風に、体積積分の問題から表面積分の問題に変換できる。そしてこれを、
+次のようにモデル表面の各三角形\(\partial V_i\) 毎の積分に近似して、
+\begin{align}
+	V
+	&= \sum_i \int_{\partial V_i} \bm{v} \cdot \d \bm{S}_i \tag{3}
+\end{align}
+となる。ここでは全表面を、与えられている多数の三角形で近似していくが、勿論三角形(平面)
+以外の近似も考えられる。各頂点からB-スプラインなどの曲面近似をしてやればいい。
+（まあ、元のモデルを三角形で十分近似できていれば、ただ計算量が嵩むだけだと思うが...
+検証・調査してないから何とも）<br>
+
+さて、問題はこの\(\partial V_i\) 上での積分の計算方法だ。<br>
+
+\(\d\bm{S}_i\)は面素ベクトルである。これまたベクトル解析で出てきたように
+\begin{align}
+	\d\bm{S}_i
+	&=
+	\left(
+		\pard{u_i}{}{\bm{r}} \times \pard{v_i}{}{\bm{r}}
+	\right)
+	\d u_i\, \d v_i \tag{4}
+\end{align}
+となる。ここで\(u_i,v_i,\bm{r}\) は図を参考にしてほしい。三角形の各頂点を順番に（表裏に注意して）
+\(\bm{r}_{i0}=(x_{i0},y_{i0},z_{i0})\T\)、\(\bm{r}_{i1}=(x_{i1},y_{i1},z_{i1})\T\)、
+\(\bm{r}_{i2}=(x_{i2},y_{i2},z_{i2})\T\)とすると、
+\begin{align}
+	\bm{r}
+	&=
+	\bm{r}_{i0}
+	+\left( \bm{r}_{i1} -\bm{r}_{i0} \right) u_i
+	+\left( \bm{r}_{i2} -\bm{r}_{i0} \right) v_i \tag{5} \\
+%
+	\pard{u_i}{}{\bm{r}}
+	&=
+	\bm{r}_{i1} -\bm{r}_{i0} \\
+	\pard{v_i}{}{\bm{r}}
+	&=
+	\bm{r}_{i2} -\bm{r}_{i0} \\
+%
+	\d \bm{S}_i
+	&=
+	\left( \bm{r}_{i1} -\bm{r}_{i0} \right)
+	\times
+	\left( \bm{r}_{i2} -\bm{r}_{i0} \right)
+	\d u_i\, \d v_i \tag{6}
+\end{align}
+<br>
+
+\(\bm{v}\) は\(\div\bm{v}\) が 1 になればいいので任意性がある。ただ、計算するときに
+できるだけ簡単な形である方がいいに決まっている。今回は\(\bm{v}=x\e{x}\) を採用する。
+これなら\(\d\bm{S}_i\) との内積は\(x\)成分だけを考えればいいし、被積分関数\(x\)は式(5)から
+計算できる。
+<br>
+
+これで漸く準備は整った。早速計算していこう。
+\begin{align}
+	V
+	&= \sum_i \int_{\partial V_i} \bm{v}\cdot \d\bm{S}_i \\
+	&=
+	\sum_i
+	\int_0^1 \d u_i \int_0^{1-u} \d v_i \,
+		x \e{x} \,\cdot
+		\left(
+			\left( \bm{r}_{i1} -\bm{r}_{i0} \right)
+			\times
+			\left( \bm{r}_{i2} -\bm{r}_{i0} \right)
+		\right) \\
+	&=
+	\sum_i
+	\int_0^1 \d u_i \int_0^{1-u_i} \d v_i \,
+		x
+		\left(
+			(y_{i1} -y_{i0})
+			(z_{i2} -z_{i0})
+			-
+			(z_{i1} -z_{i0})
+			(y_{i2} -y_{i0})
+		\right) \\
+	&=
+	\sum_i
+	\left(
+		(y_{i1} -y_{i0})
+		(z_{i2} -z_{i0})
+		-
+		(z_{i1} -z_{i0})
+		(y_{i2} -y_{i0})
+	\right)
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i x \\[3mm]
+%
+%
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i x
+	&=
+	\int_0^1 \d u_i
+	\int_0^{1-u_i} \d v_i
+	\left(
+		x_{i0}
+		+ (x_{i1} -x_{i0}) u_i
+		+ (x_{i2} -x_{i0}) v_i
+	\right)
+	\qquad (\because (5)) \\
+	&=
+	\int_0^1 \d u_i
+	\left[
+		\frac{1}{2(x_{i2} -x_{i0})}
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+			+ (x_{i2} -x_{i0}) v_i
+		\right)^2
+	\right]_{v=0}^{v=1-u_i} \\
+	&=
+	\frac{1}{2(x_{i2} -x_{i0})}
+	\int_0^1 \d u_i
+	\left(
+		\left(
+			x_{i2}
+			+ (x_{i1} -x_{i2}) u_i
+		\right)^2
+		-
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+		\right)^2
+	\right) \\
+	&=
+	\frac{1}{2(x_{i2} -x_{i0})}
+	\left[
+		\frac{1}{3(x_{i1} -x_{i2})}
+		\left(
+			x_{i2}
+			+ (x_{i1} -x_{i2}) u_i
+		\right)^3
+		-
+		\frac{1}{3(x_{i1} -x_{i0})}
+		\left(
+			x_{i0}
+			+ (x_{i1} -x_{i0}) u_i
+		\right)^3
+	\right]_{0}^{1} \\
+	&=
+	\frac{1}{2(x_{i2} -x_{i0})}
+	\left(
+		\frac{1}{3(x_{i1} -x_{i2})}
+		\left(
+			x_{i1}^3
+			- x_{i2}^3
+		\right)
+		-
+		\frac{1}{3(x_{i1} -x_{i0})}
+		\left(
+			x_{i1}^3
+			- x_{i0}^3
+		\right)
+	\right) \\
+	&=
+	\frac{1}{6(x_{i2} -x_{i0})}
+	\left(
+		x_{i1}^2
+		+x_{i1} x_{i2}
+		+x_{i2}^2
+		-x_{i1}^2
+		-x_{i1} x_{i0}
+		-x_{i0}^2
+	\right) \\
+	&=
+	\frac{1}{6(x_{i2} -x_{i0})}
+	\left(
+		x_{i1}
+		\left(
+			x_{i2} -x_{i0}
+		\right)
+		+
+		\left(
+			x_{i2} +x_{i0}
+		\right)
+		\left(
+			x_{i2} -x_{i0}
+		\right)
+	\right) \\
+	&=
+	\frac{1}{6}
+	\left(
+		x_{i0}
+		+x_{i1}
+		+x_{i2}
+	\right) \\[3mm]
+%
+%
+	\therefore
+	V
+	&=
+	\sum_i
+	\left(
+		(y_{i1} -y_{i0})
+		(z_{i2} -z_{i0})
+		-
+		(z_{i1} -z_{i0})
+		(y_{i2} -y_{i0})
+	\right)
+	\cdot
+	\frac{1}{6}
+	\left(
+		x_{i0} +x_{i1} +x_{i2}
+	\right) \\
+	&=
+	\frac{1}{6}
+	\sum_i
+	\left(
+		y_{i0} z_{i1}
+		+y_{i1} z_{i2}
+		+y_{i2} z_{i0}
+		-y_{i0} z_{i2}
+		-y_{i1} z_{i0}
+		-y_{i2} z_{i1}
+	\right)
+	\left(
+		x_{i0} +x_{i1} +x_{i2}
+	\right)
+\end{align}
+
+よし、実装しよう。<br>
+
+今回は、\(x\) 方向に86.02 mm、\(y\) 方向に69 mm、\(z\) 方向に3 mm、
+(25.4303 mm,44.8737 mm)の位置に円筒状の穴を開けた板で理論値と計算値を比較してみる。
+
+体積理論値:1.4333599174290994563390255027454E-5 m3
+体積計算値:1.4346567880864574E-5 m3
+
+うん、まずまずいいだろう。モデルのメッシュサイズによってまた変わってくるだろう。
+とりあえず、実装はうまくいったみたいだ。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

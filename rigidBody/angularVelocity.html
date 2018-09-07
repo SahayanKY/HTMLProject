@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>剛体の運動計算---角速度</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+	\newcommand{\bm}[1]{\boldsymbol{#1}}
+	\newcommand{\d}{{\rm d}}
+	\newcommand{\div}{\nabla\cdot}
+	\newcommand{\e}[1]{\bm{e}_{#1}}
+	\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+	\newcommand{\T}{^{\rm T}}
+$$
+前回の最後に次の式が出た。
+\begin{align}
+	\bm{r}_i (t)
+	&= \bm{r}_0 (t) +R(t)\bm{r}_{i0}(0)
+\end{align}
+これを時間微分してみると
+\begin{align}
+	\dot{\bm{r}_i}(t)
+	&= \dot{\bm{r}_0}(t) +\dot{R}(t) \bm{r}_{i0}(0) \\
+	&= \dot{\bm{r}_0}(t) +\dot{R}(t) R\T(t) \bm{r}_{i0}(t) \\
+	& \qquad (\bm{r}_{i0}(t) = R(t)\bm{r}_{i0}(0)) \\
+	\dot{\bm{r}_{i0}}(t)
+	&= \dot{R}(t) R\T(t) \bm{r}_{i0}(t)
+\end{align}
+ここで角速度ベクトル\(\bm{\omega}\)を使った次の式を連想する人はいるだろうか。
+\begin{align}
+	\bm{v}_{i0}
+	= \dot{\bm{r}_{i0}}(t)
+	&= \bm{\omega}(t) \times \bm{r}_{i0}(t)
+\end{align}
+つまり、\(\dot{R}R\T\)をかけることは、角速度ベクトル\(\bm{\omega}\)との外積をとることに等しい。
+\begin{align}
+	\dot{R}(t) R\T(t)
+	= \bm{\omega}(t) \times
+\end{align}
+...？\(\bm{\omega}\times\)ってどんな量だ？外積の定義に戻って考えてみると
+\begin{align}
+	\bm{v} \times \bm{w}
+	&=
+	\left[
+	\begin{array}{c}
+		v_x \\ v_y \\ v_z
+	\end{array}
+	\right]
+	\times
+	\left[
+	\begin{array}{c}
+		w_x \\ w_y \\ w_z
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{c}
+		v_y w_z - v_z w_y \\
+		v_z w_x - v_x w_z \\
+		v_x w_y - v_y w_x \\
+	\end{array}
+	\right] \\
+	&=
+	\left[
+	\begin{array}{ccc}
+		0 & -v_z & v_y \\
+		v_z & 0 & -v_x \\
+		-v_y & v_x & 0
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		w_x \\ w_y \\ w_z
+	\end{array}
+	\right] \\
+%
+	\bm{v} \times
+	&=
+	\left[
+	\begin{array}{ccc}
+		0 & -v_z & v_y \\
+		v_z & 0 & -v_x \\
+		-v_y & v_x & 0
+	\end{array}
+	\right]
+\end{align}
+という行列を表している。(ただ、この表記の仕方をしている例をあまり見ないので要検証)すると、上の式から、
+\begin{align}
+	\dot{R}(t) R\T(t)
+	&=
+	\bm{\omega}(t) \times \\
+%
+	\dot{R}(t)
+	&=
+	\bm{\omega}(t) \times R(t) \\
+	&
+	\qquad (R\T R = E) \\[3mm]
+%
+%
+	\dot{\bm{r}_i}(t)
+	&=
+	\dot{\bm{r}_0}(t)
+	+ \bm{\omega}(t) \times \bm{r}_{i0}(t) \\
+%
+	&=
+	\left[
+	\begin{array}{cc}
+		E & -\bm{r}_{i0}(t) \times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_0}(t) \\
+		\bm{\omega}(t)
+	\end{array}
+	\right] \\[3mm]
+%
+%
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_1}(t) \\
+		\dot{\bm{r}_2}(t) \\
+		\vdots \\
+		\dot{\bm{r}_n}(t)
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{cc}
+		E & -\bm{r}_{10}(t) \times \\
+		E & -\bm{r}_{20}(t) \times \\
+		\vdots & \vdots \\
+		E & -\bm{r}_{n0}(t) \times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_0}(t) \\
+		\bm{\omega}(t)
+	\end{array}
+	\right]
+\end{align}
+上の式をよく見てほしい。左辺の行列と右辺の一番右の行列の行数を比較すると、\(3n\)から\(6\)に
+減っている。これを運動方程式に代入すればどうなるだろうか？
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		m_1 & 0 & \cdots & 0 \\
+		0 & m_2 & \cdots & 0 \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots & m_n
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\ddot{\bm{r}_1} \\
+		\ddot{\bm{r}_2} \\
+		\vdots \\
+		\ddot{\bm{r}_n}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		\bm{f}_1 \\
+		\bm{f}_2 \\
+		\vdots \\
+		\bm{f}_n
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\bm{f}_1^c \\
+		\bm{f}_2^c \\
+		\vdots \\
+		\bm{f}_n^c
+	\end{array}
+	\right] \\
+%
+%
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cccc}
+			m_1 & 0 & \cdots & 0 \\
+			0 & m_2 & \cdots & 0 \\
+			\vdots & \vdots & \ddots & \vdots \\
+			0 & 0 & \cdots & m_n
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{cc}
+			E & -\bm{r}_{10}(t)\times \\
+			E & -\bm{r}_{20}(t)\times \\
+			\vdots & \vdots \\
+			E & -\bm{r}_{n0}(t)\times
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0}(t) \\
+			\bm{\omega}(t)
+		\end{array}
+		\right]
+	\right)
+	&=
+	\left[
+	\begin{array}{c}
+		\bm{f}_1 \\ \bm{f}_2 \\ \vdots \\ \bm{f}_n
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\bm{f}_1^c \\ \bm{f}_2^c \\ \vdots \\ \bm{f}_n^c
+	\end{array}
+	\right] \\
+%
+%
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cccc}
+			m_1 E & -m_1\bm{r}_{10}(t)\times \\
+			m_2 E & -m_2\bm{r}_{20}(t)\times \\
+			\vdots & \vdots \\
+			m_n E & -m_n\bm{r}_{n0}(t)\times
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0}(t) \\
+			\bm{\omega}(t)
+		\end{array}
+		\right]
+	\right)
+	&=
+		\left[
+	\begin{array}{c}
+		\bm{f}_1 \\ \bm{f}_2 \\ \vdots \\ \bm{f}_n
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\bm{f}_1^c \\ \bm{f}_2^c \\ \vdots \\ \bm{f}_n^c
+	\end{array}
+	\right]
+\end{align}
+上の式は\(\dot{\bm{r}_0}(t),\bm{\omega}(t)\)という6つの量に関する連立微分方程式になっている。
+もとの式が\(3n\)本の連立微分方程式であったことを思い出せば、解く量が文字通り桁違いに小さく
+なったことが分かると思う。<br>
+
+だが、この式もまだ実用的ではないのだ。理由は2つある。1つ目は6本の連立方程式とは言ったが、
+その係数行列には時間依存項が\(n\)個もあることだ。これじゃあ、本質的な解決にはなっていない。
+なぜなら、時間発展の度に\(n\)個の点の位置を計算しなければならないため、計算量が落ちないからだ。
+その上、上の連立微分方程式は最終的にはただの連立方程式となるだが、ここで連立方程式を解くときの
+気持ちになってほしい。方程式を解く間、係数行列を常に記憶しておかなければならない。
+つまり、記憶量も実質落ちないのだ。<br>
+2つ目は、拘束力の項がまだ残っていることだ。これをうまく処理しなければ計算が面倒だ。<br>
+これらのことは、次回解決する。
+</body>
+</html>

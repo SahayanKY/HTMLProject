@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>拘束力と運動方程式---内力</title>
+<script type="text/javascript"
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+$$
+物体が点\(\bm{r}_i\)で受ける力\(\bm{F}_i\)が微小変位\(\delta\bm{r}_i\)させたときの仕事の総和
+\(\delta W\)を考える。
+\begin{align}
+	\delta W
+	&=
+	\bm{F}_1 \cdot \delta \bm{r}_1
+	+\bm{F}_2 \cdot \delta \bm{r}_2
+	+\cdots \\
+%
+	&=
+	\sum_i \bm{F}_i \cdot \delta \bm{r}_i
+\end{align}
+
+拘束力\(\bm{f}^c_i\)は拘束条件を満たす変位\(\delta\bm{r}^c_i\)においては仕事をしない。 即ち、
+\begin{align}
+	\sum_i \bm{f}^c_i \cdot \delta\bm{r}^c_i
+	&= 0
+\end{align}
+つまり、\(\d t\)で割って極限をとって、
+\begin{align}
+	\sum_i \bm{f}^c_i \cdot \dot{\bm{r}^c_i}
+	&=0 \\
+%
+	\left[
+	\begin{array}{ccc}
+		\dot{\bm{r}^c_1}\T & \cdots & \dot{\bm{r}^c_n}\T
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\bm{f}^c_1 \\ \vdots \\ \bm{f}^c_n
+	\end{array}
+	\right]
+	&= 0
+\end{align}
+この上の式を見て、何か思いつくことは無いだろうか？
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		m_1 E & O & \cdots & O \\
+		O & m_2 E & \cdots & O \\
+		\vdots & \vdots & \ddots & \vdots \\
+		O & O & \cdots & m_n E
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\ddot{\bm{r}_1} \\
+		\ddot{\bm{r}_2} \\
+		\vdots \\
+		\ddot{\bm{r}_n}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c}
+		\bm{f}_1 \\
+		\bm{f}_2 \\
+		\vdots \\
+		\bm{f}_n
+	\end{array}
+	\right]
+	+
+	\left[
+	\begin{array}{c}
+		\bm{f}^c_1 \\
+		\bm{f}^c_2 \\
+		\vdots \\
+		\bm{f}^c_n
+	\end{array}
+	\right]
+\end{align}
+Newtonの運動方程式に\(\left[\dot{\bm{r}_1}\T \, \cdots \,\dot{\bm{r}_n}\T\right]\)を
+左乗してやることで、拘束力の項がうまく消える。(注.方程式中の\(\dot{\bm{r}_i}\)は
+実現可能な速度ベクトルであり、拘束条件を満たす変位に一致するのだから\(\dot{\bm{r}^c_i}\)に
+一致する)ところで、その行列は、角速度のページで述べたように
+\begin{align}
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_1} \\
+		\dot{\bm{r}_2} \\
+		\vdots \\
+		\dot{\bm{r}_n}
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{cc}
+		E & -\bm{r}_{10}\times \\
+		E & -\bm{r}_{20}\times \\
+		\vdots & \vdots \\
+		E & -\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_0} \\
+		\bm{\omega}
+	\end{array}
+	\right]
+\end{align}
+であるから、
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		\dot{\bm{r}_1}\T &
+		\dot{\bm{r}_2}\T &
+		\cdots &
+		\dot{\bm{r}_n}\T
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\bm{f}^c_1 \\
+		\bm{f}^c_2 \\
+		\vdots \\
+		\bm{f}^c_n
+	\end{array}
+	\right]
+	&=
+	0 \\
+%
+	\left[
+	\begin{array}{cc}
+		\dot{\bm{r}_0}\T & \bm{\omega}\T
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		E & E & \cdots & E \\
+		-(\bm{r}_{10}\times)\T &
+		-(\bm{r}_{20}\times)\T &
+		\cdots &
+		-(\bm{r}_{n0}\times)\T
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\bm{f}^c_1 \\
+		\bm{f}^c_2 \\
+		\vdots \\
+		\bm{f}^c_n
+	\end{array}
+	\right]
+	&=
+	0
+\end{align}
+上の式は、
+\begin{align}
+	A_1 \dot{x_0}
+	+ A_2 \dot{y_0}
+	+ A_3 \dot{z_0}
+	+ A_4 \omega_x
+	+ A_5 \omega_y
+	+ A_6 \omega_z
+	= 0
+\end{align}
+という形に書き直せる。もし、各時刻、各位置\(\bm{r}_0\)、各姿勢\(R\)において
+\(\dot{\bm{r}_0},\bm{\omega}\)が全く自由に選べるのなら、係数\(A_i\)は0だから、
+(\((\bm{v}\times)+(\bm{v}\times)\T =O\)より、)
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		E & E & \cdots & E \\
+		\bm{r}_{10}\times &
+		\bm{r}_{20}\times &
+		\cdots &
+		\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\bm{f}^c_1 \\
+		\bm{f}^c_2 \\
+		\vdots \\
+		\bm{f}^c_n
+	\end{array}
+	\right]
+	&= O
+\end{align}
+自由に選べるというのは、剛体が空中で（必要に応じて外力（重力やローレンツ力など）を受けて）
+運動するようなときである。ここでの拘束力は、1つの剛体内の点同士が作用し合う力が挙げられる。
+逆に、壁や地面を転がったり滑ったりするようなときに受ける拘束力に対してはこの論理は成り立たない。
+\(\dot{\bm{r}_0}\)や\(\bm{\omega}\)が制限されるからである。<br>
+上のことから、剛体が空中で運動する際の運動方程式に対して、上の式を利用してやることで、
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		E & E & \cdots & E \\
+		\bm{r}_{10}\times &
+		\bm{r}_{20}\times &
+		\cdots &
+		\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		m_1 E & O & \cdots & O \\
+		O & m_2 E & \cdots & O \\
+		\vdots & \vdots & \ddots & \vdots \\
+		O & O & \cdots & m_n E
+	\end{array}
+	\right]
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_1} \\
+			\dot{\bm{r}_2} \\
+			\vdots \\
+			\dot{\bm{r}_n}
+		\end{array}
+		\right]
+	\right)
+	&=
+	\left[
+	\begin{array}{cccc}
+		E & E & \cdots & E \\
+		\bm{r}_{10}\times &
+		\bm{r}_{20}\times &
+		\cdots &
+		\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left(
+		\left[
+		\begin{array}{c}
+			\bm{f}_1 \\
+			\bm{f}_2 \\
+			\vdots \\
+			\bm{f}_n
+		\end{array}
+		\right]
+		+
+		\left[
+		\begin{array}{c}
+			\bm{f}^c_1 \\
+			\bm{f}^c_2 \\
+			\vdots \\
+			\bm{f}^c_n
+		\end{array}
+		\right]
+	\right) \\
+\end{align}
+\begin{align}
+	(左辺)
+	&=
+	\left[
+	\begin{array}{cccc}
+		E & E & \cdots & E \\
+		\bm{r}_{10}\times &
+		\bm{r}_{20}\times &
+		\cdots &
+		\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		m_1 E & O & \cdots & O \\
+		O & m_2 E & \cdots & O \\
+		\vdots & \vdots & \ddots & \vdots \\
+		O & O & \cdots & m_n E
+	\end{array}
+	\right]
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_1} \\
+			\dot{\bm{r}_2} \\
+			\vdots \\
+			\dot{\bm{r}_n}
+		\end{array}
+		\right]
+	\right) \\
+%
+	&=
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cccc}
+			E & E & \cdots & E \\
+			\bm{r}_{10}\times &
+			\bm{r}_{20}\times &
+			\cdots &
+			\bm{r}_{n0}\times
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{cccc}
+			m_1 E & O & \cdots & O \\
+			O & m_2 E & \cdots & O \\
+			\vdots & \vdots & \ddots & \vdots \\
+			O & O & \cdots & m_n E
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{cc}
+			E & -\bm{r}_{10}\times \\
+			E & -\bm{r}_{20}\times \\
+			\vdots & \vdots \\
+			E & -\bm{r}_{n0}\times
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right) \\
+	&\qquad
+	-
+	\left[
+	\begin{array}{cccc}
+		O & O & \cdots & O \\
+		\dot{\bm{r}_{10}}\times &
+		\dot{\bm{r}_{20}}\times &
+		\cdots &
+		\dot{\bm{r}_{n0}}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		m_1 E & O & \cdots & O \\
+		O & m_2 E & \cdots & O \\
+		\vdots & \vdots & \ddots & \vdots \\
+		O & O & \cdots & m_n E
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cc}
+		E & -\bm{r}_{10}\times \\
+		E & -\bm{r}_{20}\times \\
+		\vdots & \vdots \\
+		E & -\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_0} \\ \bm{\omega}
+	\end{array}
+	\right] \\[3mm]
+%
+	(左辺第一項)
+	&=
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cccc}
+			m_1 E & m_2 E & \cdots & m_n E \\
+			m_1\bm{r}_{10}\times &
+			m_2\bm{r}_{20}\times &
+			\cdots &
+			m_n\bm{r}_{n0}\times
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{cc}
+			E & -\bm{r}_{10}\times \\
+			E & -\bm{r}_{20}\times \\
+			\vdots & \vdots \\
+			E & -\bm{r}_{n0}\times
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right) \\
+	&=
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cc}
+			\sum_i m_i E &
+			-\sum_i m_i\bm{r}_{i0}\times \\
+			\sum_i m_i\bm{r}_{i0}\times &
+			-\sum_i m_i (\bm{r}_{i0}\times)(\bm{r}_{i0}\times)
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right) \\
+%
+	&=
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cc}
+			M &
+			-M\bm{r}_{g0}\times \\
+			M\bm{r}_{g0}\times &
+			\sum_i m_i (|\bm{r}_{i0}|^2	E - \bm{r}_{i0}\bm{r}_{i0}\T)
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right) \\
+%
+	&=
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cc}
+			M &
+			-M\bm{r}_{g0}\times \\
+			M\bm{r}_{g0}\times &
+			I_0
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right) \\[3mm]
+%
+%
+	(左辺第二項)
+	&=
+	-
+	\left[
+	\begin{array}{cccc}
+		O & O & \cdots & O \\
+		m_1\dot{\bm{r}_{10}}\times &
+		m_2\dot{\bm{r}_{20}}\times &
+		\cdots &
+		m_n\dot{\bm{r}_{n0}}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cc}
+		E & -\bm{r}_{10}\times \\
+		E & -\bm{r}_{20}\times \\
+		\vdots & \vdots \\
+		E & -\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_0} \\ \bm{\omega}
+	\end{array}
+	\right] \\
+%
+	&=
+	-
+	\left[
+	\begin{array}{cc}
+		O & O \\
+		\sum_i m_i\dot{\bm{r}_{i0}}\times &
+		-\sum_i m_i(\dot{\bm{r}_{i0}}\times) (\bm{r}_{i0}\times)
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		\dot{\bm{r}_0} \\ \bm{\omega}
+	\end{array}
+	\right] \\
+%
+	&=
+	-
+	\left[
+	\begin{array}{c}
+		O \\
+		\sum_i m_i
+			\dot{\bm{r}_{i0}}\times\dot{\bm{r}_0}
+		-\sum_i m_i
+			(\dot{\bm{r}_{i0}}\times)(\bm{r}_{i0}\times\bm{\omega})
+	\end{array}
+	\right] \\
+	&=
+	-
+	\left[
+	\begin{array}{c}
+		O \\
+		M\dot{\bm{r}_{g0}}\times\dot{\bm{r}_0}
+		-
+		\sum_i m_i
+			(\dot{\bm{r}_{i0}}\times)(-\dot{\bm{r}_{i0}})
+	\end{array}
+	\right] \\
+	&=
+	-
+	\left[
+	\begin{array}{c}
+		O \\
+		M\dot{\bm{r}_{g0}}\times\dot{\bm{r}_0}
+	\end{array}
+	\right] \\[3mm]
+%
+%
+	(右辺)
+	&=
+	\left[
+	\begin{array}{cccc}
+		E & E & \cdots & E \\
+		\bm{r}_{10}\times &
+		\bm{r}_{20}\times &
+		\cdots &
+		\bm{r}_{n0}\times
+	\end{array}
+	\right]
+	\left(
+		\left[
+		\begin{array}{c}
+			\bm{f}_1 \\
+			\bm{f}_2 \\
+			\vdots \\
+			\bm{f}_n
+		\end{array}
+		\right]
+		+
+		\left[
+		\begin{array}{c}
+			\bm{f}^c_1 \\
+			\bm{f}^c_2 \\
+			\vdots \\
+			\bm{f}^c_n
+		\end{array}
+		\right]
+	\right) \\
+%
+	&=
+	\left[
+	\begin{array}{c}
+		\sum_i \bm{f}_i \\
+		\sum_i \bm{r}_{i0}\times\bm{f}_i
+	\end{array}
+	\right] \\
+%
+	&=
+	\left[
+	\begin{array}{c}
+		\bm{F} \\
+		\bm{\tau}_0
+	\end{array}
+	\right]
+\end{align}
+ここで、\(\bm{r}_g\)は重心の位置、\(M\)は剛体の全質量、\(I_0\)は\(\bm{r}_0\)周りの
+慣性モーメントテンソル、\(\bm{F}\)は剛体にかかる外力の総和、
+\(\bm{\tau}_0\)は\(\bm{r}_0\)周りの外力のトルクの総和である。
+\begin{align}
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cc}
+			M & -M\bm{r}_{g0}\times \\
+			M\bm{r}_{g0}\times & I_0
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_0} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right)
+	-
+	\left[
+	\begin{array}{c}
+		O \\ M\dot{\bm{r}_{g0}}\times\dot{\bm{r}_0}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{c}
+		\bm{F} \\ \bm{\tau}_0
+	\end{array}
+	\right]
+\end{align}
+回転の基準点を\(\bm{r}_g\)にとれば
+\begin{align}
+	\frac{\d}{\d t}
+	\left(
+		\left[
+		\begin{array}{cc}
+			M & O \\
+			O & I_g
+		\end{array}
+		\right]
+		\left[
+		\begin{array}{c}
+			\dot{\bm{r}_g} \\ \bm{\omega}
+		\end{array}
+		\right]
+	\right)
+	=
+	\left[
+	\begin{array}{c}
+		\bm{F} \\ \bm{\tau}_g
+	\end{array}
+	\right]
+\end{align}
+どうかな？最初の式に比べて非常に本数が減っただろう？さらにもうちょっと変形して、
+\begin{align}
+	\frac{\d}{\d t}
+	\left(
+		M\dot{\bm{r}_g}
+	\right)
+	&=
+	M\frac{\d\dot{\bm{r}_g}}{\d t} \\[3mm]
+%
+%
+	I_0(t)
+%
+	&=
+	\sum_i m_i
+		\left[
+			\bm{r}_{i0}\T(t)\bm{r}_{i0}(t) E
+			-\bm{r}_{i0}(t)\bm{r}_{i0}\T(t)
+		\right]
+	\\
+%
+	&=
+	\sum_i m_i
+		\left[
+			(R(t)\bm{r}_{i0}(0))\T(R(t)\bm{r}_{i0}(0)) E
+			-(R(t)\bm{r}_{i0}(0))(R(t)\bm{r}_{i0}(0))\T
+		\right]
+	\\
+%
+	&=
+	\sum_i m_i
+		\left[
+			\bm{r}_{i0}\T(0) R\T(t)R(t) \bm{r}_{i0}(0) E
+			-R(t)\bm{r}_{i0}(0)\bm{r}_{i0}\T(0) R\T (t)
+		\right]
+	\\
+%
+	&=
+	\sum_i m_i
+		R(t)
+		\left[
+			|\bm{r}_{i0}(0)|^2 E
+			-\bm{r}_{i0}(0)\bm{r}_{i0}\T (0)
+		\right]
+		R\T (t)
+	\qquad
+		(E = RR\T = R\T R) \\
+%
+	&=
+	R(t) I_0(0) R\T (t) \\[3mm]
+	%
+	%
+	\frac{\d}{\d t}
+	\left( I_g(t) \right)
+%
+	&=
+	\frac{\d}{\d t}
+	\left( RI_g(0)R\T \right) \\
+%
+	&=
+	\dot{R}I_g(0)R\T
+	+
+	RI_g(0)\dot{R}\T \\
+%
+	&=
+	(\bm{\omega}\times R)I_g(0) R\T
+	+
+	RI_g(0)(R\T	(\bm{\omega}\times)\T) \\
+%
+	&=
+	\bm{\omega}\times R I_g(0) R\T
+	-
+	R I_g(0) R\T (\bm{\omega}\times) \\
+%
+	&=
+	\bm{\omega}\times I_g(t)
+	-
+	I_g(t) (\bm{\omega}\times) \\
+%
+%
+	\frac{\d}{\d t}
+	\left( I_g\bm{\omega} \right)
+%
+	&=
+	\dot{I_g}\bm{\omega}
+	+
+	I_g\dot{\bm{\omega}} \\
+%
+	&=
+	\left(
+		\bm{\omega}\times I_g(t)
+		-
+		I_g(t) (\bm{\omega}\times)
+	\right)
+	\bm{\omega}
+	+
+	I_g(t)\dot{\bm{\omega}} \\
+%
+	&=
+	\bm{\omega}\times I_g(t) \bm{\omega}
+	+
+	I_g(t) \dot{\bm{\omega}} \\[3mm]
+%
+%
+\end{align}
+\begin{align}
+	&
+	\left\{
+	\begin{array}{ccc}
+		\dfrac{\d}{\d t}(M\dot{\bm{r}_g}) &=& \bm{F} \\[2mm]
+		\dfrac{\d}{\d t}(I_g \bm{\omega}) &=& \bm{\tau}_g
+	\end{array}
+	\right. \\
+%
+	&
+	\left\{
+	\begin{array}{ccc}
+		\dfrac{\d}{\d t}(\dot{\bm{r}_g})
+			&=& \dfrac{1}{M}\bm{F} \\[2mm]
+		\dfrac{\d}{\d t}(\bm{\omega})
+			&=& I_g^{-1} (\bm{\tau}_g -\bm{\omega}\times I_g \bm{\omega})
+	\end{array}
+	\right.
+	\end{align}
+この上の式と下の式
+\begin{align}
+	\left\{
+	\begin{array}{ccc}
+		\dfrac{\d}{\d t}(\bm{r}_g) &=& \dot{\bm{r}_g} \\[2mm]
+		\dfrac{\d}{\d t}(R) &=& \bm{\omega}\times R
+	\end{array}
+	\right.
+\end{align}
+を時間発展(積分)することで、各時刻での\(\bm{r}_g\)と\(R\)を計算していく。<br>
+だが、これまでの議論では衝突、点の位置の拘束、曲面上での転がりや滑りの問題を
+考えていない。これからはこの点について考えていく。
+
+参考文献
+http://d.hatena.ne.jp/lemniscus/20091220/1261301431
+https://physics-htfi.github.io/classical_mechanics/011.html
+
+	<br> さて拘束力\(\bm{f}^c_i\)について、拘束条件を一捻りして考察してみる。
+	<br>
+
+	拘束条件\(g_j(\bm{r}_1,\bm{r}_2,\cdots)=0(j=1,2,\cdots)\)を満たす変位\(\delta\bm{r}^c_i\)では
+	\begin{align} \d g_j &= \pard{\bm{r}_1}{}{g_j} \cdot \delta\bm{r}^c_1 +
+	\pard{\bm{r}_2}{}{g_j} \cdot \delta\bm{r}^c_2 + \cdots \\ &= \sum_i
+	\pard{\bm{r}_i}{}{g_j} \cdot \delta\bm{r}^c_i = 0 \\ % % \sum_j \d g_j
+	&= \sum_j \sum_i \pard{\bm{r}_i}{}{g_j} \cdot \delta\bm{r}^c_i = 0
+	\end{align} となる。すなわち、そのような変位では\(g_j\)の変化量\(\d g_j\)は0になるということである。ここで、
+	この上の式と拘束力の式(↓)とを見比べてみてほしい。 \begin{align} \sum_i \bm{f}^c_i \cdot
+	\delta\bm{r}^c_i &= 0 \end{align}
+	\(\delta\bm{r}^c_i\)に直交する2つのベクトルは平行であり、ある定数\(\lambda\)を用いて
+	\begin{align} \bm{f}^c_i = \sum_j \lambda_{ij} \pard{\bm{r}_i}{}{g_j}
+	\end{align} である。
+
+
+
+</body>
+</html>
