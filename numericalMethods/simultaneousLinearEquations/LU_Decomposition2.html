@@ -656,13 +656,197 @@ LU分解の場合、行列の行の入れ替えの問題はちょっと複雑だ
 	\end{array}
 	\right]
 \end{align}
+\begin{align}
+	& \left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			P_{3;23}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			P_{3;13}
+	\end{array}
+	\right]
+	P_{4;12} A_4 \\
+%
+%
+	&\qquad =
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		u'_{11} P_{3;23} P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			P_{3;23} P_{3;13}
+			\left[
+			\begin{array}{c}
+				l'_{21} \\ l'_{31} \\ l'_{41}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array}
+			\right]
+			+
+			\left[
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array}
+				\right] &
+			%
+					L'''_2
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					U'''_2
+			\end{array}
+			\right]
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	P_{4;34} P_{4;24} P_{4;12} A_4
+	=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;23} P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array}
+				\right] &
+			%
+					L'''_2
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					U'''_2
+			\end{array}
+	\end{array}
+	\right]
+\end{align}
+上の最後の式の右辺は\(LU\)の形になっていることに気付くだろうか。つまり、最終的には
+\(P_{4;34} P_{4;24} P_{4;12} A_4\)をLU分解したということである。だが、\(L\)の要素の
+順序はぐちゃぐちゃになってしまっている。例えば、\(l'_{21}\)や\(l'_{31}\)などの要素の
+値は計算した後に入れ替える必要がある。この入れ替え方を今度は考えて行かなくてはならない。<br>
 
 
+上の式で\(P_{2;12}\)と\(P_{3;23}\)と\(P_{4;34}\)は3回目の行入れ替えのときの
+置換行列である。また、\(P_{3;13}\)と\(P_{4;24}\)は2回目の行入れ替えのときの
+置換行列である。\(P_{4;12}\)は1回目の行入れ替えのときの置換行列である。<br>
 
+一方で、\(l'_{ij}\)は1回目の置換後の要素、\(l''_{ij}\)は2回目の置換後の要素である。<br>
 
+これらのことを考えると、\(m\)回目の置換後の要素\(l^{(m)}_{ij}\)は\(m+1\)回目以降の置換に
+相当する置換行列を順に作用させることになるのが分かると思う。例えば、1回目の置換後の要素
+\(l'_{ij}\)は2回目の置換\(P_{3;13}\)を作用させた後、3回目の置換\(P_{3;23}\)を作用させている。
+また、A_nには1回目の置換から、\(n-1\)までの置換を順に作用させることになるのが分かる。<br>
 
-
-
+さて、作用させる置換行列の種類や順番が分かったが、この説明だけではいまいち実際の数値計算の
+アルゴリズムが想像しにくいのではないだろうか。次回は、今回得られたことを基にしてもう一度
+LU分解の流れを例示しながらアルゴリズムを考えていく。
 
 </body>
 </html>
