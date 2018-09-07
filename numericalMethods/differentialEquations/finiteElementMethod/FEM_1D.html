@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>1次元の有限要素法</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+$$
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+$$
+まずは簡単な1次元の微分方程式を解くことから始めていく。下の方程式を例に進めていく。
+\begin{align}
+	\frac{\d^2 f}{\d x^2} &= 1 \qquad (0\l x\l 1)\\
+	f(0) &= 0 \\
+	f(1) &= 0
+\end{align}
+この方程式は大学生なら簡単に解けるのではないだろうか。解は
+\begin{align}
+	f(x)
+	=
+	\frac{1}{2} x^2
+	-
+	\frac{1}{2} x
+\end{align}
+である。これを有限要素法を用いて（数値的に）求めていく。<br>
+
+まず、次のような関数\(r\)を考える。
+\begin{align}
+	r(x)
+	=
+	\frac{\d^2 f}{\d x^2} -1 \qquad (0 \l x \l 1)
+\end{align}
+即ち、ある関数\(f\)の方程式の解との差（残差）である。\(f\)が方程式の
+解であれば、残差\(r\)は定義域内で常に0となる。そのため、任意の関数
+\(w\)（重み関数）をかけて\([0,1]\)で積分しても
+\begin{align}
+	\int_0^1
+		w(x) r(x)
+		\d x
+	&= 0
+\end{align}
+となる。即ち、元の微分方程式を解く問題を、任意の関数\(w\)に対して
+\begin{align}
+	\int_0^1
+		w(x)
+		\left(
+			\frac{\d^2 f}{\d x^2} -1
+		\right)
+		\d x
+	&= 0
+\end{align}
+を満たす関数\(f\)を求める問題に読み替えたのである。
+
+</body>
+</html>
