@@ -6,7 +6,7 @@
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 </head>
 <body>
-$
+$$
 \newcommand{\bm}[1]{\boldsymbol{#1}}
 \newcommand{\d}{{\rm d}}
 \newcommand{\div}{\nabla\cdot}
@@ -14,7 +14,7 @@ $
 \newcommand{\e}[1]{\bm{e}_{#1}}
 \newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
 \newcommand{\T}{^{\rm T}}
-$
+$$
 前回はなかなかもやもやした感じがしただろうか。今回は前回と同じ行列をもう一度LU分解し、
 実際のアルゴリズムに関して言及しながら説明していく。
 \begin{align}
@@ -28,7 +28,211 @@ $
 		4 & -2 & -2 & 4
 	\end{array}
 	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & a_{13} & a_{14} \\
+		a_{21} & a_{22} & a_{23} & a_{24} \\
+		a_{31} & a_{32} & a_{33} & a_{34} \\
+		a_{41} & a_{42} & a_{43} & a_{44}
+	\end{array}
+	\right]
+\end{align}<br>
+
+ここで「1周」を、行列\(A_n\)の行を入れ替え、次の行列\(A_{n-1}\)が得られるところまでとする。
+\(n\)周目のときに各行列の要素のインデックスなどの数字がどのように変化するのかを追っていってほしい。<br>
+
+1周目<br>
+
+まず、1行目をどの行と交換するかを調べる。今回の場合、1列目で最も大きい8をもつ2行目と交換する
+ことになる。また、このとき、連立方程式\(A\bm{x}=\bm{b}\)の\(\bm{b}\)行も交換することになる
+ので注意が必要だ。
+\begin{align}
+	&\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & a_{13} & a_{14} \\
+		a_{21} & a_{22} & a_{23} & a_{24} \\
+		a_{31} & a_{32} & a_{33} & a_{34} \\
+		a_{41} & a_{42} & a_{43} & a_{44}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		0 & 1 & 4 & -6 \\
+		8 & 1 & 6 & -2 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right]
+	,
+	\quad
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ b_3 \\ b_4
+	\end{array}
+	\right] \\
+%
+%
+	&\downarrow \\
+%
+%
+	&\left[
+	\begin{array}{cccc}
+		a'_{11} & a'_{12} & a'_{13} & a'_{14} \\
+		a'_{21} & a'_{22} & a'_{23} & a'_{24} \\
+		a'_{31} & a'_{32} & a'_{33} & a'_{34} \\
+		a'_{41} & a'_{42} & a'_{43} & a'_{44}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right]
+	,
+	\quad
+	\left[
+	\begin{array}{c}
+		b_2 \\ b_1 \\ b_3 \\ b_4
+	\end{array}
+	\right] \\
+%
+%
+	&\text{(1行目と2行目の交換)}
 \end{align}
+次は、入れ替えた行列\(=L_4U_4\)とおいて、\(L_4\)や\(U_4\)の要素を求める。
+\begin{align}
+	\left[
+	\begin{array}{c|ccc}
+		8 & 1 & 6 & -2 \\ \hline
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right]
+	&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array} &
+	%
+			L'_3
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			U'_3
+	\end{array}
+	\right] \\
+%
+%
+	&=
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		u'_{11}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\left[
+			\begin{array}{c}
+				l'_{21} \\ l'_{31} \\ l'_{41}
+			\end{array}
+			\right]
+			\left[
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array}
+			\right]
+			+
+			L'_3 U'_3
+	\end{array}
+	\right] \\
+%
+%
+	&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ -\frac{1}{4} \\ \frac{1}{2}
+		\end{array} &
+	%
+			L'_3
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		8 &
+	%
+			\begin{array}{ccc}
+				1 & 6 & -2
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			U'_3
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	\left\{
+	\begin{array}{l}
+		u'_{1j} = a'_{1j} \quad (j=1,2,3,4) \\
+		l'_{i1} = \frac{a'_{i1}}{u'_{11}} \quad (i=2,3,4)
+	\end{array}
+	\right.
+\end{align}
+\begin{align}
+	A_3
+	&=
+	L'_3 U'_3 \\
+	&=
+\end{align}
+
+
 
 
 
