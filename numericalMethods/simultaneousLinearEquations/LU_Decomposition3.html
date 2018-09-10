@@ -31,13 +31,14 @@ $$
 	=
 	\left[
 	\begin{array}{cccc}
-		a_{11} & a_{12} & a_{13} & a_{14} \\
-		a_{21} & a_{22} & a_{23} & a_{24} \\
-		a_{31} & a_{32} & a_{33} & a_{34} \\
-		a_{41} & a_{42} & a_{43} & a_{44}
+		a_{4;11} & a_{4;12} & a_{4;13} & a_{4;14} \\
+		a_{4;21} & a_{4;22} & a_{4;23} & a_{4;24} \\
+		a_{4;31} & a_{4;32} & a_{4;33} & a_{4;34} \\
+		a_{4;41} & a_{4;42} & a_{4;43} & a_{4;44}
 	\end{array}
 	\right]
-\end{align}<br>
+\end{align}
+この頁では、\(A_n\)の\((i,j)\)成分を\(A_{n;ij}\)と表記する。<br>
 
 ここで「1周」を、行列\(A_n\)の行を入れ替え、次の行列\(A_{n-1}\)が得られるところまでとする。
 \(n\)周目のときに各行列の要素のインデックスなどの数字がどのように変化するのかを追っていってほしい。<br>
@@ -48,12 +49,13 @@ $$
 ことになる。また、このとき、連立方程式\(A\bm{x}=\bm{b}\)の\(\bm{b}\)行も交換することになる
 ので注意が必要だ。
 \begin{align}
-	&\left[
+	A_4
+	&=\left[
 	\begin{array}{cccc}
-		a_{11} & a_{12} & a_{13} & a_{14} \\
-		a_{21} & a_{22} & a_{23} & a_{24} \\
-		a_{31} & a_{32} & a_{33} & a_{34} \\
-		a_{41} & a_{42} & a_{43} & a_{44}
+		a_{4;11} & a_{4;12} & a_{4;13} & a_{4;14} \\
+		a_{4;21} & a_{4;22} & a_{4;23} & a_{4;24} \\
+		a_{4;31} & a_{4;32} & a_{4;33} & a_{4;34} \\
+		a_{4;41} & a_{4;42} & a_{4;43} & a_{4;44}
 	\end{array}
 	\right]
 	=
@@ -77,12 +79,13 @@ $$
 	&\downarrow \\
 %
 %
-	&\left[
+	P_{4;12} A_4
+	&=\left[
 	\begin{array}{cccc}
-		a'_{11} & a'_{12} & a'_{13} & a'_{14} \\
-		a'_{21} & a'_{22} & a'_{23} & a'_{24} \\
-		a'_{31} & a'_{32} & a'_{33} & a'_{34} \\
-		a'_{41} & a'_{42} & a'_{43} & a'_{44}
+		a'_{4;11} & a'_{4;12} & a'_{4;13} & a'_{4;14} \\
+		a'_{4;21} & a'_{4;22} & a'_{4;23} & a'_{4;24} \\
+		a'_{4;31} & a'_{4;32} & a'_{4;33} & a'_{4;34} \\
+		a'_{4;41} & a'_{4;42} & a'_{4;43} & a'_{4;44}
 	\end{array}
 	\right]
 	=
@@ -221,19 +224,230 @@ $$
 	\left\{
 	\begin{array}{l}
 		u'_{1j} = a'_{1j} \quad (j=1,2,3,4) \\
-		l'_{i1} = \frac{a'_{i1}}{u'_{11}} \quad (i=2,3,4)
+		l'_{i1} = \frac{a'_{i1}}{u'_{11}} \quad (i=2,3,4) \\
+		a_{3;ij} = a'_{4;i+1,j+1} -l'_{i+1,1} u'_{1,j+1} \quad (i,j=1,2,3)
 	\end{array}
 	\right.
 \end{align}
 \begin{align}
 	A_3
-	&=
-	L'_3 U'_3 \\
-	&=
+	=
+	L'_3 U'_3
+	=
+	\left[
+	\begin{array}{ccc}
+		1 & 4 & -6 \\
+		\frac{1}{4} & \frac{3}{2} & \frac{5}{2} \\
+		-\frac{5}{2} & -5 & 5
+	\end{array}
+	\right]
+\end{align}<br>
+
+2周目<br>
+
+次は\(A_3\)の行入れ替えを行う。このとき同時に、既に求まっている\(L\)の要素
+\(l'_{i1}\)、元の行列\(A_4\)、\(\bm{b}\)も行入れ替えを行う。今回は
+\(1,\frac{1}{4},-\frac{5}{2}\)を比較し、1行目と3行目を入れ替える。この入れ
+替えは、\(4\times 4\)行列では2行目と4行目の入れ替えに相当する。従って、
+\begin{align}
+	A_3
+	&=\left[
+	\begin{array}{ccc}
+		a_{3;11} & a_{3;12} & a_{3;13} \\
+		a_{3;21} & a_{3;22} & a_{3;23} \\
+		a_{3;31} & a_{3;32} & a_{3;33}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		1 & 4 & -6 \\
+		\frac{1}{4} & \frac{3}{2} & \frac{5}{2} \\
+		-\frac{5}{2} & -5 & 5
+	\end{array}
+	\right] \\
+%
+%
+	&\downarrow \\
+%
+%
+	P_{3;13} A_3
+	&=\left[
+	\begin{array}{ccc}
+		a'_{3;11} & a'_{3;12} & a'_{3;13} \\
+		a'_{3;21} & a'_{3;22} & a'_{3;23} \\
+		a'_{3;31} & a'_{3;32} & a'_{3;33}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{ccc}
+		-\frac{5}{2} & -5 & 5 \\
+		\frac{1}{4} & \frac{3}{2} & \frac{5}{2} \\
+		1 & 4 & -6
+	\end{array}
+	\right] \\
+%
+%
+	&\text{(1行目と3行目の交換)}
+\end{align}
+\begin{align}
+	&\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array} &
+	%
+			L'_3
+	\end{array}
+	\right]
+	\rightarrow
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			l'_{41} \\ l'_{31} \\ l'_{21}
+		\end{array} &
+	%
+			\ast
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			\frac{1}{2} \\ -\frac{1}{4} \\ 0
+		\end{array} &
+	%
+			\ast
+	\end{array}
+	\right] \\
+%
+%
+	&\text{(1行目と3行目の交換)}
+\end{align}
+\begin{align}
+	P_{4;12} A_4
+	&=\left[
+	\begin{array}{cccc}
+		a'_{4;11} & a'_{4;12} & a'_{4;13} & a'_{4;14} \\
+		a'_{4;21} & a'_{4;22} & a'_{4;23} & a'_{4;24} \\
+		a'_{4;31} & a'_{4;32} & a'_{4;33} & a'_{4;34} \\
+		a'_{4;41} & a'_{4;42} & a'_{4;43} & a'_{4;44}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right], \quad
+%
+	\left[
+	\begin{array}{c}
+		b_2 \\ b_1 \\ b_3 \\ b_4
+	\end{array}
+	\right] \\
+%
+%
+	&\downarrow \\
+%
+%
+	P_{4;24} P_{4;12} A_4
+	&=\left[
+	\begin{array}{cccc}
+		a''_{4;11} & a''_{4;12} & a''_{4;13} & a''_{4;14} \\
+		a''_{4;21} & a''_{4;22} & a''_{4;23} & a''_{4;24} \\
+		a''_{4;31} & a''_{4;32} & a''_{4;33} & a''_{4;34} \\
+		a''_{4;41} & a''_{4;42} & a''_{4;43} & a''_{4;44}
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		4 & -2 & -2 & 4 \\
+		-2 & 0 & 0 & 3 \\
+		0 & 1 & 4 & -6
+	\end{array}
+	\right], \quad
+%
+	\left[
+	\begin{array}{c}
+		b_2 \\ b_4 \\ b_3 \\ b_1
+	\end{array}
+	\right] \\
+%
+%
+	&\text{(2行目と4行目の交換)}
 \end{align}
 
-
-
+そして、1周目同様、入れ替えた行列\(P_{3;13} A_3\)を\(LU\)とおいて、要素を求める。
+\begin{align}
+	\left[
+	\begin{array}{c|cc}
+		-\frac{5}{2} & -5 & 5 \\ \hline
+		\frac{1}{4} & \frac{3}{2} & \frac{5}{2} \\
+		1 & 4 & -6
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{cc}
+				0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			l'_{32} \\ l'_{42}
+		\end{array} &
+	%
+			L''_2
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u''_{22} &
+	%
+			\begin{array}{cc}
+				u''_{23} & u''_{24}
+ 			\end{array} \\ \hline
+ 	%
+ 	%
+ 		\begin{array}{c}
+ 			0 \\ 0
+ 		\end{array} &
+ 	%
+ 			U''_2
+	\end{array}
+	\right]
+\end{align}
 
 
 </body>
