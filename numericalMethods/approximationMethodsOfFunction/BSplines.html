@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bスプライン</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+まず最初にBスプライン曲線の定義を示す。その意味は後に示す例から感じ取ってほしい。
+曲線の概形を表す点をコントロールポイント（制御点）とよび、\(\bm{P}_i(i=1,2,\cdots ,n)\)
+と表す。この点の数を\(n\)個とする。また、区分的に（ある区間において）1つの多項式
+で表される既知の関数を基底関数\(N_{i,p}(t)(i=1,2,\cdots ,n)\)と呼び、その多項式の
+次数を\(p\)とする。さらに、実数の単調増加列をノットベクトル\(T\)といい、その要素の数
+は\(n+p+1\)とする。
+\begin{align}
+	T
+	=
+	\left\{
+		t_1 ,t_2 ,\cdots ,t_{n+p+1}
+	\right\} \\
+%
+%
+	(t_i \in \mathbb{R}, t_i \leq t_{i+1})
+\end{align}
+また、基底関数\(N_{i,p}(t)\)の具体的な形はこのノットベクトル\(T\)を用いて、次の漸化式で
+定義される。なお、右辺の分数の分母が0になる場合、その項は0として計算する。
+\begin{align}
+	N_{i,0}(t)
+	&=
+	\left\{
+	\begin{array}{ll}
+		1 &
+	%
+			(t_i \leq t \l t_{i+1}) \\
+	%
+	%
+		0 &
+	%
+			(\text{otherwise})
+	\end{array}
+	\right. \\
+%
+%
+	N_{i,p}(t)
+	&=
+	\frac{t -t_{i}}{t_{i+p} -t_{i}} N_{i,p-1}(t)
+	+
+	\frac{t_{i+p+1} -t}{t_{i+p+1} -t_{t+1}} N_{i+1,p-1}(t)
+\end{align}
+このとき、ある曲線\(\bm{C}(t)\)はこれらを使って次のように近似される。
+\begin{align}
+	\bm{C}(t)
+	=
+	\sum_{i=1}^{n} \bm{P}_i N_{i,p}
+\end{align}<br>
+
+以上が定義ではあるのだが、これだけでは少しイメージしにくいだろうか。まずは、
+実際には\(N_{i,p}(t)\)がどんな形をしているのかというところから始める。<br>
+
+\(N_{i,p}(t)\)の形は基底関数のインデックス\(i\)や、区分多項式の次数\(p\)に
+依存するが、ノットベクトル\(T\)にも依存する。この点にまずは注意してほしい。
+（裏を返せば、それだけ色んな形の基底関数を作れるので、表現できる曲線の幅も
+増えると言うことだ。）<br>
+
+次数\(p=0\),ノットベクトル\(T=\{0,1,2,3,4\}\)では、基底関数は\(i=1,2,3,4\)まで
+定義でき、以下のグラフのようになる。<br>
+
+次に、次数\(p=1\),同じノットベクトルとすると、基底関数は\(i=1,2,3\)まで定義でき、
+以下のグラフのようになる。
+\begin{align}
+	N_{1,1}(t)
+	&=
+	\frac{t -t_1}{t_2 -t_1} N_{1,0}(t)
+	+
+	\frac{t_3 -t}{t_3 -t_2} N_{2,0}(t) \\
+%
+%
+	&=
+	t N_{1,0}(t) +(2-t) N_{2,0}(t) \\
+%
+%
+	&=
+	\left\{
+	\begin{array}{ll}
+		t & (t_1 \leq t \l t_2) \\
+		2-t & (t_2 \leq t \l t_3) \\
+		0 & (\text{otherwise})
+	\end{array}
+	\right.
+\end{align}<br>
+
+そして、次数\(p=2\),同じノットベクトルとすると、基底関数は\(i=1,2\)まで定義でき、
+以下のグラフのようになる。
+\begin{align}
+	N_{1,2} (t)
+	&=
+	\frac{t -t_1}{t_3 -t_1} N_{1,1}(t)
+	+
+	\frac{t_4 -t}{t_4 -t_2} N_{2,1}(t) \\
+%
+%
+	&=
+	\frac{1}{2}t
+	\left(
+		\frac{t -t_1}{t_2 -t_1} N_{1,0}(t)
+		+
+		\frac{t_3 -t}{t_3 -t_2} N_{2,0}(t)
+	\right)
+	+
+	\frac{1}{2}(3-t)
+	\left(
+		\frac{t -t_2}{t_3 -t_2} N_{2,0}(t)
+		+
+		\frac{t_4 -t}{t_4 -t_3} N_{3,0}(t)
+	\right) \\
+%
+%
+	&=
+	\frac{1}{2} t^2 N_{1,0}(t)
+	+
+	(-t^2 +3t -\frac{3}{2}) N_{2,0}(t)
+	+
+	\frac{1}{2} (3-t)^2 N_{3,0}(t) \\
+%
+%
+	&=
+	\left\{
+	\begin{array}{ll}
+		\frac{1}{2} t^2 & (t_1 \leq t \l t_2) \\
+		-t^2 +3t -\frac{3}{2} & (t_2 \leq t \l t_3) \\
+		\frac{1}{2}(3-t)^2 & (t_3 \leq t \l t_4) \\
+		0 & (\text{otherwise})
+	\end{array}
+	\right.
+\end{align}<br>
+
+さらに高次の基底関数やノットを重ねた時(\(T={0,0,0,1,2,2,3,3,3}\)など)、どのような形になるかは
+自分で試してみてほしい。手計算が面倒なら、プログラムを組んでみてもいいだろう。
+
+
+
+
+
+
+
+
+
+</body>
+</html>
