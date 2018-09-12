@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>1次元の有限要素法その2</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+さて、前回は以下の重み付き残差方程式の弱形式
+\begin{align}
+	\int_0^1
+		\frac{\d w}{\d x} \frac{\d f}{\d x}
+		\d x
+	+
+	\int_0^1
+		w(x) \d x
+	= 0
+\end{align}
+を導出した。そして目的の解は、上の重み付き残差方程式を満たしつつ、以下の境界条件
+\begin{align}
+	\left\{
+	\begin{array}{l}
+		f(0) = f(1) = 0 \\
+		w(0) = w(1) = 0
+	\end{array}
+	\right.
+\end{align}
+を満たす関数の中から求める。<br>
+
+さて、前回の最後に言及したが、関数はあまりに自由度が高いので、既知の関数、基底関数
+\(\phi_i ,\psi_i\)の組み合わせで近似することにする。
+\begin{align}
+	f(x)
+	&=
+	f_0 (x) +\sum_i f_i \phi_i (x) \\
+%
+%
+	w(x)
+	&=
+	\sum_i w_i \psi_i (x)
+\end{align}
+線形代数で基底ベクトルの線形結合（定数倍の足し合わせ）によって任意のベクトルを表現した
+ことに近いことをやっているのが分かるだろうか。ここで、\(\phi_i ,\psi_i\)は関数値が与えら
+れている境界（ディリクレ境界）においては0とする。すなわち、
+\begin{align}
+	\phi_i (0) = \phi_i (1) = \psi_i (0) = \psi_i (1) = 0
+\end{align}
+一方で\(f_0\)はディリクレ境界条件を満たす関数とする。従って今回は
+\begin{align}
+	f_0 (x) = 0 \quad (0\leq x \leq 1)
+\end{align}
+とする。この近似式を弱形式に直接代入する。
+\begin{align}
+	\int_0^1
+		\frac{\d w}{\d x} \frac{\d f}{\d x}
+		\d x
+	+
+	\int_0^1
+		w(x) \d x
+	&=
+	0 \\
+%
+%
+	\int_0^1
+		\frac{\d}{\d x}
+			\left(
+				\sum_i w_i \psi_i (x)
+			\right)
+		\cdot
+		\frac{\d}{\d x}
+			\left(
+				\sum_j f_j \phi_j (x)
+			\right)
+		\d x
+	+
+	\int_0^1
+		\sum_i w_i \psi_i (x) \d x
+	&=
+	0 \\
+%
+%
+	\int_0^1
+		\left(
+			\sum_i w_i \frac{\d \psi_i}{\d x}
+		\right)
+		\cdot
+		\left(
+			\sum_j f_j \frac{\d \phi_j}{\d x}
+		\right)
+		\d x
+	+
+	\int_0^1
+		\sum_i w_i \psi_i (x) \d x
+	&=
+	0 \\
+%
+%
+	\sum_i \sum_j
+		w_i f_j
+		\int_0^1
+			\frac{\d \psi_i}{\d x} \frac{\d \phi_j}{\d x}
+			\d x
+	+
+	\sum_i
+		w_i
+		\int_0^1
+			\psi_i (x)
+			\d x
+	&=
+	0 \\
+%
+%
+	\sum_i
+		w_i
+		\left(
+			\sum_j
+				f_j
+				\int_0^1
+					\frac{\d \psi_i}{\d x} \frac{\d \phi_j}{\d x}
+					\d x
+			+
+			\int_0^1
+				\psi_i (x) \d x
+		\right)
+	&=
+	0
+\end{align}
+最後、\(\sum_i w_i v_i = 0\)の形になっている。ここで、任意の\(w\)について
+弱形式が成立しなくてはならないことを思い出すと、任意の\(w_1,w_2,\cdots\)に
+ついて上の最後の式が0にならなくてはならない。つまり、\(v_1,v_2,\cdots\)は
+全て0である。即ち、
+\begin{align}
+	\sum_j
+		f_j
+		\int_0^1
+			\frac{\d \psi_i}{\d x} \frac{\d \phi_j}{\d x}
+			\d x
+	+
+	\int_0^1
+		\psi_i (x) \d x
+=
+	0
+\end{align}
+となる。
+\begin{align}
+	a_{ij}
+&=
+	\int_0^1
+		\frac{\d \psi_i}{\d x} \frac{\d \phi_j}{\d x}
+		\d x \\
+%
+%
+	b_i
+&=
+	-\int_0^1
+		\psi_i (x) \d x
+\end{align}
+と置き換えると
+\begin{align}
+	\sum_j
+		a_{ij} f_j
+&=
+	b_i
+\end{align}
+となる。これは、\(f_1,f_2,\cdots\)に関する連立方程式なのが分かるだろうか？
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & \cdots & a_{1n} \\
+		a_{21} & a_{22} & \cdots & a_{2n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} & a_{n2} & \cdots & a_{nn}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		f_1 \\ f_2 \\ \vdots \\ f_n
+	\end{array}
+	\right]
+&=
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ \vdots \\ b_n
+	\end{array}
+	\right]
+\end{align}
+
+
+
+
+
+</body>
+</html>
