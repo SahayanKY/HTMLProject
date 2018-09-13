@@ -38,7 +38,76 @@ $$
 	\end{array}
 	\right]
 \end{align}
-この頁では、\(A_n\)の\((i,j)\)成分を\(A_{n;ij}\)と表記する。<br>
+この頁では、\(A_n\)の\((i,j)\)成分を\(A_{n;ij}\)と表記する。今回は、前回の最後に得られた式
+\begin{align}
+	P_{4;34} P_{4;24} P_{4;12} A_4
+=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;23} P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array}
+				\right] &
+			%
+					L'''_2
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					U'''_2
+			\end{array}
+	\end{array}
+	\right]
+\end{align}
+を分解しながら得ることを目標としている。<br>
 
 ここで「1周」を、行列\(A_n\)の行を入れ替え、次の行列\(A_{n-1}\)が得られるところまでとする。
 \(n\)周目のときに各行列の要素のインデックスなどの数字がどのように変化するのかを追っていってほしい。<br>
@@ -66,21 +135,21 @@ $$
 		-2 & 0 & 0 & 3 \\
 		4 & -2 & -2 & 4
 	\end{array}
-	\right]
-	,
-	\quad
+	\right] \\
+%
 	\left[
 	\begin{array}{c}
 		b_1 \\ b_2 \\ b_3 \\ b_4
 	\end{array}
-	\right] \\
+	\right] & \\
 %
 %
 	&\downarrow \\
 %
 %
 	P_{4;12} A_4
-	&=\left[
+	&=
+	\left[
 	\begin{array}{cccc}
 		a'_{4;11} & a'_{4;12} & a'_{4;13} & a'_{4;14} \\
 		a'_{4;21} & a'_{4;22} & a'_{4;23} & a'_{4;24} \\
@@ -96,14 +165,14 @@ $$
 		-2 & 0 & 0 & 3 \\
 		4 & -2 & -2 & 4
 	\end{array}
-	\right]
-	,
-	\quad
+	\right] \\
+%
+	P_{4;12}
 	\left[
 	\begin{array}{c}
-		b_2 \\ b_1 \\ b_3 \\ b_4
+		b_1 \\ b_2 \\ b_3 \\ b_4
 	\end{array}
-	\right] \\
+	\right] & \\
 %
 %
 	&\text{(1行目と2行目の交換)}
@@ -292,7 +361,18 @@ $$
 	&\text{(1行目と3行目の交換)}
 \end{align}
 \begin{align}
-	&\left[
+	P_{4;12} A_4
+&=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3 \\
+		4 & -2 & -2 & 4
+	\end{array}
+	\right] \\
+&=
+	\left[
 	\begin{array}{c|c}
 		1 &
 	%
@@ -305,87 +385,39 @@ $$
 			l'_{21} \\ l'_{31} \\ l'_{41}
 		\end{array} &
 	%
-			L'_3
-	\end{array}
-	\right]
-	\rightarrow
-	\left[
-	\begin{array}{c|c}
-		1 &
-	%
-			\begin{array}{ccc}
-				0 & 0 & 0
-			\end{array} \\ \hline
-	%
-	%
-		\begin{array}{c}
-			l'_{41} \\ l'_{31} \\ l'_{21}
-		\end{array} &
-	%
 			\ast
 	\end{array}
 	\right]
-	=
 	\left[
 	\begin{array}{c|c}
-		1 &
+		u'_{11} &
 	%
 			\begin{array}{ccc}
-				0 & 0 & 0
+				u'_{12} & u'_{13} & u'_{14}
 			\end{array} \\ \hline
 	%
 	%
 		\begin{array}{c}
-			\frac{1}{2} \\ -\frac{1}{4} \\ 0
+			0 \\ 0 \\ 0
 		\end{array} &
 	%
 			\ast
 	\end{array}
 	\right] \\
 %
-%
-	&\text{(1行目と3行目の交換)}
-\end{align}
-\begin{align}
-	P_{4;12} A_4
-	&=\left[
-	\begin{array}{cccc}
-		a'_{4;11} & a'_{4;12} & a'_{4;13} & a'_{4;14} \\
-		a'_{4;21} & a'_{4;22} & a'_{4;23} & a'_{4;24} \\
-		a'_{4;31} & a'_{4;32} & a'_{4;33} & a'_{4;34} \\
-		a'_{4;41} & a'_{4;42} & a'_{4;43} & a'_{4;44}
-	\end{array}
-	\right]
-	=
-	\left[
-	\begin{array}{cccc}
-		8 & 1 & 6 & -2 \\
-		0 & 1 & 4 & -6 \\
-		-2 & 0 & 0 & 3 \\
-		4 & -2 & -2 & 4
-	\end{array}
-	\right], \quad
-%
+	P_{4;12}
 	\left[
 	\begin{array}{c}
-		b_2 \\ b_1 \\ b_3 \\ b_4
+		b_1 \\ b_2 \\ b_3 \\ b_4
 	\end{array}
-	\right] \\
+	\right] & \\
 %
 %
 	&\downarrow \\
 %
 %
 	P_{4;24} P_{4;12} A_4
-	&=\left[
-	\begin{array}{cccc}
-		a''_{4;11} & a''_{4;12} & a''_{4;13} & a''_{4;14} \\
-		a''_{4;21} & a''_{4;22} & a''_{4;23} & a''_{4;24} \\
-		a''_{4;31} & a''_{4;32} & a''_{4;33} & a''_{4;34} \\
-		a''_{4;41} & a''_{4;42} & a''_{4;43} & a''_{4;44}
-	\end{array}
-	\right]
-	=
+&=
 	\left[
 	\begin{array}{cccc}
 		8 & 1 & 6 & -2 \\
@@ -393,13 +425,50 @@ $$
 		-2 & 0 & 0 & 3 \\
 		0 & 1 & 4 & -6
 	\end{array}
-	\right], \quad
-%
+	\right] \\
+&=
 	\left[
-	\begin{array}{c}
-		b_2 \\ b_4 \\ b_3 \\ b_1
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\ast
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\ast
 	\end{array}
 	\right] \\
+%
+	P_{4;24} P_{4;12}
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ b_3 \\ b_4
+	\end{array}
+	\right] & \\
 %
 %
 	&\text{(2行目と4行目の交換)}
@@ -541,7 +610,211 @@ $$
 3周目<br>
 今度は\(A_2\)の行入れ替えを行う。そして2周目同様に、\(l'_{i1}\)、\(l''_{i2}\)、
 行列\(A_4\)、\(\bm{b}\)も入れ替える。2周目違って、前回の周で求めた\(l''_{i2}\)も
-以降は入れ替えることになる。
+以降は入れ替えることになる。なお、2行の行列での1行目と2行目の入れ替えは、3行の行列での
+2行目と3行目、4行の行列での3行目と4行目の入れ替えに相当することに注意すること。
+\begin{align}
+	A_2
+&=
+	\left[
+	\begin{array}{cc}
+		a_{2;11} & a_{2;12} \\
+		a_{2;21} & a_{2;22}
+	\end{array}
+	\right]
+=
+	\left[
+	\begin{array}{cc}
+		1 & 3 \\
+		2 & -4
+	\end{array}
+	\right] \\
+%
+%
+&\downarrow \\
+%
+%
+	P_{2;12} A_2
+&=
+	\left[
+	\begin{array}{cc}
+		a'_{2;11} & a'_{2;12} \\
+		a'_{2;21} & a'_{2;22}
+	\end{array}
+	\right]
+=
+	\left[
+	\begin{array}{cc}
+		2 & -4 \\
+		1 & 3
+	\end{array}
+	\right] \\
+%
+%
+&\text{(1行目と2行目の交換)}
+\end{align}
+\begin{align}
+	P_{4;24} P_{4;12} A_4
+&=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		4 & -2 & -2 & 4 \\
+		-2 & 0 & 0 & 3 \\
+		0 & 1 & 4 & -6
+	\end{array}
+	\right] \\
+&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array} &
+			%
+					\ast
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					\ast
+			\end{array}
+	\end{array}
+	\right] \\
+%
+%
+&\downarrow \\
+%
+%
+	P_{4;34} P_{4;24} P_{4;12} A_4
+&=
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		4 & -2 & -2 & 4 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3
+	\end{array}
+	\right] \\
+&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;23} P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array}
+				\right] &
+			%
+					\ast
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					\ast
+			\end{array}
+	\end{array}
+	\right]
+\end{align}
+
+
+
+
+
+
+
+
+
 
 
 </body>
