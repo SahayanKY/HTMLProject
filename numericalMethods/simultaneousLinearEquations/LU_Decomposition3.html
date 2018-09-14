@@ -804,14 +804,343 @@ $$
 					\ast
 			\end{array}
 	\end{array}
+	\right] \\
+%
+%
+	P_{4;24} P_{4;12}
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ b_3 \\ b_4
+	\end{array}
+	\right]
+&\rightarrow
+	P_{4;34} P_{4;24} P_{4;12}
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ b_3 \\ b_4
+	\end{array}
+	\right] \\
+%
+%
+&\text{(3行目と4行目の交換)}
+\end{align}
+そして、\(A_2\)を入れ替えた結果の行列\(P_{2;12} A_2\)を今度は\(LU\)とおいて分解する。
+\begin{align}
+	\left[
+	\begin{array}{c|c}
+		a'_{2;11} & a'_{2;12} \\ \hline
+		a'_{2;21} & a'_{2;22}
+	\end{array}
+	\right]
+=
+	\left[
+	\begin{array}{c|c}
+		2 & -4 \\ \hline
+		1 & 3
+	\end{array}
+	\right]
+&=
+	\left[
+	\begin{array}{c|c}
+		1 & 0 \\ \hline
+		l'''_{43} & 1
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'''_{33} & u'''_{34} \\ \hline
+		0 & u'''_{44}
+	\end{array}
+	\right] \\
+%
+%
+&=
+	\left[
+	\begin{array}{c|c}
+		u'''_{33} & u'''_{34} \\ \hline
+		u'''_{33} l'''_{43} & l'''_{43} u'''_{34} +u'''_{44}
+	\end{array}
+	\right] \\
+%
+%
+&=
+	\left[
+	\begin{array}{c|c}
+		1 & 0 \\ \hline
+		\frac{1}{2} & 1
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		2 & -4 \\ \hline
+		0 & 5
+	\end{array}
 	\right]
 \end{align}
-
-
-
-
-
-
+\begin{align}
+	\left\{
+	\begin{array}{l}
+		u'''_{3j} = a'_{2;1,j-2} \quad (j=3,4) \\
+		l'''_{i3} = \frac{a'_{2;i-2,1}}{u'''_{33}} \quad (i=4) \\
+		u'''_{44} = a'_{2;22} -l'''_{43} u'''_{34}
+	\end{array}
+	\right.
+\end{align}
+そして、この\(LU\)を上の式の\(\ast\)の所に埋め込めば終わりだ。
+\begin{align}
+	P_{4;34} P_{4;24} P_{4;12} A_4
+&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;23} P_{3;13}
+		\left[
+		\begin{array}{c}
+			l'_{21} \\ l'_{31} \\ l'_{41}
+		\end{array}
+		\right] &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					l''_{32} \\ l''_{42}
+				\end{array}
+				\right] &
+			%
+					\begin{array}{c|c}
+						1 & 0 \\ \hline
+						l'''_{43} & 1
+					\end{array}
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		u'_{11} &
+	%
+			\begin{array}{ccc}
+				u'_{12} & u'_{13} & u'_{14}
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				u''_{22} &
+			%
+					\begin{array}{cc}
+						u''_{23} & u''_{24}
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					\begin{array}{c|c}
+						u'''_{33} & u'''_{34} \\ \hline
+						0 & u'''_{44}
+					\end{array}
+			\end{array}
+	\end{array}
+	\right] \\
+%
+%
+	P_{4;34} P_{4;24} P_{4;12} A_4
+&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		P_{3;23} P_{3;13}
+		\left[
+		\begin{array}{c}
+			0 \\ -\frac{1}{4} \\ \frac{1}{2}
+		\end{array}
+		\right] &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				P_{2;12}
+				\left[
+				\begin{array}{c}
+					-\frac{1}{10} \\ -\frac{2}{5}
+				\end{array}
+				\right] &
+			%
+					\begin{array}{c|c}
+						1 & 0 \\ \hline
+						\frac{1}{2} & 1
+					\end{array}
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		8 &
+	%
+			\begin{array}{ccc}
+				1 & 6 & -2
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				-\frac{5}{2} &
+			%
+					\begin{array}{cc}
+						-5 & 5
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					\begin{array}{c|c}
+						2 & -4 \\ \hline
+						0 & 5
+					\end{array}
+			\end{array}
+	\end{array}
+	\right] \\
+%
+%
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		4 & -2 & -2 & 4 \\
+		0 & 1 & 4 & -6 \\
+		-2 & 0 & 0 & 3
+	\end{array}
+	\right]
+&=
+	\left[
+	\begin{array}{c|c}
+		1 &
+	%
+			\begin{array}{ccc}
+				0 & 0 & 0
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			\frac{1}{2} \\ 0 \\ -\frac{1}{4}
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				1 &
+			%
+					\begin{array}{cc}
+						0 & 0
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					-\frac{2}{5} \\ -\frac{1}{10}
+				\end{array} &
+			%
+					\begin{array}{c|c}
+						1 & 0 \\ \hline
+						\frac{1}{2} & 1
+					\end{array}
+			\end{array}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c|c}
+		8 &
+	%
+			\begin{array}{ccc}
+				1 & 6 & -2
+			\end{array} \\ \hline
+	%
+	%
+		\begin{array}{c}
+			0 \\ 0 \\ 0
+		\end{array} &
+	%
+			\begin{array}{c|c}
+				-\frac{5}{2} &
+			%
+					\begin{array}{cc}
+						-5 & 5
+					\end{array} \\ \hline
+			%
+			%
+				\begin{array}{c}
+					0 \\ 0
+				\end{array} &
+			%
+					\begin{array}{c|c}
+						2 & -4 \\ \hline
+						0 & 5
+					\end{array}
+			\end{array}
+	\end{array}
+	\right]
+\end{align}
+どうだろう？確かにLU分解に成功しているのが分かるだろう。結局、連立方程式は
+\begin{align}
+	\left[
+	\begin{array}{cccc}
+		1 & 0 & 0 & 0 \\
+		\frac{1}{2} & 1 & 0 & 0 \\
+		0 & -\frac{2}{5} & 1 & 0 \\
+		-\frac{1}{4} & -\frac{1}{10} & \frac{1}{2} & 1
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{cccc}
+		8 & 1 & 6 & -2 \\
+		0 & -\frac{5}{2} & -5 & 5 \\
+		0 & 0 & 2 & -4 \\
+		0 & 0 & 0 & 5
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		x_1 \\ x_2 \\ x_3 \\ x_4
+	\end{array}
+	\right]
+	=
+	\left[
+	\begin{array}{c}
+		b_2 \\ b_4 \\ b_1 \\ b_3
+	\end{array}
+	\right]
+\end{align}
+を解くことになる。
 
 
 
