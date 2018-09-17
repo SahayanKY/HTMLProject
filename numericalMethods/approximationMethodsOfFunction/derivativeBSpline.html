@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bスプラインの微分</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+今回は、Bスプラインの微分を考える。BスプラインをCGなどに利用する限りでは微分値は
+必要ないかもしれないが、有限要素法に利用する際に重要だ。<br>
+
+復習となるが、基底関数\(N_{i,p}(t)\)とコントロールポイント\(\bm{P}_i\)を用いて、
+曲線\(\bm{C}(t)\)を次のように表現する。
+\begin{align}
+	\bm{C}(t)
+=
+	\sum_i \bm{P}_i N_{i,p}(t)
+\end{align}
+今回はこれの微分、つまり\(\frac{\d\bm{C}}{\d t}\)を考える。\(\bm{P}_i\)は定数なので
+\begin{align}
+	\frac{\d \bm{C}}{\d t}
+&=
+	\sum_i \bm{P}_i \frac{\d N_{i,p}}{\d t}
+\end{align}
+より、基底関数\(N_{i,p}\)の導関数のみを考えればよい。一般に、
+\begin{align}
+	\frac{\d N_{i,p}}{\d t}
+&=
+	\frac{p}{t_{i+p} -t_i} N_{i,p-1}(t)
+	-
+	\frac{p}{t_{i+p+1} -t_{i+1}} N_{i+1,p-1}(t)
+\end{align}
+であることが知られている。今回はこの上の式の証明をまずする。<br>
+
+まずは簡単な（基底関数の漸化式が余り必要ない）例から見てみる。\(p=1\)のときだ。
+\(N_{i,1}\)の微分を考える。
+\begin{align}
+	N_{i,1}
+&=
+	\frac{t -t_i}{t_{i+1} -t_i} N_{i,0}
+	+
+	\frac{t_{i+2} -t}{t_{i+2} -t_{i+1}} N_{i+1,0} \\
+%
+%
+	\frac{\d N_{i,1}}{\d t}
+&=
+	\frac{1}{t_{i+1} -t_i} N_{i,0}
+	+
+	\frac{t -t_i}{t_{i+1} -t_i} \frac{\d N_{i,0}}{\d t}
+	+
+	\frac{-1}{t_{i+2} -t_{i+1}} N_{i+1,0}
+	+
+	\frac{t_{i+2} -t}{t_{i+2} -t_{i+1}} \frac{\d N_{i+1,0}}{\d t}
+\end{align}
+ここで、\(N_{i,0}\)と\(N_{i+1,0}\)の微分について考えてみよう。これらは、1か0しか取らない、
+区分的に定数な関数だ。つまり、その微分値は0になる。よって、
+\begin{align}
+	\frac{\d N_{i,1}}{\d t}
+&=
+	\frac{1}{t_{i+1} -t_i} N_{i,0}
+	-
+	\frac{1}{t_{i+2} -t_{i+1}} N_{i+1,0}
+\end{align}
+となる。ここから、\(p=1\)について、成立していることが分かる。では\(p\geq 2\)の場合でも
+成立するのだろうか？数学的帰納法を用いる。まず、\(p=k(\geq 1)\)での成立を仮定する。
+すなわち、
+\begin{align}
+	\frac{\d N_{i,k}}{\d t}
+&=
+	\frac{k}{t_{i+k} -t_i} N_{i,k-1}
+	-
+	\frac{k}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+\end{align}
+と仮定する。このとき、\(p=k+1\)での成立を確認する。
+\begin{align}
+	N_{i,k+1}
+&=
+	\frac{t -t_i}{t_{i+k+1} -t_i} N_{i,k}
+	+
+	\frac{t_{i+k+2} -t}{t_{i+k+2} -t_{i+1}} N_{i+1,k} \\[3mm]
+%
+%
+	\frac{\d N_{i,k+1}}{\d t}
+&=
+	\frac{1}{t_{i+k+1} -t_i} N_{i,k}
+	+
+	\frac{t -t_i}{t_{i+k+1} -t_i} \frac{\d N_{i,k}}{\d t} \\
+&\qquad
+	+
+	\frac{-1}{t_{i+k+2} -t_{i+1}} N_{i+1,k}
+	+
+	\frac{t_{i+k+2} -t}{t_{i+k+2} -t_{i+1}} \frac{\d N_{i+1,k}}{\d t} \\[3mm]
+%
+%
+&=
+	\frac{1}{t_{i+k+1} -t_i} N_{i,k}
+	+
+	\frac{t -t_i}{t_{i+k+1} -t_i}
+	\left(
+		\frac{k}{t_{i+k} -t_i} N_{i,k-1}
+		-
+		\frac{k}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+	\right) \\
+&\qquad
+	+
+	\frac{-1}{t_{i+k+2} -t_{i+1}} N_{i+1,k}
+	+
+	\frac{t_{i+k+2} -t}{t_{i+k+2} -t_{i+1}}
+	\left(
+		\frac{k}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+		-
+		\frac{k}{t_{i+k+2} -t_{i+2}} N_{i+2,k-1}
+	\right) \\[3mm]
+%
+%
+&=
+	\frac{1}{t_{i+k+1} -t_i} N_{i,k}
+	+
+	\frac{k}{t_{i+k+1} -t_i}
+	\left(
+		\frac{t -t_i}{t_{i+k} -t_i} N_{i,k-1}
+		+
+		\frac{t_i -t}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+	\right) \\
+&\qquad
+	+
+	\frac{-1}{t_{i+k+2} -t_{i+1}} N_{i+1,k}
+	+
+	\frac{-k}{t_{i+k+2} -t_{i+1}}
+	\left(
+		\frac{t -t_{i+k+2}}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+		+
+		\frac{t_{i+k+2} -t}{t_{i+k+2} -t_{i+2}} N_{i+2,k-1}
+	\right)
+\end{align}
+ここで、第2項の括弧内は\(N_{i,k}\)に非常に近い形をしているのが分かるだろうか。
+また、第4項の括弧内は\(N_{i+1,k}\)に近い。そこで、次のように変形する。
+\begin{align}
+&=
+	\frac{1}{t_{i+k+1} -t_i} N_{i,k}
+	+
+	\frac{k}{t_{i+k+1} -t_i}
+	\left(
+		N_{i,k}
+		+
+		\frac{t_i -t_{i+k+1}}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+	\right) \\
+&\qquad
+	+
+	\frac{-1}{t_{i+k+2} -t_{i+1}} N_{i+1,k}
+	+
+	\frac{-k}{t_{i+k+2} -t_{i+1}}
+	\left(
+		N_{i+1,k}
+		+
+		\frac{t_{i+1} -t_{i+k+2}}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1}
+	\right) \\[3mm]
+%
+%
+&=
+	\frac{k+1}{t_{i+k+1} -t_i} N_{i,k}
+	-
+	\frac{k}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1} \\
+&\qquad
+	+
+	\frac{-(k+1)}{t_{i+k+2} -t_{i+1}} N_{i+1,k}
+	+
+	\frac{k}{t_{i+k+1} -t_{i+1}} N_{i+1,k-1} \\
+%
+%
+&=
+	\frac{k+1}{t_{i+k+1} -t_i} N_{i,k}
+	-
+	\frac{k+1}{t_{i+k+2} -t_{i+1}} N_{i+1,k}
+\end{align}
+このことから、\(p=k+1\)においても成立する。従って、任意の\(p\geq 1\)について、
+\begin{align}
+	\frac{\d N_{i,p}}{\d t}
+&=
+	\frac{p}{t_{i+p} -t_i} N_{i,p-1}
+	-
+	\frac{p}{t_{i+p+1} -t_{i+1}} N_{i+1,p-1}
+\end{align}
+となる。
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
