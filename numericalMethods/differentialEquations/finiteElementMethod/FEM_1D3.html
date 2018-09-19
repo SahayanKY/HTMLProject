@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>1次元の有限要素法その3</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+前回は弱形式中の目的の関数\(f\)と重み関数\(w\)をそれぞれ\(\phi_i\)、\(\psi_i\)の線形結合
+で近似し、その結果
+\begin{align}
+	&
+	\left[
+	\begin{array}{cccc}
+		a_{11} & a_{12} & \cdots & a_{1n} \\
+		a_{21} & a_{22} & \cdots & a_{2n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} & a_{n2} & \cdots & a_{nn}
+	\end{array}
+	\right]
+	\left[
+	\begin{array}{c}
+		f_1 \\ f_2 \\ \vdots \\ f_n
+	\end{array}
+	\right]
+=
+	\left[
+	\begin{array}{c}
+		b_1 \\ b_2 \\ \vdots \\ b_n
+	\end{array}
+	\right] \\
+%
+%
+	&\left\{
+	\begin{array}{l}
+		a_{ij}
+		= \int_0^1
+			\frac{\d \psi_i}{\d x} \frac{\d \phi_j}{\d x}
+			\d x \\
+	%
+	%
+		b_i
+		= -\int_0^1
+			\psi_i \d x
+	\end{array}
+	\right.
+\end{align}
+が得られた。次はこの連立方程式を解くことになる。そこで、係数行列\([a_{ij}]\)と右辺のベクトル
+\([b_i]\)の各要素の積分値を計算する必要がある。この値は基底関数\(\phi_i,\psi_i\)による。そこで
+まずは簡単な例として、基底関数に一次要素を用いる場合を見ていく。
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
