@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>de Boorのアルゴリズム</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+前回、Bスプライン曲線\(\bm{C}(t)\)は基底関数\(N_{i,p}\)とコントロールポイント\(\bm{P}_i\)
+を用いて、
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^{n-1} \bm{P}_i N_{i,p}(t)
+\end{align}
+と表されることを述べた。さて、今回はこの曲線上の点を求める方法について述べる。<br>
+
+というのも、基底関数は殆どの領域で0になるので、\(n\)個ある基底関数の全てについて
+\begin{align}
+	N_{i,p}
+&=
+	\frac{t -t_i}{t_{i+p} -t_i} N_{i,p-1}
+	+
+	\frac{t_{i+p+1} -t}{t_{i+p+1} -t_{i+1}} N_{i+1,p-1}
+\end{align}
+の再帰式を計算するのは非常に無駄だからである。そこで、まずは基底関数が0とそれ以外を
+とる領域はそれぞれ何処なのかを調べる。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
