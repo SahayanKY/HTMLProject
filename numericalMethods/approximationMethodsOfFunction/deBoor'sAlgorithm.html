@@ -131,11 +131,72 @@ MathJax.Hub.Config({
 \end{align}
 これにより、これまで\(n\)回足し合わせていたものが\(p+1\)回足し合わせればよくなった。<br>
 
-さて、実は話はまだこれに終わらない。
+さて、実は話はまだこれに終わらない。タイトルであるde Boorのアルゴリズムはこれまでの議論
+にはまだ出ていない。というのも、まだ直接計算するのは無駄があるからだ。
+\begin{xy}
+\xymatrix{
+	*+[o][F]{N_{k,p}} & & & \\
+	N_{k,p-1} \ar[u] &
+		N_{k+1,p-1} \ar[lu] & & \\
+	\ar[u] &
+		\ar[lu] \ar[u] &
+		\ar[lu] & & \\
+	*+[o][F]{N_{k,0}} \ar@{.>}[u] \ar@{.}[rrr] & & &
+		N_{k+p,0} \ar@{.>}[lu]
+}
+\end{xy}
+総和において\(N_{k,p}\)がある項を代表に考えてみる。ここから実際にほしいルートは\(N_{k,0}\)
+である（\(N_{k,0}\)だけが0でないから）。つまりは真っ直ぐ下に進むルートだけが
+欲しいのである。だがしかし、再帰式通りに計算を進めていくと、\(N_{k+1,0}\)や
+\(N_{k+p,0}\)などに辿りつく計算も行ってしまう。これでは非常に無駄だ。そこを
+どうにかしようというのがde Boorのアルゴリズムだ。<br>
 
-
-
-
+実はさっき上で出た逆三角形の模式図がヒントとなる。簡単な例、次数1から始める。
+\begin{xy}
+\xymatrix{
+	N_{k-1,1} & & N_{k,1} & & \\
+	& {\displaystyle \times \frac{t_{k+1} -t}{t_{k+1} -t_k}} \ar[lu] &
+		{\displaystyle \times \frac{t -t_k}{t_{k+1} -t_k}} \ar[u] & & \\
+	\ar@{.>}[uu] & &
+		 N_{k,0} \ar@{-}[lu] \ar@{-}[u] & &
+		 \ar@{.>}[lluu]
+}
+\end{xy}
+この場合、実線の矢印のルートのみを通れば良いのが分かるだろうか？
+曲線を求める式は次のようになる。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=k-1}^{k} \bm{P}_i N_{i,1}(t) \qquad (\because p=1)\\
+%
+%
+&=
+	\bm{P}_{k-1} N_{k-1,1}(t)
+	+
+	\bm{P}_k N_{k,1}(t) \\
+%
+%
+&=
+	\bm{P}_{k-1} \cdot \frac{t_{k+1} -t}{t_{k+1} -t_k} \cdot N_{k,0}(t)
+	+
+	\bm{P}_k \cdot \frac{t -t_k}{t_{k+1} -t_k} \cdot N_{k,0}(t) \\
+%
+%
+&=
+	\bm{P}_{k-1} \cdot \frac{t_{k+1} -t}{t_{k+1} -t_k}
+	+
+	\bm{P}_k \cdot \frac{t -t_k}{t_{k+1} -t_k}
+	\qquad (\because t_k \leq t \l t_{k+1}) \\
+%
+%
+&=
+	\bm{P}_{k-1}(1-\alpha)
+	+
+	\bm{P}_{k}\alpha \\
+%
+%
+&\qquad \left(\alpha = \frac{t -t_k}{t_{k+1} -t_k} \right)
+\end{align}
 
 
 
