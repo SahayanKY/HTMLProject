@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>de Boorのアルゴリズム</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 </head>
 <body>
@@ -26,7 +37,25 @@
 \end{align}
 と表されることを述べた。さて、今回はこの曲線上の点を求める方法について述べる。<br>
 
-というのも、基底関数は殆どの領域で0になるので、\(n\)個ある基底関数の全てについて
+というのも、基底関数は殆どの領域で0になる。例えば、前回出てきた1次の基底関数のグラフを見る。
+<div align="center">
+<img src="BSplineBasisFunction1.png" alt="BSpline1次の基底関数のグラフ" title="BSpline1次の基底関数のグラフ">
+</div>
+このグラフにおいて、\(0\leq t \leq 1\)の範囲で0でない基底関数は\(N_{0,1}\)のみである。
+つまり、上の曲線を求める式は次のようになる。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^{n-1} \bm{P}_i N_{i,1}(t) \\
+%
+%
+&=
+	\bm{P}_0 N_{0,1}(t) \qquad (0\leq t \leq 1)
+\end{align}
+即ち基底関数の値はその範囲で0にならないもののみについて計算すればよいことが分かる。
+そこで、まずは基底関数が0とそれ以外をとる領域はそれぞれ何処なのかを調べる。<br>
+
+基底関数の再帰式
 \begin{align}
 	N_{i,p}
 &=
@@ -34,17 +63,75 @@
 	+
 	\frac{t_{i+p+1} -t}{t_{i+p+1} -t_{i+1}} N_{i+1,p-1}
 \end{align}
-の再帰式を計算するのは非常に無駄だからである。そこで、まずは基底関数が0とそれ以外を
-とる領域はそれぞれ何処なのかを調べる。
+を次のような模式図に置き換えて考えてみる。
+\begin{xy}
+\xymatrix{
+	N_{i,p} & \\
+	N_{i,p-1} \ar[u]^{\times \frac{t -t_i}{t_{i+p} -t_i}} &
+		N_{i+1,p-1} \ar[lu]_(0.3){\times \frac{t_{i+p+1} -t}{t_{i+p+1} -t_{i+1}}} \\
+}
+\end{xy}
+これを帰納的に考えると、
+\begin{xy}
+\xymatrix{
+	N_{i,p} & & & \\
+	N_{i,p-1} \ar[u] &
+		N_{i+1,p-1} \ar[lu] & & \\
+	\ar[u] &
+		\ar[lu] \ar[u] &
+		\ar[lu] & \\
+	N_{i,0} \ar@{.>}[u] \ar@{.}[rrr] & & &
+		N_{i+p,0} \ar@{.>}[lu] \\
+}
+\end{xy}
+即ち、再帰を繰り返していくと、\(N_{i,p}\)は\(N_{i,0}\)から\(N_{i+p,0}\)までが
+出てくることが分かる。\(N_{i,0}\)は定義より
+\begin{align}
+	N_{i,0}(t)
+&=
+	\left\{
+	\begin{array}{ll}
+		1 & (t_i \leq t \l t_{i+1}) \\
+		0 & (\text{otherwise})
+	\end{array}
+	\right.
+\end{align}
+であることを考えると、\(N_{i,p}\)は\(t_i \leq t \l t_{i+p+1}\)では0ではない。<br>
 
+今度はこれを逆に考えてみる。\(t\)が\(t_k \leq t \l t_{k+1}\)であるとき、
+0次基底関数\(N_{i,0}\)の中では\(N_{k,0}\)のみが0ではないのだから、この\(N_{k,0}\)
+が出てくる基底関数\(N_{i,p}\)は全部でどれなのかを考える。ここで再帰結果に
+\(N_{k,0}\)が出てくる基底関数のみがBスプライン曲線の計算のときに有効となる。
+\begin{xy}
+\xymatrix{
+	N_{k-p,p} \ar@{.}[rrr] & & &
+		N_{k,p} \\
+	& \ar@{.>}[lu] & & \ar@{.>}[u] \\
+	& & N_{k-1,1} \ar[lu] \ar[u] & N_{k,1} \ar[lu] \ar[u] \\
+	& & & N_{k,0} \ar[u] \ar[lu]
+}
+\end{xy}
+この図から、\(N_{k-p,p}\)から\(N_{k,p}\)までを考慮して足し合わせればいいことが分かる。
+（逆に、他の\(N_{i,p}\)では\(N_{k,0}\)が出てこない）<br>
 
+従って、曲線を求める式は次のようになる。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^{n-1} \bm{P}_i N_{i,p}(t) \\
+%
+%
+&=
+	\sum_{i=k-p}^k \bm{P}_i N_{i,p}(t) \\
+%
+%
+&\qquad \left(
+	t_k \leq t \l t_{k+1}
+\right)
+\end{align}
+これにより、これまで\(n\)回足し合わせていたものが\(p+1\)回足し合わせればよくなった。<br>
 
-
-
-
-
-
-
+さて、実は話はまだこれに終わらない。
 
 
 
