@@ -96,11 +96,21 @@ MathJax.Hub.Config({
 	\end{array}
 	\right.
 \end{align}
-であることを考えると、\(N_{i,p}\)は\(t_i \leq t \l t_{i+p+1}\)では0ではない。<br>
+であることを考えると、
+\begin{align}
+	\left\{
+	\begin{array}{ll}
+		N_{i,p} \neq 0 & (t_i \leq t \l t_{i+p+1}) \\
+		N_{i,p} = 0 & (\text{otherwise})
+	\end{array}
+	\right.
+\end{align}
+となることが分かる。<br>
 
-今度はこれを逆に考えてみる。\(t\)が\(t_k \leq t \l t_{k+1}\)であるとき、
-0次基底関数\(N_{i,0}\)の中では\(N_{k,0}\)のみが0ではないのだから、この\(N_{k,0}\)
-が出てくる基底関数\(N_{i,p}\)は全部でどれなのかを考える。ここで再帰結果に
+今度はこれを逆に考えてみる。なお、以降の議論はオープンノットベクトルであることを
+仮定する。なぜオープンノットベクトルでなければならないのかについては後で説明する。
+\(t\)が\(t_k \leq t \l t_{k+1}\)であるとき、
+0次基底関数\(N_{i,0}\)の中では\(N_{k,0}\)のみが0ではないのだから、再帰結果に
 \(N_{k,0}\)が出てくる基底関数のみがBスプライン曲線の計算のときに有効となる。
 \begin{xy}
 \xymatrix{
@@ -111,8 +121,9 @@ MathJax.Hub.Config({
 	& & & N_{k,0} \ar[u] \ar[lu]
 }
 \end{xy}
-この図から、\(N_{k-p,p}\)から\(N_{k,p}\)までを考慮して足し合わせればいいことが分かる。
-（逆に、他の\(N_{i,p}\)では\(N_{k,0}\)が出てこない）<br>
+この図から、\(N_{k-p,p}\)から\(N_{k,p}\)までの基底関数が0にならないことが分かる。
+（逆に、他の\(N_{i,p}\)では\(N_{k,0}\)が出てこないため0となる）
+つまり、総和を計算する時はこれらの項だけを足し合わせればいいことが分かる。<br>
 
 従って、曲線を求める式は次のようになる。
 \begin{align}
@@ -145,9 +156,9 @@ MathJax.Hub.Config({
 		N_{k+p,0} \ar@{.>}[lu]
 }
 \end{xy}
-総和において\(N_{k,p}\)がある項を代表に考えてみる。ここから実際にほしいルートは\(N_{k,0}\)
-である（\(N_{k,0}\)だけが0でないから）。つまりは真っ直ぐ下に進むルートだけが
-欲しいのである。だがしかし、再帰式通りに計算を進めていくと、\(N_{k+1,0}\)や
+総和において\(N_{k,p}\)のある項を代表に考えてみる。実際にほしい計算の
+ルートは\(N_{k,p}\)と\(N_{k,0}\)を結ぶ一本のみである。
+だがしかし、再帰式通りに計算を進めていくと、\(N_{k+1,0}\)や
 \(N_{k+p,0}\)などに辿りつく計算も行ってしまう。これでは非常に無駄だ。そこを
 どうにかしようというのがde Boorのアルゴリズムだ。<br>
 
@@ -196,16 +207,202 @@ MathJax.Hub.Config({
 %
 %
 &\qquad \left(\alpha = \frac{t -t_k}{t_{k+1} -t_k} \right)
+\end{align}<br>
+
+次は次数2のときを考えてみる。
+\begin{xy}
+\xymatrix{
+	N_{k-2,2} & &
+		N_{k-1,2} & &
+		N_{k,2} \\
+	&\displaystyle \times\frac{t_{k+1} -t}{t_{k+1} -t_{k-1}} \ar[lu] &
+		\displaystyle \times\frac{t -t_{k-1}}{t_{k+1} -t_{k-1}} \ar[u] &
+		\displaystyle \times\frac{t_{k+2} -t}{t_{k+2} -t_k} \ar[lu] &
+		\displaystyle \times\frac{t -t_k}{t_{k+2} -t_k} \ar[u] \\
+	\ar@{.>}[uu] & & N_{k-1,1} \ar@{-}[lu] \ar@{-}[u] & &
+		N_{k,1} \ar@{-}[lu] \ar@{-}[u] \\
+	& & &
+		\displaystyle \times\frac{t_{k+1} -t}{t_{k+1} -t_k} \ar[lu] &
+		\displaystyle \times\frac{t -t_k}{t_{k+1} -t_k} \ar[u] \\
+	\ar@{.>}[uu] & & \ar@{.>}[uu] \ar@{.>}[lluu] & &
+		N_{k,0} \ar@{-}[lu] \ar@{-}[u] \\
+}
+\end{xy}
+このときは、実線を通るのは変わらず、次数の大きい方から萎むような感じに計算を
+進めていけばいいのが分かるだろうか。数式上では次のようになる。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=k-2}^k \bm{P}_i N_{i,2}(t) \qquad (\because p=2) \\
+%
+%
+&=
+	\bm{P}_{k-2} N_{k-2,2}(t)
+	+
+	\bm{P}_{k-1} N_{k-1,2}(t)
+	+
+	\bm{P}_k N_{k,2}(t) \\
+%
+%
+&=
+	\left(
+		\bm{P}_{k-2} \cdot \frac{t_{k+1} -t}{t_{k+1} -t_{k-1}}
+		+
+		\bm{P}_{k-1} \cdot \frac{t -t_{k-1}}{t_{k+1} -t_{k-1}}
+	\right) N_{k-1,1}(t)
+	+
+	\left(
+		\bm{P}_{k-1} \cdot \frac{t_{k+2} -t}{t_{k+2} -t_k}
+		+
+		\bm{P}_{k} \cdot \frac{t -t_k}{t_{k+2} -t_k}
+	\right) N_{k,1}(t) \\
+%
+%
+&=
+	\left(
+		\bm{P}_{k-2} (1-\alpha_1)
+		+
+		\bm{P}_{k-1} \alpha_1
+	\right) N_{k-1,1}(t)
+	+
+	\left(
+		\bm{P}_{k-1} (1-\alpha_2)
+		+
+		\bm{P}_k \alpha_2
+	\right)	N_{k,1}(t) \\
+&\qquad
+\left(
+	\alpha_1 = \frac{t -t_{k-1}}{t_{k+1} -t_{k-1}}
+\right) \\
+%
+%
+&=
+	\bm{P}'_{k-1} N_{k-1,1}(t)
+	+
+	\bm{P}'_k N_{k,1}(t) \\
+&\qquad
+\left(
+	\bm{P}'_{k-1}
+	=
+	\bm{P}_{k-2} (1-\alpha_1)
+	+
+	\bm{P}_{k-1} \alpha_1
+\right)
 \end{align}
+後の計算は1次の時に見た例と同じである。<br>
 
+ようは、逆三角形の上からどんどん到達点の\(N_{k,0}\)まで萎んでいくように計算
+すればいいのだ。このように計算すれば、今まで無駄に計算してきていた部分
+（上の図における点線矢印の部分）を省略して求めることができる。
+これがde Boorのアルゴリズムである。<br>
 
+さて、模式図を次の様に書き替えてみる。基底関数ではなくコントロールポイント
+\(\bm{P}_i\)に注目した書き方だ。
+\begin{xy}
+\xymatrix{
+	\bm{P}_{0,k-2} \ar@{-}[rd] & &
+		\bm{P}_{0,k-1} \ar@{-}[d] \ar@{-}[rd] & &
+		\bm{P}_{0,k} \ar@{-}[d] \\
+	& \displaystyle \times\frac{t_{k+1} -t}{t_{k+1} -t_{k-1}} \ar[rd]&
+		\displaystyle \times\frac{t -t_{k-1}}{t_{k+1} -t_{k-1}} \ar[d] &
+		\displaystyle \times\frac{t_{k+2} -t}{t_{k+2} -t_k} \ar[rd] &
+		\displaystyle \times\frac{t -t_k}{t_{k+2} -t_k} \ar[d] \\
+	& & \bm{P}_{1,k-1} \ar@{-}[rd] & & \bm{P}_{1,k} \ar@{-}[d] \\
+	& & & \displaystyle \times\frac{t_{k+1} -t}{t_{k+1} -t_k} \ar[rd] &
+		\displaystyle \times\frac{t -t_k}{t_{k+1} -t_k} \ar[d] \\
+	& & & & \bm{P}_{2,k} \\
+}
+\end{xy}
+ここで、\(\bm{P}_{0,i}=\bm{P}_i\)である。この図において最後に得られる
+\(\bm{P}_{2,k}\)が欲しい結果なのである。<br>
 
+さて、ここから次数を一般化すると、
+\begin{xy}
+\xymatrix{
+	\bm{P}_{r,i-1} \ar@{-}[rd] & & \bm{P}_{r,i} \ar@{-}[d] \\
+	& \displaystyle \times(1-\alpha_{r,i}) \ar[rd] &
+		\displaystyle \times \alpha_{r,i} \ar[d] \\
+	& & \bm{P}_{r+1,i}
+}
+\end{xy}
+\begin{align}
+	\bm{P}_{r+1,i}
+&=
+	(1-\alpha_{r,i}) \bm{P}_{r,i-1}
+	+
+	\alpha_{r,i} \bm{P}_{r,i} \\
+%
+%
+	\alpha_{r,i}
+&=
+	\frac{t -t_{i}}{t_{i+p-r} -t_{i}} \\
+%
+%
+	r
+&=
+	0,1,\cdots ,p-1 \\
+%
+%
+	i
+&=
+	k-p+r+1,k-p+r+2,\cdots ,k
+\end{align}
+ということになる。<br>
 
+さて、こっからは実際の実装を考慮した話に移る。また、\(=\)は等号ではなく、
+代入演算子を意味するので注意して欲しい。<br>
 
+上の話だけでは、\(\{\bm{P}_{0,k-2},\bm{P}_{0,k-1},\bm{P}_{0,k}\}\)と
+\(\{\bm{P}_{1,k-1},\bm{P}_{1,k}\}\)と、異なる\(r\)毎に配列を用意して
+計算していくかのように見えるかもしれない。だが、模式図において、
+\(\bm{P}_{0,i}\)から\(\bm{P}_{1,i}\)を計算する段を注意深く見て欲しい。
+この段では2回の計算（\(\bm{P}_{1,k-1}\)と\(\bm{P}_{1,k}\)を計算）がある。
+ここで一番右から処理していくと、1回目は\(\bm{P}_{0,k}\)の値は参照されるが、
+2回目は\(\bm{P}_{0,k}\)の値は参照されない。つまり、その値を保持している
+メモリは無駄になるのである。そこで、そのメモリに計算結果を保存するように
+して再利用するのである。つまり、実装コードとしては次のようにすればいい。
+\(r=0,1,\cdots ,p-1\)、\(i=k,\cdots ,k-p+r+2,k-p+r+1\)（デクリメント）と反復し、
+\begin{align}
+	\alpha_{r,i}
+&=
+	\frac{t -t_i}{t_{i+p-r} -t_i} \\
+%
+%
+	\bm{Q}_{i}
+&=
+	(1-\alpha_{r,i}) \bm{Q}_{i-1}
+	+
+	\alpha_{r,i} \bm{Q}_{i}
+\end{align}
+と計算する。（\(\bm{P}_{r,i}\)の\(r\)はもう必要ないので消したが、元の
+コントロールポイントと区別するために\(\bm{Q}_i\)を用いた）<br>
 
+また、今\(\bm{P}_{i}\)のインデックス\(i\)は\(k-p\)始まりになっているが、
+実際に実装する際は\(\bm{P}_{i}\)の\(i\)は0始まりの方が楽なので、
+(大抵の言語は配列のインデックスは0から始まるため)まず、
+\begin{align}
+	\bm{Q}_i
+&=
+	\bm{P}_{k-p+i} \qquad (i=0,1,\cdots,p)
+\end{align}
+と初期化した上で、
+\(r=0,1,\cdots,p-1\)（インクリメント）、\(i=p,\cdots,r+2,r+1\)（デクリメント）と反復し、
+\begin{align}
+	\alpha
+&=
+	\frac{t -t_{i+k-p}}{t_{i+k-r} -t_{i+k-p}} \\
+%
+%
+	\bm{Q}_i
+&=
+	(1-\alpha) \bm{Q}_{i-1}
+	+
+	\alpha \bm{Q}_{i}
+\end{align}
+と計算し、その結果\(\bm{Q}_p\)に得られた結果が欲しい値\(\bm{C}(t)\)となる。<br>
 
-
-
-
+以上がde Boorのアルゴリズムであった。最後の添え字の変換が少しややこしかっただろうか。
+今回は1変数のNURBS（B-Spline）曲線に対して考えたが、実際には多変数のこともある。
+次回は多変数の場合への適用を考える。
 </body>
 </html>
