@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert the title</title>
+<title>多変数のときのde Boorのアルゴリズム</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   extensions: ["tex2jax.js"],
@@ -28,6 +28,104 @@ MathJax.Hub.Config({
 \newcommand{\l}{&lt;}
 \newcommand{\g}{&gt;}
 \)
+前回は1変数のB-Spline（NURBS）に対するde Boorのアルゴリズムについて説明した。
+今回はこれを多変数に拡張する。とは言っても、前回ほどあれこれ考える必要はない。<br>
+
+まずは2変数のB-Splineから入る。
+\begin{align}
+	\bm{S}(u,v)
+&=
+	\sum_{i=0}^{m-1} \sum_{j=0}^{n-1}
+		\bm{P}_{i,j} M_{i,p}(u) N_{j,q}(v)
+\end{align}
+であり、ノットベクトルはオープンノットベクトルを仮定し、
+\begin{align}
+	U
+&=
+	\left\{
+		u_0, u_1, \cdots, u_{m+p}
+	\right\} \\
+%
+%
+	V
+&=
+	\left\{
+		v_0, v_1, \cdots, v_{n+q}
+	\right\}
+\end{align}
+とおく。さて、確かに多変数関数だが、次の様に変形すれば1変数のときのを応用できるのが
+分かるだろうか。
+\begin{align}
+	\bm{S}(u,v)
+&=
+	\sum_{i=0}^{m-1}
+		M_{i,p}(u)
+		\left(
+			\sum_{j=0}^{n-1} \bm{P}_{i,j} N_{j,q}(v)
+		\right) \\
+%
+%
+&=
+	\sum_{i=0}^{m-1}
+		M_{i,p}(u)
+		\tilde{\bm{P}_i}
+\end{align}
+つまりは順に処理していくだけ、ということだ。<br>
+
+具体的に見ていく。\(u_k \leq u \l u_{k+1}\)、\(v_l \leq v \l v_{l+1}\)とする。このとき、
+\begin{align}
+	\bm{S}(u,v)
+&=
+	\sum_{i=k-p}^k
+		M_{i,p}(u)
+		\left(
+			\sum_{j=l-q}^l
+				\bm{P}_{i,j} N_{j,q}(v)
+		\right)
+\end{align}
+である。（以降"\(=\)"は等号ではなく、代入演算子を意味する）
+\begin{align}
+	\bm{Q}_{i,j}
+&=
+	\bm{P}_{k-p+i,l-q+j} \qquad (i=0,1,\cdots,p,\quad j=0,1,\cdots,q)
+\end{align}
+と初期化し、\(s=0,1,\cdots,q-1\)（インクリメント）、\(j=q,\cdots,s+2,s+1\)
+（デクリメント）と反復し、
+\begin{align}
+	\alpha
+&=
+	\frac{t -t_{j+l-q}}{t_{j+l-s} -t_{j+l-q}} \\
+\end{align}
+を計算する。さらにその内側で\(i=0,1,\cdots,p\)(インクリメント)と反復し、
+\begin{align}
+	\bm{Q}_{i,j}
+&=
+	(1-\alpha)\bm{Q}_{i,j-1}
+	+
+	\alpha \bm{Q}_{i,j}
+\end{align}
+と計算し、この反復の結果\(\bm{Q}_{i,q}(i=0,1,\cdots,p-1)\)に得られた値が
+\(\tilde{\bm{P}}_i\)に相当する。ここで、1変数のときにはなかった一番内側の
+ループの\(i=0,1,\cdots,p\)について触れると、同じ\(\alpha\)の値を使うため
+同時に計算させている。（実際、\(\alpha\)に\(i\)は含まれない。）
+後は1変数の時と殆ど同じだ。\(r=0,1,\cdots,p-1\)
+（インクリメント）、\(i=p,\cdots,r+2,r+1\)（デクリメント）と反復し、
+\begin{align}
+	\alpha
+&=
+	\frac{t -t_{i+k-p}}{t_{i+k-r} -t_{i+k-p}} \\
+%
+%
+	\bm{Q}_{i,q}
+&=
+	(1-\alpha)\bm{Q}_{i-1,q}
+	+
+	\alpha \bm{Q}_{i,q}
+\end{align}
+と計算した結果、\(\bm{Q}_{p,q}\)に欲しい結果\(\bm{S}(u,v)\)が得られる。
+
+
+
 
 
 
