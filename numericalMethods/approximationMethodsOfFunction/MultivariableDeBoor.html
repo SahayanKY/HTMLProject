@@ -96,7 +96,7 @@ MathJax.Hub.Config({
 &=
 	\frac{t -t_{j+l-q}}{t_{j+l-s} -t_{j+l-q}} \\
 \end{align}
-を計算する。さらにその内側で\(i=0,1,\cdots,p\)(インクリメント)と反復し、
+を計算する。さらにその内側で\(i=0,1,\cdots,p\)と反復し、
 \begin{align}
 	\bm{Q}_{i,j}
 &=
@@ -122,10 +122,63 @@ MathJax.Hub.Config({
 	+
 	\alpha \bm{Q}_{i,q}
 \end{align}
-と計算した結果、\(\bm{Q}_{p,q}\)に欲しい結果\(\bm{S}(u,v)\)が得られる。
+と計算した結果、\(\bm{Q}_{p,q}\)に欲しい結果\(\bm{S}(u,v)\)が得られる。<br>
 
-
-
+さて、変数の数を今度は一般化して考えてみる。\(t_0,t_1,\cdots,t_{m-1}\)を変数
+とすると（ノットベクトルの要素ではないことに注意）
+\begin{align}
+	\bm{F}(t_0,t_1,\cdots,t_{m-1})
+&=
+	\sum_{i_0=0}^{n_0 -1}
+	\sum_{i_1=0}^{n_1 -1}
+		\cdots
+	\sum_{i_{m-1}=0}^{n_{m-1} -1}
+		\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+		N_{0;i_0,p_0}(t_0)
+		N_{1;i_1,p_1}(t_1)
+			\cdots
+		N_{m-1;i_{m-1},p_{m-1}}(t_{m-1})
+\end{align}
+\(N_{l;i_l,p_l}\)は\(t_l\)の関数であり、ノットベクトル\(T_l\)は
+\begin{align}
+	T_l
+=
+	\left\{
+		t_{l;0},t_{l;1},\cdots,t_{l;n_l+p_l}
+	\right\}
+\end{align}
+である。\(t_{l;k_l} \leq t_l \l t_{l;k_l +1}\)とすると、
+\begin{align}
+	&\bm{F}(t_0,t_1,\cdots,t_{m-1}) \\
+=&
+	\sum_{i_0=k_0 -p_0}^{k_0}
+	\sum_{i_1=k_1 -p_1}^{k_1}
+		\cdots
+	\sum_{i_{m-1}=k_{m-1} -p_{m-1}}^{k_{m-1}}
+		\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+		N_{0;i_0,p_0}(t_0)
+		N_{1;i_1,p_1}(t_1)
+			\cdots
+		N_{m-1;i_{m-1},p_{m-1}}(t_{m-1}) \\
+%
+%
+&=
+	\sum_{i_0=k_0 -p_0}^{k_0}
+		N_{0;i_0,p_0}(t_0)
+		\left(
+			\sum_{i_1=k_1 -p_1}^{k_1}
+				N_{1;i_1,p_1}(t_1)
+				\left(
+					\cdots
+					\left(
+						\sum_{i_{m-1}=k_{m-1} -p_{m-1}}^{k_{m-1}}
+							\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+							N_{m-1;i_{m-1},p_{m-1}}(t_{m-1})
+					\right)
+				\right)
+		\right)
+\end{align}
+上で見た2変数のときのを応用して考えると、
 
 
 
