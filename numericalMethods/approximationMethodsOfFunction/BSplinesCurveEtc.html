@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bスプライン曲線・曲面</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<h1>Bスプライン曲線・曲面</h1>
+さて、前回はBスプラインに用いられる基底関数\(N_{i,p}\)のことについて説明してきた。
+今回は、この基底関数を利用して曲線や曲面などを表現することについて説明していく。<br>
+
+<h2>Bスプライン曲線</h2>
+まずは、曲線について説明していく。曲線\(\bm{C}(t)\)は一般に次の式で表される。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^{n-1} \bm{P}_i N_{i,p}(t)
+\end{align}
+曲線なので当然、1変数\(\,t\,\)の関数で表される。具体的な例を見てみよう。<br>
+
+<h3>Bスプライン曲線の具体例1</h3>
+まずは、次数\(p\)とノットベクトル\(T\)を与える。（そうでなければ基底関数の形が定まらない。）
+基底関数の次数\(p\)は1とする。そして
+\begin{align}
+	T
+&=
+	\left\{
+		0,0,1,2,2
+	\right\}
+\end{align}
+とする。即ち、オープンノットベクトルだ。要素数が\(n+p+1=5\)なので、自動的に\(n=3\)となる。
+即ち、コントロールポイントと基底関数の数は3つ必要となる。
+このとき、基底関数は次のように定まる。
+\begin{align}
+	N_{0,1}
+&=
+	\frac{t -t_0}{t_1 -t_0} N_{0,0}
+	+
+	\frac{t_2 -t}{t_2 -t_1} N_{1,0} \\
+%
+%
+&=
+	\frac{t_2 -t}{t_2 -t_1} N_{1,0} \qquad \left( \because t_0 = t_1 \right) \\
+%
+%
+&=
+	\left\{
+	\begin{array}{ll}
+		1 -t & (0 \leq t \l 1) \\
+		0 & (\text{otherwise:}1\leq t \leq 2)
+	\end{array}
+	\right. \\
+%
+%
+	N_{1,1}
+&=
+	\left\{
+	\begin{array}{ll}
+		t & (0 \leq t \l 1) \\
+		2 -t & (1 \leq t \l 2)
+	\end{array}
+	\right. \\
+%
+%
+	N_{2,1}
+&=
+	\left\{
+	\begin{array}{ll}
+		0 & (\text{otherwise:}0 \leq t \l 1) \\
+		t -1 & (1 \leq t \l 2)
+	\end{array}
+	\right.
+\end{align}
+である。次はコントロールポイント\(\bm{P}_i(i=0,1,2)\)を与える。
+\begin{align}
+	\bm{P}_0
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 0
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_1
+&=
+	\left(
+	\begin{array}{c}
+		1 \\ 1
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_2
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 3
+	\end{array}
+	\right)
+\end{align}
+とおく。このとき、曲線\(\bm{C}(t)\)は次のようになる。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^{2} \bm{P}_i N_{i,1}(t) \\
+%
+%
+&=
+	\bm{P}_0 N_{0,1}(t)
+	+
+	\bm{P}_1 N_{1,1}(t)
+	+
+	\bm{P}_2 N_{2,1}(t) \\
+%
+%
+&=
+	\left\{
+	\begin{array}{ll}
+		\left(
+		\begin{array}{c}
+			0 \\ 0
+		\end{array}
+		\right)
+			(1-t)
+		+
+		\left(
+		\begin{array}{c}
+			1 \\ 1
+		\end{array}
+		\right)
+			\cdot t
+		+
+		\left(
+		\begin{array}{c}
+			0 \\ 3
+		\end{array}
+		\right)
+			\cdot 0
+			%
+			&
+				(0 \leq t \leq 1) \\
+	%
+	%
+		\left(
+		\begin{array}{c}
+			0 \\ 0
+		\end{array}
+		\right)
+			\cdot 0
+		+
+		\left(
+		\begin{array}{c}
+			1 \\ 1
+		\end{array}
+		\right)
+			(2-t)
+		+
+		\left(
+		\begin{array}{c}
+			0 \\ 3
+		\end{array}
+		\right)
+			(t-1)
+			%
+			&
+				(1 \leq t \leq 2)
+	\end{array}
+	\right. \\
+%
+%
+&=
+	\left\{
+	\begin{array}{ll}
+		\left(
+		\begin{array}{c}
+			t \\ t
+		\end{array}
+		\right)
+			%
+			&
+				(0 \leq t \leq 1) \\
+		%
+		%
+		\left(
+		\begin{array}{c}
+			2-t \\ 2t-1
+		\end{array}
+		\right)
+			%
+			&
+				(1 \leq t \leq 2)
+	\end{array}
+	\right.
+\end{align}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
