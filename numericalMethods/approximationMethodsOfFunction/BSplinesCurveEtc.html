@@ -216,14 +216,253 @@ MathJax.Hub.Config({
 	\end{array}
 	\right.
 \end{align}
+<div align="center">
+<img src="BSplineCurve1.png" alt="1次BSpline曲線のグラフ" title="1次BSpline曲線のグラフ">
+</div>
+（「曲線じゃなくて直線じゃん」という野暮やツッコミはしない）前回、Bスプライン曲線は
+一般にコントロールポイントを通過しないと言ったが、今回の場合は通過する。次に示す例では
+通過しない。
 
+<h3>Bスプライン曲線の具体例2</h3>
+次は次数\(p=2\)で、ノットベクトル\(T=\{0,0,0,1,1,1\}\)の場合を考える。基底関数は、
+\begin{align}
+	N_{0,2}
+&=
+	(1-t)^2 \\
+%
+%
+	N_{1,2}
+&=
+	2t(1-t) \\
+%
+%
+	N_{2,2}
+&=
+	t^2 \\
+%
+%
+&\quad (0\leq t \leq 1)
+\end{align}
+である。また、コントロールポイントを
+\begin{align}
+	\bm{P}_0
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 0
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_1
+&=
+	\left(
+	\begin{array}{c}
+		1 \\ 1
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_2
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 3
+	\end{array}
+	\right)
+\end{align}
+とおく。（上の例と同じ）このとき、曲線\(\bm{C}(t)\)は次のようになる。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^2
+		\bm{P}_i N_{i,2}(t) \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 0
+	\end{array}
+	\right)
+		\cdot(1-t)^2
+	+
+	\left(
+	\begin{array}{c}
+		1 \\ 1
+	\end{array}
+	\right)
+		\cdot 2t(1-t)
+	+
+	\left(
+	\begin{array}{c}
+		0 \\ 3
+	\end{array}
+	\right)
+		\cdot t^2 \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		-2t^2 +2t \\
+		t^2 +2t
+	\end{array}
+	\right)
+		\qquad (0 \leq t \leq 1)
+\end{align}
+<div align="center">
+<img src="BSplineCurve2.png" alt="2次BSpline曲線のグラフ" title="2次BSpline曲線のグラフ">
+</div>
+ある程度感じが掴めてきただろうか。
 
+<h2>Bスプライン曲面</h2>
+次は曲面について説明していく。曲面\(\bm{S}(u,v)\)は一般に次の式で表される。
+\begin{align}
+	\bm{S}(u,v)
+&=
+	\sum_{i=0}^{m-1} \sum_{j=0}^{n-1}
+		\bm{P}_{i,j} M_{i,p}(u) N_{j,q}(v)
+\end{align}
+\(M_{i,p}\)と\(N_{i,q}\)が出てきたが、どちらもこれまでと同じ基底関数だ。
+2つの異なる基底関数を掛け合わせて表現する。当然、ノットベクトルもそれぞれに
+用意するし、次数も（一般に）異なる。まあ、具体例を見ていこう。
 
-
-
-
-
-
+<h3>Bスプライン曲面の具体例1</h3>
+今回は2つの基底関数それぞれにノットベクトルと次数を与えなければならない。
+まず、\(M_{i,p}(u)\)のノットベクトルを\(U=\{0,0,1,2,2\}\)、次数\(p\)を1とする。
+そして、\(N_{j,q}(v)\)のノットベクトルを\(V=\{0,0,0,1,1,1\}\)、次数\(q\)を2とする。
+このとき、基底関数は
+\begin{align}
+	M_{0,1}(u)
+&=
+	\left\{
+	\begin{array}{ll}
+		1-u & (0\leq u \leq 1) \\
+		0 & (1\leq u \leq 2)
+	\end{array}
+	\right. \\
+%
+%
+	M_{1,1}(u)
+&=
+	\left\{
+	\begin{array}{ll}
+		u & (0\leq u \leq 1) \\
+		2-u & (1\leq u \leq 2)
+	\end{array}
+	\right. \\
+%
+%
+	M_{2,1}(u)
+&=
+	\left\{
+	\begin{array}{ll}
+		0 & (0\leq u \leq 1) \\
+		u-1 & (1\leq u \leq 2)
+	\end{array}
+	\right. \\[3mm]
+%
+%
+	N_{0,2}(v)
+&=
+	(1-v)^2 \\
+%
+%
+	N_{1,2}(v)
+&=
+	2v(1-v) \\
+%
+%
+	N_{2,2}(v)
+&=
+	v^2 \\
+%
+%
+&\quad (0\leq v \leq 1)
+\end{align}
+そして、コントロールポイントを次のように与える。\(\bm{P}_{i,j}(i=0,1,2,\ j=0,1,2)\)より、
+\begin{align}
+	\bm{P}_{0,0}
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 0
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_{0,1}
+&=
+	\left(
+	\begin{array}{c}
+		1 \\ 1
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_{0,2}
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 3
+	\end{array}
+	\right) \\[2mm]
+%
+%
+	\bm{P}_{1,0}
+&=
+	\left(
+	\begin{array}{c}
+		2 \\ 0
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_{1,1}
+&=
+	\left(
+	\begin{array}{c}
+		2 \\ 1
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_{1,2}
+&=
+	\left(
+	\begin{array}{c}
+		2 \\ 4
+	\end{array}
+	\right) \\[2mm]
+%
+%
+	\bm{P}_{2,0}
+&=
+	\left(
+	\begin{array}{c}
+		3 \\ -1
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_{2,1}
+&=
+	\left(
+	\begin{array}{c}
+		3 \\ 2
+	\end{array}
+	\right) &
+%
+%
+	\bm{P}_{2,2}
+&=
+	\left(
+	\begin{array}{c}
+		4 \\ 4
+	\end{array}
+	\right)
+\end{align}
 
 
 
