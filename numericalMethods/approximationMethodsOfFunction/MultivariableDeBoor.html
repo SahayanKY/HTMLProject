@@ -190,7 +190,39 @@ MathJax.Hub.Config({
 \begin{align}
 	(i_0,i_1,\cdots,i_{l-1}) \in \{0,1,\cdots,p_0\}\times\cdots\times\{0,1,\cdots,p_{l-1}\}
 \end{align}
-という式があるが、これは右側の直積集合の全要素に対して行うことを意味している。
+という式があるが、これは右側の直積集合の全要素に対してループを行うことを意味している。<br>
 
+さて、このアルゴリズムは変数の数を動的に変えるのならば、そのまま実装するのは難しい。例えば、
+一番内側のループは、実装する時は更にfor文を入れ子にすることになるが、その階層の数が
+コーディング時には決まっていないため実装が難しい。また、配列\(Q\)のインデックスの数が決まらない
+ことになるため、そもそもそのまま実装するのは無理だ。<br>
+
+そこで次のように工夫する。\((i_0,i_1,\cdots,i_{m-1})\)という配列の\(m\)個のインデックスを
+次のように一つの数に対応させる。
+\begin{align}
+	(0,0,\cdots,0,0) &\longleftrightarrow 0 \\
+	(0,0,\cdots,0,1) &\longleftrightarrow 1 \\
+	(0,0,\cdots,0,p_{m-1}) &\longleftrightarrow p_{m-1} \\
+	(0,0,\cdots,1,0) &\longleftrightarrow p_{m-1}+1 \\
+	(0,0,\cdots,p_{m-2},0) &\longleftrightarrow p_{m-2}(p_{m-1}+1) \\
+	(0,0,\cdots,p_{m-2},p_{m-1}) &\longleftrightarrow (p_{m-2}+1)(p_{m-1}+1)-1 \\
+	(1,0,\cdots,0,0) &\longleftrightarrow (p_{1}+1)\cdots(p_{m-1}+1) \\
+	(i_0,i_1,\cdots,i_{m-2},i_{m-1}) &\longleftrightarrow
+		\sum_{k=0}^{m-1}i_k \prod_{l=k+1}^{m-1}(p_l +1)
+		= \sum_{k=0}^{m-1} i_k \Pi_k
+\end{align}
+ただし、\(\Pi_{m-1}=1\)とする。このようにすることで動的に変わる変数の数\(m\)個のインデックスを
+使っていたところを1つのインデックスに置き換えることができる。また、
+\begin{align}
+	(i_0,i_1,\cdots,i_{l-1}) \in \{0,1,\cdots,p_0\}\times\cdots\times\{0,1,\cdots,p_{l-1}\}
+\end{align}
+のところのループに関しては、\((i_0,i_1,\cdots,i_{l-1})\)を上から\(p_0+1\)進数、
+\(p_1+1\)進数、...、\(p_{l-1}+1\)進数の数と見なしてループを回せばいい。例えば、
+\(p_0=p_1=\cdots =p_{l-1}=9\)だった場合、
+\begin{align}
+	(i_0,i_1,\cdots,i_{l-1}) \in \{0,1,\cdots,9\}\times\cdots\times\{0,1,\cdots,9\}
+\end{align}
+となり、\(00\cdots 00\)、\(00\cdots 01\)、...、\(00\cdots 09\)、\(00\cdots 10\)と
+繰り上がりさせれば、直積集合の全要素に対してループを行える。
 </body>
 </html>
