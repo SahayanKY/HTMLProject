@@ -209,9 +209,9 @@ MathJax.Hub.Config({
 	(1,0,\cdots,0,0) &\longleftrightarrow (p_{1}+1)\cdots(p_{m-1}+1) \\
 	(i_0,i_1,\cdots,i_{m-2},i_{m-1}) &\longleftrightarrow
 		\sum_{k=0}^{m-1}i_k \prod_{l=k+1}^{m-1}(p_l +1)
-		= \sum_{k=0}^{m-1} i_k \Pi_k
+		= \sum_{k=0}^{m-1} i_k \Pi_{k+1}
 \end{align}
-ただし、\(\Pi_{m-1}=1\)とする。このようにすることで動的に変わる変数の数\(m\)個のインデックスを
+ただし、\(\Pi_{m}=1\)とする。このようにすることで動的に変わる変数の数\(m\)個のインデックスを
 使っていたところを1つのインデックスに置き換えることができる。また、
 \begin{align}
 	(i_0,i_1,\cdots,i_{l-1}) \in \{0,1,\cdots,p_0\}\times\cdots\times\{0,1,\cdots,p_{l-1}\}
