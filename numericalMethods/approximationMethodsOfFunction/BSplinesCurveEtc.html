@@ -463,7 +463,248 @@ MathJax.Hub.Config({
 	\end{array}
 	\right)
 \end{align}
-
+このとき、曲面\(\bm{S}(u,v)\)は次のようになる。
+\begin{align}
+	\bm{S}(u,v)
+&=
+	\sum_{i=0}^{2} \sum_{j=0}^{2}
+		\bm{P}_{i,j} M_{i,1}(u) N_{j,2}(v) \\
+%
+%
+&=
+	\bm{P}_{0,0} M_{0,1} N_{0,2}
+	+
+	\bm{P}_{0,1} M_{0,1} N_{1,2}
+	+
+	\bm{P}_{0,2} M_{0,1} N_{2,2} \\
+&\qquad
+	+
+	\bm{P}_{1,0} M_{1,1} N_{0,2}
+	+
+	\bm{P}_{1,1} M_{1,1} N_{1,2}
+	+
+	\bm{P}_{1,2} M_{1,1} N_{2,2} \\
+&\qquad
+	+
+	\bm{P}_{2,0} M_{2,1} N_{0,2}
+	+
+	\bm{P}_{2,1} M_{2,1} N_{1,2}
+	+
+	\bm{P}_{2,2} M_{2,1} N_{2,2} \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 0
+	\end{array}
+	\right)
+	(1-u)\cdot (1-v)^2
+	+
+	\left(
+	\begin{array}{c}
+		1 \\ 1
+	\end{array}
+	\right)
+	(1-u)\cdot 2v(1-v)
+	+
+	\left(
+	\begin{array}{c}
+		0 \\ 3
+	\end{array}
+	\right)
+	(1-u)\cdot v^2 \\
+&\qquad
+	+
+	\left(
+	\begin{array}{c}
+		2 \\ 0
+	\end{array}
+	\right)
+	u\cdot (1-v)^2
+	+
+	\left(
+	\begin{array}{c}
+		2 \\ 1
+	\end{array}
+	\right)
+	u\cdot 2v(1-v)
+	+
+	\left(
+	\begin{array}{c}
+		2 \\ 4
+	\end{array}
+	\right)
+	u\cdot v^2 \\
+&\qquad
+	+
+	\left(
+	\begin{array}{c}
+		3 \\ -1
+	\end{array}
+	\right)
+	0\cdot (1-v)^2
+	+
+	\left(
+	\begin{array}{c}
+		3 \\ 2
+	\end{array}
+	\right)
+	0\cdot 2v(1-v)
+	+
+	\left(
+	\begin{array}{c}
+		4 \\ 4
+	\end{array}
+	\right)
+	0\cdot v^2 \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		2v -2uv -2v^2 +2uv^2
+		+2u -4uv +2uv^2
+		+4uv -4uv^2
+		+2uv^2 \\
+	%
+		2v -2uv -2v^2 +2uv^2
+		+3v^2 -3uv^2
+		+2uv -2uv^2
+		+4uv^2
+	\end{array}
+	\right) \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		2v -2uv -2v^2
+		+2u
+		+2uv^2 \\
+	%
+		2v
+		+v^2
+		+uv^2
+	\end{array}
+	\right)
+	\qquad
+	(0\leq u\leq 1,\, 0\leq v\leq 1) \\[3mm]
+%
+%
+	\bm{S}(u,v)
+&=
+	\left(
+	\begin{array}{c}
+		0 \\ 0
+	\end{array}
+	\right)
+	0\cdot (1-v)^2
+	+
+	\left(
+	\begin{array}{c}
+		1 \\ 1
+	\end{array}
+	\right)
+	0\cdot 2v(1-v)
+	+
+	\left(
+	\begin{array}{c}
+		0 \\ 3
+	\end{array}
+	\right)
+	0\cdot v^2 \\
+&\qquad
+	+
+	\left(
+	\begin{array}{c}
+		2 \\ 0
+	\end{array}
+	\right)
+	(2-u)\cdot (1-v)^2
+	+
+	\left(
+	\begin{array}{c}
+		2 \\ 1
+	\end{array}
+	\right)
+	(2-u)\cdot 2v(1-v)
+	+
+	\left(
+	\begin{array}{c}
+		2 \\ 4
+	\end{array}
+	\right)
+	(2-u)\cdot v^2 \\
+&\qquad
+	+
+	\left(
+	\begin{array}{c}
+		3 \\ -1
+	\end{array}
+	\right)
+	(u-1)\cdot (1-v)^2
+	+
+	\left(
+	\begin{array}{c}
+		3 \\ 2
+	\end{array}
+	\right)
+	(u-1)\cdot 2v(1-v)
+	+
+	\left(
+	\begin{array}{c}
+		4 \\ 4
+	\end{array}
+	\right)
+	(u-1)\cdot v^2 \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		\left(
+		\begin{array}{c}
+			4 -2u -8v +4uv +4v^2 -2uv^2
+			+8v -4uv -8v^2 +4uv^2
+			+4v^2 -2uv^2 \\
+		%
+			\quad
+			+3u -3 -6uv +6v +3uv^2 -3v^2
+			+6uv -6v -6uv^2 +6v^2
+			+4uv^2 -4v^2
+		\end{array}
+		\right) \\[2mm]
+	%
+		\left(
+		\begin{array}{c}
+			4v -2uv -4v^2 +2uv^2
+			+8v^2 -4uv^2
+			-u +1 +2uv -2v -uv^2 +v^2 \\
+		%
+			+4uv -4v -4uv^2 +4v^2
+			+4uv^2 -4v^2
+		\end{array}
+		\right)
+	\end{array}
+	\right) \\
+%
+%
+&=
+	\left(
+	\begin{array}{c}
+		+u -v^2 +uv^2 +1  \\
+	%
+		-u -2v
+		-3uv^2
+		+5v^2
+		+4uv
+		+1 \\
+	\end{array}
+	\right)
+	\qquad
+	(1\leq u\leq 2,\, 0\leq v\leq 1) \\
+\end{align}
 
 
 
