@@ -27,8 +27,183 @@ MathJax.Hub.Config({
 \newcommand{\T}{^{\rm T}}
 \newcommand{\l}{&lt;}
 \newcommand{\g}{&gt;}
+%
+\newcommand{\ki}[1]{\langle#1\rangle}
+\newcommand{\iki}[1]{\langle\!\!\!\>\langle#1\rangle\!\!\!\>\rangle}
 \)
+このページでは、Bスプライン曲線の形状と曲線上の点に対応する変数値を変化させずにノットを挿入する
+方法についてみていく。つまり、次の式を満たす\(\bm{Q}_i\)を求める。
+\begin{align}
+	\bm{C}(t)
+&=
+	\sum_{i=0}^{n-1} N_{i,p}(t) \bm{P}_i
+=
+	\sum_{i=0}^{n} \bar{N}_{i,p}(t) \bm{Q}_i
+\end{align}
+このようにイコールで結べる時、\(t\)に対応する曲線上の点\(\bm{C}(t)\)が一致するので、
+上記の要求を満たせる。
+ここで\(N_{i,p}\)はノットベクトル\(T\)に基づいて構成された基底関数であり、一方の
+\(\bar{N}_{i,p}\)はノットベクトル\(\bar{T}\)に基づいて構成された基底関数である。
+また\(\bar{T}\)は、\(T\)に新たにノットを挿入して得られたベクトルである。
+挿入した値を\(\bar{t}\ (t_k \leq \bar{t} \l t_{k+1})\)とすると、
+\begin{align}
+	T
+&=
+	\left\{
+		t_0,t_1,\cdots,t_{n+p}
+	\right\} \\
+%
+%
+	\bar{T}
+&=
+	\left\{
+		t_0,t_1,\cdots,t_k,\bar{t},t_{k+1},\cdots,t_{n+p}
+	\right\} \\
+%
+%
+&=
+	\left\{
+		\bar{t}_0,\bar{t}_1,\cdots,
+		\bar{t}_k,\bar{t}_{k+1},\bar{t}_{k+2},\cdots,
+		\bar{t}_{n+p+1}
+	\right\}
+\end{align}
+である。さて、うまいこと\(\bm{Q}_i\)を決めたいが、先に基底関数\(N_{i,p}\)と\(\bar{N}_{i,p}\)の
+関係についてみていく。<br>
 
+まず、ある1つの基底関数は特定の範囲のノットしか使わない。例えば、\(N_{0,0}(t)\)なら
+\(t_0,t_1\)のみを参照する。\(N_{2,1}(t)\)なら\(t_2,t_3,t_4\)のみを参照する。一般に、
+\(N_{i,p}(t)\)は\(t_i,t_{i+1},\cdots,t_{i+p+1}\)のみを参照する。これら参照するノットの範囲外で
+ノットの数が増えようが、値が変わろうが、基底関数の形状には影響がない。（基底関数の計算時に
+参照しないのだから変化が起こらないのは当たり前）従って、\(\bar{t}\)を参照しない基底関数は
+挿入の前後で形状が全く変化しない。（インデックスはちょっと変わるが）即ち、
+\begin{align}
+	N_{0,p}
+&=
+	\bar{N}_{0,p} &
+%
+%
+	N_{1,p}
+&=
+	\bar{N}_{1,p} &
+%
+%
+	\cdots &&
+%
+%
+	N_{k-p-1,p}
+&=
+	\bar{N}_{k-p-1,p} \\
+%
+%
+%
+	N_{k+1,p}
+&=
+	\bar{N}_{k+2,p} &
+%
+%
+	N_{k+2,p}
+&=
+	\bar{N}_{k+3,p} &
+%
+%
+	\cdots &&
+%
+%
+	N_{n-1,p}
+&=
+	\bar{N}_{n,p}
+\end{align}
+上で\(N_{k-p-1,p}\)は\(t_k\)までしか参照しないため、変化がなく、\(\bar{N}_{k-p-1,p}\)に等しくなる。
+また、\(N_{k+1,p}\)は\(t_{k+1},\cdots,t_{k+p+2}\)を参照するので、\(\bar{t}\)を含まない。
+そして、それらノットは\(\bar{t}_{k+2},\cdots,\bar{t}_{k+p+3}\)と等しいので、
+\(N_{k+1,p}\)は\(\bar{N}_{k+2,p}\)に等しくなる。そのため、上のような等式が成り立つ。<br>
+
+上の議論だけでは\(N_{k-p,p},\cdots,N_{k,p}\)に関する関係式が抜けてしまったので、
+次はこれらの基底関数について考える。一般に次の関係式が成り立つ。
+\begin{align}
+	N_{i,p}(t)
+&=
+	\frac{\bar{t}_{k+1} -\bar{t}_i}{\bar{t}_{i+p+1} -\bar{t}_i}
+		\bar{N}_{i,p}(t)
+	+
+	\frac{\bar{t}_{i+p+2} -\bar{t}_{k+1}}{\bar{t}_{i+p+2} -\bar{t}_{i+1}}
+		\bar{N}_{i+1,p}(t)
+\end{align}
+以降、この式を証明する。見やすさのために、
+\begin{align}
+	t_i
+&=
+	\ki{i} &
+%
+%
+	\bar{t}_i
+&=
+	\iki{i}
+\end{align}
+と略記する。このとき、
+\begin{align}
+	\ki{i}
+&=
+	\left\{
+	\begin{array}{ll}
+		\iki{i} & (0\leq i\leq k) \\
+		\iki{i+1} & (k+1\leq i\leq n+p)
+	\end{array}
+	\right.
+\end{align}
+という関係がある。従って、\(p=0\)のときは
+\begin{align}
+	\begin{array}{lc}
+		\begin{array}{rl}
+			\ki{i} &= \iki{i} \\
+			\ki{i+1} &= \iki{i+2} \\
+			\ki{i+p} &= \iki{i+p} \\
+			\ki{i+p+1} &= \iki{i+p+2}
+		\end{array} &
+			(i=k)
+	\end{array}
+\end{align}
+であり、\(p\geq 1\)のときは
+\begin{align}
+	\begin{array}{rll}
+		\ki{i}
+			&= \iki{i}
+			& (i=k-p,k-p+1,\cdots,k) \\
+		\ki{i+1}
+			&=
+			\left\{
+			\begin{array}{l}
+				\iki{i+1} \\
+				\iki{i+2}
+			\end{array}
+			\right.
+			&
+			\begin{array}{l}
+				(i=k-p,k-p+1,\cdots,k-1) \\
+				(i=k)
+			\end{array} \\
+		\ki{i+p}
+			&=
+			\left\{
+			\begin{array}{l}
+				\iki{i+p} \\
+				\iki{i+p+1}
+			\end{array}
+			\right.
+			&
+			\begin{array}{l}
+				(i=k-p) \\
+				(i=k-p+1,k-p+2,\cdots,k)
+			\end{array} \\
+		\ki{i+p+1}
+			&=
+			\iki{i+p+2}
+			&(i=k-p,k-p+1,\cdots,k)
+	\end{array}
+\end{align}
+である。\(p\geq 1\)のとき、\(i=k-p\)、\(i=k\)、\(i=k-p+1,\cdots,k-1\)の3通りに場合分けができる。
+従って、計4通りについて関係式の成立を考える。
 
 
 </body>
