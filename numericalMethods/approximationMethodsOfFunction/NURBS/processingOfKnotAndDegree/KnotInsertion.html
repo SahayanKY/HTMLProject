@@ -235,7 +235,8 @@ MathJax.Hub.Config({
 	\bar{N}_{k+1,p}
 \end{align}
 方針としては、\(N_{k,p}\)を基底関数の定義式により\(N_{k,p-1},N_{k+1,p-1}\)に変え、
-帰納法を用いてそれらを\(\bar{N}_{k,p-1},\bar{N}_{k+1,p-1},N_{k+2,p-1}\)に変え、そして、
+次数\(p-1\)の基底関数では証明したい等式が成立すると仮定して（帰納法を用いて）、
+それらを\(\bar{N}_{k,p-1},\bar{N}_{k+1,p-1},N_{k+2,p-1}\)に変え、そして、
 \(\bar{N}_{k,p},\bar{N}_{k+1,p}\)の基底関数の定義式を用いて
 \(\bar{N}_{k,p},\bar{N}_{k+1,p}\)に変えて等式と示す。実際に計算していく。
 \begin{align}
@@ -540,6 +541,202 @@ MathJax.Hub.Config({
 	\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+1}}
 		\bar{N}_{i+1,p}
 \end{align}
+今回も同様の手順で、
+\begin{align}
+	N_{i,p}
+&=
+	\frac{t -\ki{i}}{\ki{i+p} -\ki{i}}
+		N_{i,p-1} \\
+	&\qquad
+	+
+	\frac{\ki{i+p+1} -t}{\ki{i+p+1} -\ki{i+1}}
+		N_{i+1,p-1} \\[3mm]
+%
+%
+&=
+	\frac{t -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\left(
+			\frac{\iki{k+1} -\iki{i}}{\iki{i+p} -\iki{i}}
+				\bar{N}_{i,p-1}
+			+
+			\frac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i+1}}
+				\bar{N}_{i+1,p-1}
+		\right) \\
+	&\qquad
+	+
+	\frac{\iki{i+p+2} -t}{\iki{i+p+2} -\iki{i+1}}
+		\left(
+			\frac{\iki{k+1} -\iki{i+1}}{\iki{i+p+1} -\iki{i+1}}
+				\bar{N}_{i+1,p-1}
+			+
+			\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+2}}
+				\bar{N}_{i+2,p-1}
+		\right) \\[3mm]
+%
+%
+&=
+	\frac{t -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\frac{\iki{k+1} -\iki{i}}{\iki{i+p} -\iki{i}}
+		\bar{N}_{i,p-1} \\
+	&\qquad
+	+
+	\left(
+		\frac{t -\iki{i}}{\iki{i+p+1} -\iki{i}}
+			\frac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i+1}}
+		+
+		\frac{\iki{i+p+2} -t}{\iki{i+p+2} -\iki{i+1}}
+			\frac{\iki{k+1} -\iki{i+1}}{\iki{i+p+1} -\iki{i+1}}
+	\right)
+		\bar{N}_{i+1,p-1} \\
+	&\qquad
+	+
+	\frac{\iki{i+p+2} -t}{\iki{i+p+2} -\iki{i+1}}
+		\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+2}}
+		\bar{N}_{i+2,p-1} \\[3mm]
+%
+%
+&=
+	\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\left(
+			\bar{N}_{i,p}
+			-
+			\frac{\iki{i+p+1} -t}{\iki{i+p+1} -\iki{i+1}}
+				\bar{N}_{i+1,p-1}
+		\right) \\
+	&\qquad
+	+
+	\left(
+		\frac{t -\iki{i}}{\iki{i+p+1} -\iki{i}}
+			\frac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i+1}}
+		+
+		\frac{\iki{i+p+2} -t}{\iki{i+p+2} -\iki{i+1}}
+			\frac{\iki{k+1} -\iki{i+1}}{\iki{i+p+1} -\iki{i+1}}
+	\right)
+		\bar{N}_{i+1,p-1} \\
+	&\qquad
+	+
+	\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+1}}
+		\left(
+			\bar{N}_{i+1,p}
+			-
+			\frac{t -\iki{i+1}}{\iki{i+p+1} -\iki{i+1}}
+				\bar{N}_{i+1,p-1}
+		\right) \\[3mm]
+%
+%
+&=
+	\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\bar{N}_{i,p} \\
+	&\qquad
+	+
+	\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+1}}
+		\bar{N}_{i+1,p} \\
+	&\qquad
+	+
+	0\cdot \bar{N}_{i+1,p-1} \\
+%
+%
+&=
+	\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\bar{N}_{i,p}
+	+
+	\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+1}}
+		\bar{N}_{i+1,p}
+\end{align}
+従って、このときも成立する。これにより、\(p\geq 0,k-p\leq i \leq k\)において、
+\begin{align}
+	N_{i,p}
+&=
+	\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\bar{N}_{i,p}
+	+
+	\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+1}}
+		\bar{N}_{i+1,p}
+\end{align}
+が成立する。さて、話を元に戻す。新しいコントロールポイント\(\bm{Q}_i\)を求めるのだった。
+元の基底関数\(N_{i,p}\)と新しい基底関数\(\bar{N}_{i,p}\)の関係式をうまく利用するのだ。
+\begin{align}
+	\sum_{i=0}^{n-1}
+		N_{i,p} \bm{P}_i
+&=
+	\sum_{i=0}^{n}
+		\bar{N}_{i,p} \bm{Q}_i \\
+%
+%
+	\sum_{i=0}^{k-p-1}
+		N_{i,p} \bm{P}_i
+	+
+	\sum_{i=k-p}^{k}
+		N_{i,p} \bm{P}_i
+	+
+	\sum_{i=k+1}^{n-1}
+		N_{i,p} \bm{P}_i
+&=
+	\sum_{i=0}^{n}
+		\bar{N}_{i,p} \bm{Q}_i \\
+%
+%
+	\begin{array}{l} \displaystyle
+	\sum_{i=0}^{k-p-1}
+		\bar{N}_{i,p} \bm{P}_i \\
+	\quad \displaystyle
+	+
+	\sum_{i=k-p}^{k}
+		\left(
+			\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+				\bar{N}_{i,p}
+			+
+			\frac{\iki{i+p+2} -\iki{k+1}}{\iki{i+p+2} -\iki{i+1}}
+				\bar{N}_{i+1,p}
+		\right) \bm{P}_i \\
+	\quad \displaystyle
+	+
+	\sum_{i=k+1}^{n-1}
+		\bar{N}_{i+1,p} \bm{P}_i
+	\end{array}
+&=
+	\sum_{i=0}^{n}
+		\bar{N}_{i,p} \bm{Q}_i \\
+%
+%
+	\begin{array}{l} \displaystyle
+	\sum_{i=0}^{k-p}
+		\bar{N}_{i,p} (\bm{P}_i -\bm{Q}_i) \\
+	\quad \displaystyle
+	+
+	\sum_{i=k-p+1}^{k}
+		\bar{N}_{i,p}
+		\left(
+			\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}} \bm{P}_i
+			+
+			\frac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}} \bm{P}_{i-1}
+			-\bm{Q}_i
+		\right) \\
+	\quad \displaystyle
+	+
+	\sum_{i=k+1}^{n}
+		\bar{N}_{i,p}\left(\bm{P}_{i-1} -\bm{Q}_{i} \right)
+	\end{array}
+&=
+	0
+\end{align}
+この式から、
+\begin{align}
+	\bm{Q}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{P}_i & (0\leq i\leq k-p) \\
+		\dfrac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}} \bm{P}_i
+			+\dfrac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}} \bm{P}_{i-1}
+			& (k-p+1\leq i\leq k) \\
+		\bm{P}_{i-1} & (k+1\leq i\leq n)
+	\end{array}
+	\right.
+\end{align}
+と\(\bm{Q}_i\)をとることで、曲線の形状もパラメータも変化しないように変えられる。
+
+
 
 
 
