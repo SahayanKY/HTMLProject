@@ -32,5 +32,56 @@ $$
 
 今回からはBスプライン、その後にNURBSについて解説していく。
 
+<h1>アウトライン</h1>
+<h2>1章　Bスプライン・NURBSの概観</h2>
+BスプラインやNURBSが一体どういったものなのかを見ていく。
+<dl>
+	<dt><a href="BSpline.html">Bスプライン</a>
+	<dd>
+		Bスプラインの定義から見ていく。そして、Bスプライン特有の基底関数\(N_{i,p}\)の
+		形について見ていく。
+	</dd>
+	<dt><a href="BSplineCurveEtc.html">Bスプライン曲線・曲面</a>
+	<dd>
+		Bスプラインの曲線や曲面を見ていく。それぞれについて幾つかの具体例を示した。
+	</dd>
+</dl>
+<h2>2章　Bスプラインの計算手法</h2>
+Bスプラインで定義された関数の様々な値の計算方法について見ていく。
+<dl>
+	<dt><a href="../evaluationAlgorithm/deBoor'sAlgorithm.html">de Boorのアルゴリズム</a>
+	<dd>
+		Bスプラインで定義された関数の値を計算する手法について見ていく。
+		ここではまず、簡単のために1変数関数に議論を限定する。
+	</dd>
+	<dt><a href="../evaluationAlgorithm/MultivariableDeBoor.html">多変数のときのde Boorのアルゴリズム</a>
+	<dd>
+		前ページで見た1変数のde Boorアルゴリズムを多変数の場合に拡張していく。
+	</dd>
+	<dt><a href="../evaluationAlgorithm/derivativeBSpline.html">Bスプラインの微分</a>
+	<dd>
+		Bスプラインの微分計算について見ていく。
+	</dd>
+</dl>
+<h2>3章　Bスプラインの精細化手法</h2>
+Bスプラインを扱う時、場合によってはノットベクトルを細かくしたい時や粗くしたい時がある。
+また、同様に、次数を増やしたい時や減らしたい時もある。そのような時に使うアルゴリズムを
+説明していく。
+<dl>
+	<dt><a href="../processingOfKnotAndDegree/KnotInsertion.html">ノット挿入のアルゴリズム</a>
+	<dd>
+		Bスプラインのノットベクトルに1つだけノットを挿入するときに使うアルゴリズムを説明していく。
+	</dd>
+	<dt><a href="../processingOfKnotAndDegree/KnotRefinement.html">ノットを複数同時に挿入するアルゴリズム</a>
+	<dd>
+		前ページを更に拡張して同時に複数のノットを挿入するアルゴリズムを説明する。
+	</dd>
+	<dt><a href="../processingOfKnotAndDegree/MultivariableKnotInsertion.html">多変数Bスプラインへのノット挿入アルゴリズム</a>
+	<dd>
+		多変数の場合のノットの挿入アルゴリズムを見る。
+	</dd>
+</dl>
+
+
 </body>
 </html>
