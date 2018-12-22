@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert the title</title>
+<title>多変数Bスプラインへのノット挿入アルゴリズム</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   extensions: ["tex2jax.js"],
@@ -27,9 +27,104 @@ MathJax.Hub.Config({
 \newcommand{\T}{^{\rm T}}
 \newcommand{\l}{&lt;}
 \newcommand{\g}{&gt;}
+%
+\newcommand{\ki}[1]{\langle#1\rangle}
+\newcommand{\iki}[1]{\langle\!\!\!\>\langle#1\rangle\!\!\!\>\rangle}
 \)
+<p>
 ここまでは「1変数」のBスプラインにノットを挿入することを考えてきた。
 今回はこれを拡張して、「多変数」のBスプラインにノットを挿入することを考える。
+
+<p>
+\(t_0,t_1,\cdots,t_{m-1}\)を変数とする。（ノットベクトルの要素ではない）このとき、
+多変数のBスプラインは
+\begin{align}
+	\bm{F}(t_0,t_1,\cdots,t_{m-1})
+&=
+	\sum_{i_0=0}^{n_0 -1} \sum_{i_1=0}^{n_1 -1} \cdots \sum_{i_{m-1}=0}^{n_{m-1} -1}
+		\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+			N_{0;i_0,p_0}(t_0)
+			N_{1;i_1,p_1}(t_1)
+			\cdots
+			N_{m-1;i_{m-1},p_{m-1}}(t_{m-1})
+\end{align}
+という形になる。まず、変数\(t_0\)方向のノットベクトル\(T_0\)にノットを挿入する場合を考える。
+このとき、上の式を次のように変形すると1変数とさして変わらないことが分かるだろうか?
+\begin{align}
+	\bm{F}(t_0,t_1,\cdots,t_{m-1})
+&=
+	\sum_{i_1=0}^{n_1 -1} \cdots \sum_{i_{m-1}=0}^{n_{m-1} -1}
+		N_{1;i_1,p_1}(t_1)
+			\cdots
+			N_{m-1;i_{m-1},p_{m-1}}(t_{m-1})
+			\left(
+				\sum_{i_0=0}^{n_0 -1} N_{0;i_0,p_0}(t_0) \bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+			\right)
+\end{align}
+ノットベクトル\(T_0\)を次のようにおき、挿入するノットを\(\bar{t}\)とし、
+\(t_{0;k}\leq\bar{t}\l t_{0;k+1}\)とする。そして、
+挿入後のノットベクトルを\(\bar{T_0}\)とする。このとき、
+\begin{align}
+	T_0
+&=
+	\left\{
+		t_{0;0},t_{0;1},\cdots,t_{0;n_0+p_0}
+	\right\} \\
+%
+%
+	\bar{T_0}
+&=
+	\left\{
+		t_{0;0},t_{0;1},\cdots,t_{0;k},\bar{t},t_{0;k+1},\cdots,t_{0;n_0+p_0}
+	\right\} \\
+%
+&=
+	\left\{
+		\bar{t}_{0:0},\bar{t}_{0;1},\cdots,
+			\bar{t}_{0;k},\bar{t}_{0;k+1},\bar{t}_{0;k+2},\cdots
+			\bar{t}_{0;n_0+p_0+1}
+	\right\}
+\end{align}
+となり、単純な類推から新しいコントロールポイント\(\bm{Q}_{i_0,i_1,\cdots,i_{m-1}}\)は
+（\(\iki{i}\)は\(\bar{T_0}\)の\(i\)番目のノット）
+\begin{align}
+	\bm{Q}_{i_0,i_1,\cdots,i_{m-1}}
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+		%
+		&(0\leq i_0\leq k-p_0) \\
+	%
+		\dfrac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+			\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+		+
+		\dfrac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}}
+			\bm{P}_{i_0 -1,i_1,\cdots,i_{m-1}}
+		%
+		&(k -p_0 +1\leq i_0\leq k) \\
+	%
+		\bm{P}_{i_0 -1,i_1,\cdots,i_{m-1}}
+		%
+		&(k+1\leq i_0\leq n_0)
+	\end{array}
+	\right.
+\end{align}
+これを\(0\leq i_1\leq n_{1}-1,\  0\leq i_2\leq n_{2}-1,
+\  \cdots,\  0\leq i_{m-1}\leq n_{m-1}-1\)の各場合について行う。
+この各場合は独立で、かつ同じ値（\((\iki{k+1}-\iki{i})/(\iki{i+p+1}-\iki{i})\)など）で計算する
+ので、並行して計算する方がよい。
+
+<p>
+これを一般に、新しいノットをノットベクトル\(T_l\)に挿入した場合の
+アルゴリズムのフローチャートは次のようになる。
+<div align="center">
+<img src="../image/MultivariableKnotInsertionAlgo.png"
+ alt="多変数Bスプラインに対するノット挿入のアルゴリズム"
+ title="多変数Bスプラインに対するノット挿入のアルゴリズム"
+ width="100%"
+ height="100%">
+</div>
 
 
 
