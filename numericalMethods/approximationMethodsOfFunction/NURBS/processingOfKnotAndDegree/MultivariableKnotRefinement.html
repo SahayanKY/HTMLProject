@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>多変数Bスプラインのノット精細化アルゴリズム</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+%
+\newcommand{\ki}[1]{\langle#1\rangle}
+\newcommand{\iki}[1]{\langle\!\!\!\>\langle#1\rangle\!\!\!\>\rangle}
+\)
+<p>
+さて、前回まではノットを同時に複数個挿入したり（ノット精細化）、多変数のBスプラインに対して
+1つのノットを挿入したりしてきた。今回はそれらをまとめて、多変数のBスプラインに対して
+ノット精細化を試みる。
+
+<p>
+しかし、基本的な考え方は2つの手法そのままである。
+フローチャートをまずは示そう。
+<div align="center">
+<img src="../image/MultivariableKnotRefinementAlgo.png"
+ alt="多変数Bスプラインのノット精細化アルゴリズム"
+ title="多変数Bスプラインのノット精細化アルゴリズム"
+ width="100%"
+ height="100%">
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
