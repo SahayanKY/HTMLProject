@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bスプラインとベジエ曲線の基底関数の関係</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<p>
+Bスプラインの基底関数\(N_{i,p}\)の性質として重要なものの1つに、
+ノットベクトルが特定のものであれば、ベジエ曲線の基底関数(バーンスタイン基底関数)
+と同等になることである。
+
+<p>
+次数\(p\)の基底関数のノットベクトル\(T\)を次のようにとる。
+\begin{align}
+	T
+&=
+	\left\{
+		t_0,t_1,\cdots,t_p,t_{p+1},t_{p+2},\cdots,t_{2p+1}
+	\right\} \\
+%
+%
+&=
+	\left\{
+		0,0,\cdots,0,1,1,\cdots,1
+	\right\}
+\end{align}
+つまり、前\(p+1\)個の要素は0、後ろ\(p+1\)個の要素は1となるようにとるのである。
+このとき、ベジエ曲線の基底関数に等しくなると言うのだ。
+今回はこれを証明してみる。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
