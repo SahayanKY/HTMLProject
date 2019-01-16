@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert the title</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<p>
+今回はBスプライン曲線の形状を維持しつつ、基底関数の次数を上げる手法について考える。
+なお、今回紹介する手法はノットの挿入、除去の手法も利用しているため、先にそれらの
+ページを見て欲しい。
+
+<p>
+次数を上げる手法は次の段階に分けられる。
+<ol>
+	<li>
+		元のノットベクトルに、ユニークな内部ノットを元の次数\(p\)と等しい多重度になるように
+		挿入する。これにより、曲線を複数のベジエ曲線の連なりに分解したことになる。
+	<li>
+		ベジエ曲線に特有な次数を上げる手法を適用する。
+	<li>
+		最初に挿入したノットを適当な数だけ除去する。
+</ol>
+
+<p>
+ベジエ曲線の次数を上げる手法について見ていく。
+まず、ベジエ曲線は次のような定義となっている。
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
