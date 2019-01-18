@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert the title</title>
+<title>Bスプラインの次数の上げ方</title>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   extensions: ["tex2jax.js"],
@@ -94,6 +94,8 @@ Bスプライン曲線は複数のベジエ曲線の連なりと見なせる。
 	\right)
 		t^i (1-t)^{p-i}
 \end{align}
+ここで\(\left(\begin{array}{c} p \\ i\end{array}\right)\)
+は二項係数であり、\({}_pC_i\)である。
 これの次数を1上げた\(\bm{C}_B^{p+1}(t)\)と
 元の曲線\(\bm{C}_B^p(t)\)が等しくなって欲しいので、
 (新しいコントロールポイントを\(\bm{Q}_i\)とする)
@@ -117,11 +119,176 @@ Bスプライン曲線は複数のベジエ曲線の連なりと見なせる。
 		\bm{Q}_i B_{i,p+1}
 &=
 	\sum_{i=0}^{p}
-		\bm{P}_i B_{i,p}
+		\bm{P}_i (1-t) B_{i,p}
+	+
+	\sum_{i=0}^{p}
+		\bm{P}_i t B_{i,p} \\
+%
+%
+	\sum_{i=0}^{p+1}
+		\bm{Q}_i B_{i,p+1}
+&=
+	\sum_{i=0}^{p}
+		\bm{P}_i
+			\left(
+			\begin{array}{c}
+				p \\ i
+			\end{array}
+			\right)
+			t^i (1-t)^{p-i+1}
+	+
+	\sum_{i=0}^{p}
+		\bm{P}_i
+			\left(
+			\begin{array}{c}
+				p \\ i
+			\end{array}
+			\right)
+			t^{i+1} (1-t)^{p-i} \\
+%
+%
+	\sum_{i=0}^{p+1}
+		\bm{Q}_i
+			\left(
+			\begin{array}{c}
+				p+1 \\ i
+			\end{array}
+			\right)
+			t^i (1-t)^{p+1-i}
+&=
+	\sum_{i=0}^{p}
+		\bm{P}_i
+			\left(
+			\begin{array}{c}
+				p \\ i
+			\end{array}
+			\right)
+			t^i (1-t)^{p+1-i}
+	+
+	\sum_{i=1}^{p+1}
+		\bm{P}_{i-1}
+			\left(
+			\begin{array}{c}
+				p \\ i-1
+			\end{array}
+			\right)
+			t^i (1-t)^{p+1-i}
 \end{align}
+ここで、各\(t^i (1-t)^{p+1-i}\)の項についてまとめると、
+\begin{align}
+	\left\{
+	\begin{array}{rll}
+			\bm{Q}_0
+				\left(
+				\begin{array}{c}
+					p+1 \\ 0
+				\end{array}
+				\right)
+		&=
+			\bm{P}_0
+				\left(
+				\begin{array}{c}
+					p \\ 0
+				\end{array}
+				\right) \\
+	%
+	%
+			\bm{Q}_i
+				\left(
+				\begin{array}{c}
+					p+1 \\ i
+				\end{array}
+				\right)
+		&=
+			\bm{P}_i
+				\left(
+				\begin{array}{c}
+					p \\ i
+				\end{array}
+				\right)
+			+
+			\bm{P}_{i-1}
+				\left(
+				\begin{array}{c}
+					p \\ i-1
+				\end{array}
+				\right)
+		&
+			(1\leq i\leq p) \\
+	%
+	%
+			\bm{Q}_{p+1}
+				\left(
+				\begin{array}{c}
+					p+1 \\ p+1
+				\end{array}
+				\right)
+		&=
+			\bm{P}_{p}
+				\left(
+				\begin{array}{c}
+					p \\ p
+				\end{array}
+				\right)
+	\end{array}
+	\right.
+%
+%
+	\left\{
+	\begin{array}{rll}
+			\bm{Q}_0
+		&=
+			\bm{P}_0 \\
+	%
+	%
+			\bm{Q}_i
+		&=
+			\frac{p+1-i}{p+1}
+				\bm{P}_i
+			+
+			\frac{i}{p+1}
+				\bm{P}_{i-1}
+		&
+			(1\leq i\leq p) \\
+	%
+	%
+			\bm{Q}_{p+1}
+		&=
+			\bm{P}_p
+	\end{array}
+	\right.
+\end{align}
+である。このように\(\bm{Q}_i\)をとれば、\(p+1\)次の
+ベジエ曲線が得られるのである。
 
+<p>
+このようにして得られたベジエ曲線に対して、
+最後に適当な数だけノットを除去すれば
+Bスプライン曲線になるわけである。
+この適当な数というのは、各ノットの位置における
+曲線の連続性が元の次数のときと同じになるようにとる。
 
+<p>
+\(p\)次の曲線\(\bm{C}^p\)は、多重度\(m\)のノットの位置において
+\(C^{p-m}\)連続性がある。この連続性を維持させる。
+次数を1上げた場合\(p-m=p+1-(m+1)\)より、
+多重度も1増やせばいいことが分かる。
 
+<p>
+次数上げの一連の流れに沿って多重度をみてみる。
+次数を上げる前にベジエ曲線に分解するため、
+多重度は\(m\)から\(p\)に上がる。
+つまり、\(p-m\)個のノットを挿入することになる。
+次に、次数を1上げることで多重度は1増えて\(p+1\)に上がる。
+そして最後ノットを除去する時は、
+元の曲線の連続性を維持するために多重度は\(m+1\)になる。
+つまり、\((p+1)-(m+1)=p-m\)個のノットを除去することになる。
+
+<p>
+このようにしてBスプラインの次数は上げることができる。
+しかし、(ノットでも複数のノットを同時に入れたいと思ったように)
+次数についても一度に何次も増やしたい。
+次回はこの方法について見ていく。
 
 </body>
 </html>
