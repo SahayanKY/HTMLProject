@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ノット除去の仕方</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+今回からはノットを除去する方法について考える。
+とは言っても、ノットを挿入する操作の逆操作なので、あまり新しいことは
+考えない。
+
+<p>
+多重度が\(m\)のノットの位置では、基底関数\(N_{i,p}\)は\(C^{p-m}\)連続である。
+この基底関数からなる曲線\(\bm{C}\)の連続性も\(C^{p-m}\)までは
+保証されている。しかし、前回見たノット挿入手法によれば、ノットの多重度を
+上げたからと言って(曲線の形状が変わらないので)曲線の連続性までも減ることはない。
+つまり、
+\begin{align}
+	\text{基底関数の連続性} \leq \text{曲線の連続性}
+\end{align}
+なのである。
+
+<p>
+多重度が下がれば下がるほど、基底関数の連続性は上がる。
+また、曲線の形状は変えたくない。従って、ノットは基底関数の連続性が
+曲線の連続性と一致するまでは除去できるというわけだ。
+(これはつまり、除去するノットは自由には選べないということだ。)
+
+
+
+
+
+
+
+
+</body>
+</html>
