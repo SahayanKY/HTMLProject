@@ -27,6 +27,9 @@ MathJax.Hub.Config({
 \newcommand{\T}{^{\rm T}}
 \newcommand{\l}{&lt;}
 \newcommand{\g}{&gt;}
+%
+\newcommand{\ki}[1]{\langle#1\rangle}
+\newcommand{\iki}[1]{\langle\!\!\!\>\langle#1\rangle\!\!\!\>\rangle}
 \)
 今回からはノットを除去する方法について考える。
 とは言っても、ノットを挿入する操作の逆操作なので、あまり新しいことは
@@ -49,11 +52,113 @@ MathJax.Hub.Config({
 曲線の連続性と一致するまでは除去できるというわけだ。
 (これはつまり、除去するノットは自由には選べないということだ。)
 
+<p>
+ノットを挿入する例を見せ、そしてその挿入したノットを除去する例を見せる。
 
+<p>
+ノットベクトル\(U\)、コントロールポイント\(\bm{P}_i\)、
+次数\(p=3\)から成るBスプライン曲線\(\bm{C}(u)\)を考える。
+\(U\)を次のようにとり、ポイント数\(n\)は6である。
+\begin{align}
+	U
+&=
+	\left\{
+		u_0,u_1,\cdots,u_9
+	\right\} \\
+&=
+	\left\{
+		0,0,0,0,1,1,2,2,2,2
+	\right\}
+\end{align}
+これに「1」を挿入することを考える。
+\(u_k\leq \bar{u}\l u_{k+1}\)となる\(k\) は5であり、
+新しいノットベクトル\(\bar{U}\)と
+新しいポイント\(\bm{Q}_i\)の計算式は次のようになる。
+\begin{align}
+	\bar{U}
+&=
+	\left\{
+		\bar{u}_0,\bar{u}_1,\cdots,\bar{u}_{10}
+	\right\} \\
+&=
+	\left\{
+		0,0,0,0,1,1,1,2,2,2,2
+	\right\} \\
+%
+%
+	\bm{Q}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{P}_i
+	%
+			& (0\leq i\leq 2) \\
+	%
+	%
+		\dfrac{\iki{6}-\iki{i}}{\iki{i+4}-\iki{i}}
+			\bm{P}_i
+		+
+		\dfrac{\iki{i+4}-\iki{6}}{\iki{i+4}-\iki{i}}
+			\bm{P}_{i-1}
+	%
+			& (3\leq i\leq 5) \\
+	%
+	%
+		\bm{P}_{i-1}
+	%
+			& (i=6)
+	\end{array}
+	\right.
+\end{align}
+ここで\(\iki{i}=\bar{u}_i\)である。
+\(\iki{i}(3\leq i\leq 5)\)についてみる。
+\begin{align}
+	i=3 \quad
+&\rightarrow \quad
+	\iki{i}=\iki{3}=0 \\
+%
+%
+	i=4 \quad
+&\rightarrow \quad
+	\iki{i}=\iki{4}=1=\iki{6} \\
+%
+%
+	i=5 \quad
+&\rightarrow \quad
+	\iki{i}=\iki{5}=1=\iki{6}
+\end{align}
+これは挿入したノットの元の多重度によるものである。
+従って、ポイントの計算式は次のように書き替えられる。
+\begin{align}
+	\bm{Q}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{P}_i
+	%
+			& (0\leq i\leq 2) \\
+	%
+	%
+		\dfrac{\iki{6}-\iki{i}}{\iki{i+4}-\iki{i}}
+			\bm{P}_i
+		+
+		\dfrac{\iki{i+4}-\iki{6}}{\iki{i+4}-\iki{i}}
+			\bm{P}_{i-1}
+	%
+			& (i=3) \\
+	%
+	%
+		\bm{P}_{i-1}
+	%
+			& (4\leq i\leq 6)
+	\end{array}
+	\right.
+\end{align}
 
-
-
-
+<p>
+さて、今度はノットベクトル\(\bar{U}\)、コントロールポイント\(\bm{Q}_i\)、
+次数\(p=3\)から成るBスプライン曲線\(\bm{C}(u)\)において、
+ノット「1」を除去する。
 
 
 </body>
