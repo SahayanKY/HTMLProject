@@ -156,9 +156,137 @@ MathJax.Hub.Config({
 \end{align}
 
 <p>
-さて、今度はノットベクトル\(\bar{U}\)、コントロールポイント\(\bm{Q}_i\)、
+さて、今度は上で得たノットベクトル\(\bar{U}\)、コントロールポイント\(\bm{Q}_i\)、
 次数\(p=3\)から成るBスプライン曲線\(\bm{C}(u)\)において、
-ノット「1」を除去する。
+ノット「1」を除去し、\(\bm{P}_i\)を計算する。上のポイントの計算式から、
+\begin{align}
+	\bm{P}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{Q}_i & (0\leq i\leq 2) \\
+		\bm{Q}_{i+1} & (3\leq i\leq 5)
+	\end{array}
+	\right.
+\end{align}
+によって\(\bm{P}_i\)を計算できる。ただし、これら\(\bm{P}_i\)は
+(上の\(\bm{Q}_i\)の計算式の\(i=3\) のときの)
+\begin{align}
+	\bm{Q}_3
+=
+	\dfrac{\iki{6} -\iki{3}}{\iki{7} -\iki{3}}
+		\bm{P}_3
+	+
+	\dfrac{\iki{7} -\iki{6}}{\iki{7} -\iki{3}}
+		\bm{P}_2
+\end{align}
+を満たさなければならない。この条件はまさしくノットを除去できるかどうかの
+判定である。(ただし今回の場合、先の挿入の例で挿入したノットを除去する
+のであるから確実にこの条件は満たされる)
+
+<p>
+さて、ここからはノットベクトルの具体的な形を考えない、一般的な
+話に移る。
+
+<p>
+元のノットベクトルを\(\bar{U}\)、コントロールポイントを\(\bm{Q}_i(0\leq i\leq n)\)、
+次数を\(p\)とする。この\(\bar{U}\)から多重度\(m(1\leq m\leq p)\)
+のノット\(\bar{u}=\bar{u}_{k+1}\)を除去する。
+(\(\bar{u}_k \leq \bar{u}_{k+1} \l \bar{u}_{k+2}\)となるように\(k\)を選ぶ、
+すなわち\(\bar{u}\)が多重しているなら一番後ろのものを\(\bar{u}\)とする)
+そして、除去して得られるノットベクトルを\(U\)、コントロールポイントを
+\(\bm{P}_i\)とする。ノット挿入の時のポイント計算式から、
+\begin{align}
+	\bm{Q}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{P}_i
+	%
+			& (0\leq i\leq k-p) \\
+	%
+	%
+		\dfrac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+			\bm{P}_i
+		+
+		\dfrac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}}
+			\bm{P}_{i-1}
+	%
+			& (k-p+1\leq i\leq k) \\
+	%
+	%
+		\bm{P}_{i-1}
+	%
+			& (k+1\leq i\leq n)
+	\end{array}
+	\right.
+\end{align}
+である。ここで\(\iki{i}=\bar{u}_i\)である。
+\(\iki{k+1}\)の多重度を考慮すると、
+\begin{align}
+	\iki{k+1-(m-1)}
+&=&
+	\iki{k+1-(m-2)}
+&=
+	\cdots
+=
+	\iki{k+1-0} \\
+%
+%
+	\iki{k-m+2}
+&=&
+	\iki{k-m+3}
+&=
+	\cdots
+=
+	\iki{k+1}
+\end{align}
+と、\(m-1\)個のノットは\(\iki{k+1}\)と等しくなるので、
+\begin{align}
+	\bm{Q}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{P}_i
+	%
+			& (0\leq i\leq k-p) \\
+	%
+	%
+		\dfrac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+			\bm{P}_i
+		+
+		\dfrac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}}
+			\bm{P}_{i-1}
+	%
+			& (k-p+1\leq i\leq k-m+1) \\
+	%
+	%
+		\bm{P}_{i-1}
+	%
+			& (k-m+2\leq i\leq n)
+	\end{array}
+	\right.
+\end{align}
+となる。この式から\(\bm{P}_i\)を計算し、全ての式がイコールに
+なっていれば無事ノット除去というわけだ。上の式から直ちに
+\begin{align}
+	\bm{P}_i
+&=
+	\left\{
+	\begin{array}{ll}
+		\bm{Q}_i
+	%
+			& (0\leq i\leq k-p) \\
+	%
+	%
+		\bm{Q}_{i+1}
+	%
+			& (k-m+1\leq i\leq n-1)
+	\end{array}
+	\right.
+\end{align}
+が得られる。
+
 
 
 </body>
