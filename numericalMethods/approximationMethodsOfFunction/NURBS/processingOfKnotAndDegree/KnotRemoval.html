@@ -158,7 +158,7 @@ MathJax.Hub.Config({
 <p>
 さて、今度は上で得たノットベクトル\(\bar{U}\)、コントロールポイント\(\bm{Q}_i\)、
 次数\(p=3\)から成るBスプライン曲線\(\bm{C}(u)\)において、
-ノット「1」を除去し、\(\bm{P}_i\)を計算する。上のポイントの計算式から、
+ノット「1」を除去し、\(\bm{P}_i\)を計算する。上の\(\bm{P}_i\)からの\(\bm{Q}_i\)の計算式から、
 \begin{align}
 	\bm{P}_i
 &=
@@ -169,8 +169,8 @@ MathJax.Hub.Config({
 	\end{array}
 	\right.
 \end{align}
-によって\(\bm{P}_i\)を計算できる。ただし、これら\(\bm{P}_i\)は
-(上の\(\bm{Q}_i\)の計算式の\(i=3\) のときの)
+によって全ての\(\bm{P}_i\)を計算できる。
+しかし、まだ上の式での\(i=3\)のときの式が残っている。
 \begin{align}
 	\bm{Q}_3
 =
@@ -180,8 +180,9 @@ MathJax.Hub.Config({
 	\dfrac{\iki{7} -\iki{6}}{\iki{7} -\iki{3}}
 		\bm{P}_2
 \end{align}
-を満たさなければならない。この条件はまさしくノットを除去できるかどうかの
-判定である。(ただし今回の場合、先の挿入の例で挿入したノットを除去する
+つまり、得られた\(\bm{P}_i\)はこの式を満たさなければならない。
+この条件はまさしくノットを除去できるかどうかの
+判定である。(ただし今回の場合、先に挿入したノットを除去する
 のであるから確実にこの条件は満たされる)
 
 <p>
@@ -193,7 +194,9 @@ MathJax.Hub.Config({
 次数を\(p\)とする。この\(\bar{U}\)から多重度\(m(1\leq m\leq p)\)
 のノット\(\bar{u}=\bar{u}_{k+1}\)を除去する。
 (\(\bar{u}_k \leq \bar{u}_{k+1} \l \bar{u}_{k+2}\)となるように\(k\)を選ぶ、
-すなわち\(\bar{u}\)が多重しているなら一番後ろのものを\(\bar{u}\)とする)
+すなわち\(\bar{u}\)が多重しているなら一番後ろのものを除去する)
+(これは挿入したノットが多重ノットの一番後ろにつくことに対応しているので
+挿入の時の式を転用できる)
 そして、除去して得られるノットベクトルを\(U\)、コントロールポイントを
 \(\bm{P}_i\)とする。ノット挿入の時のポイント計算式から、
 \begin{align}
@@ -285,7 +288,134 @@ MathJax.Hub.Config({
 	\end{array}
 	\right.
 \end{align}
-が得られる。
+が得られる。そして、ここで得られた\(\bm{P}_{i}(i=k-p,k-m+1)\)
+を
+\begin{align}
+	\bm{Q}_i
+=
+	\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\bm{P}_i
+	+
+	\frac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}}
+		\bm{P}_{i-1}
+	\qquad
+		(k-p+1\leq i\leq k-m+1)
+\end{align}
+に逐次代入して、次の\(\bm{P}_i\)を計算する。
+例えば、\(\bm{P}_{k-p}\)を代入して、
+\begin{align}
+	\bm{Q}_{k-p+1}
+&=
+	\frac{\iki{k+1} -\iki{k-p+1}}{\iki{k+2} -\iki{k-p+1}}
+		\bm{P}_{k-p+1}
+	+
+	\frac{\iki{k+2} -\iki{k+1}}{\iki{k+2} -\iki{k-p+1}}
+		\bm{P}_{k-p} \\
+%
+%
+	\bm{P}_{k-p+1}
+&=
+	\frac{\iki{k+2} -\iki{k-p+1}}{\iki{k+1} -\iki{k-p+1}}
+		\left(
+			\bm{Q}_{k-p+1}
+			-
+			\frac{\iki{k+2} -\iki{k+1}}{\iki{k+2} -\iki{k-p+1}}
+				\bm{P}_{k-p}
+		\right)
+\end{align}
+によって\(\bm{P}_{k-p+1}\)を求めるし、\(\bm{P}_{k-m+1}\)を代入して
+\begin{align}
+	\bm{Q}_{k-m+1}
+&=
+	\frac{\iki{k+1} -\iki{k-m+1}}{\iki{k-m+p+2} -\iki{k-m+1}}
+		\bm{P}_{k-m+1}
+	+
+	\frac{\iki{k-m+p+2} -\iki{k+1}}{\iki{k-m+p+2} -\iki{k-m+1}}
+		\bm{P}_{k-m} \\
+%
+%
+	\bm{P}_{k-m}
+&=
+	\frac{\iki{k-m+p+2} -\iki{k-m+1}}{\iki{k-m+p+2} -\iki{k+1}}
+		\left(
+			\bm{Q}_{k-m+1}
+			-
+			\frac{\iki{k+1} -\iki{k-m+1}}{\iki{k-m+p+2} -\iki{k-m+1}}
+				\bm{P}_{k-m+1}
+		\right)
+\end{align}
+によって\(\bm{P}_{k-m}\)を求める具合だ。このように
+\(\bm{P}_i(k-p+1\leq i\leq k-m)\)をどんどん内側に向かって求めていく。
+そして、最後にノットを除去できるかどうかを判断することになる。
+その勝手は
+\begin{align}
+	\text{(再掲)}\quad
+	\bm{Q}_i
+&=
+	\frac{\iki{k+1} -\iki{i}}{\iki{i+p+1} -\iki{i}}
+		\bm{P}_i
+	+
+	\frac{\iki{i+p+1} -\iki{k+1}}{\iki{i+p+1} -\iki{i}}
+		\bm{P}_{i-1}
+\end{align}
+この式の本数が偶数か奇数かによって変わる。
+
+<p>
+本数が偶数の場合、最後に下のように2本が残る。
+\begin{align}
+	\bm{Q}_i
+&=
+	\alpha_i \bm{P}_i
+	+
+	(1-\alpha_i) \bm{P}_{i-1} \\
+%
+%
+	\bm{Q}_{i+1}
+&=
+	\alpha_{i+1} \bm{P}_{i+1}
+	+
+	(1-\alpha_{i+1}) \bm{P}_i
+\end{align}
+ここで、\(\bm{P}_{i-1}\)と\(\bm{P}_{i+1}\)は既知で求まっている。
+すると、\(\bm{P}_i\)は次の2式から求まることになる。
+\begin{align}
+	\bm{P}_i
+&=
+	\frac{1}{\alpha_i}
+		\left(
+			\bm{Q}_i
+			-
+			(1-\alpha_i) \bm{P}_{i-1}
+		\right) \\
+%
+%
+	\bm{P}_i
+&=
+	\frac{1}{1-\alpha_{i+1}}
+		\left(
+			\bm{Q}_{i+1}
+			-
+			\alpha_{i+1} \bm{P}_{i+1}
+		\right)
+\end{align}
+この2式が一致した場合、ノットを除去できることになる。
+
+<p>
+本数が奇数の場合、最後に1本が残る。
+\begin{align}
+	\bm{Q}_i
+&=
+	\alpha_i \bm{P}_i
+	+
+	(1-\alpha_i) \bm{P}_{i-1}
+\end{align}
+ここで、\(\bm{P}_{i-1}\)と\(\bm{P}_i\)は既知である。
+最後に残った式の各ポイントは全て既知であるので、
+この式の等号が成立した場合、ノットを除去できる。
+
+
+
+
 
 
 
