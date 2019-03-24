@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ノイマン境界条件の取り扱い--1次元の有限要素法</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<h2>ノイマン境界条件はどう扱うか</h2>
+前回まで解いていた微分方程式は次のものである。
+\begin{align}
+	\frac{\d^2 f}{\d x^2} = 1 & \qquad (0\l x\l 1) \\
+	f(0) = 0 & \\
+	f(1) = 0 &
+\end{align}
+つまり、ディリクレ境界条件、つまり、領域の端で関数値を与えるだけであった。
+
+<p>
+しかし、一部の領域境界にはディリクレ境界条件の代わりに
+ノイマン境界条件、つまり、関数値の微分量の値を与えることが出来る。
+(なお、ディリクレ境界は一部分だけでも必ず存在する必要がある)
+
+<p>
+そこで、今回は次の微分方程式
+\begin{align}
+	\frac{\d^2 f}{\d x^2} = 1 & \qquad (0\l x\l 1) \\
+	f'(0) = -\frac{1}{2} \\
+	f(1) = 0
+\end{align}
+を解くことを例に有限要素法におけるノイマン境界条件の取り扱い方を見る。
+(ここでは\(x=0\)での条件がノイマン境界条件)
+なお、これは既に見た微分方程式と同じ理論解を与える。
+
+<p>
+さて、まずは弱形式を得る。残差に重み関数\(w(x)\)をかけて、積分をするのであった。
+\begin{align}
+	\int_0^1
+		w\left(\frac{\d^2 f}{\d x^2} -1\right) \d x
+&=
+	0 \\
+%
+%
+	\left[
+		w\frac{\d f}{\d x}
+	\right]_0^1
+	-
+	\int_0^1
+		\frac{\d w}{\d x} \frac{\d f}{\d x} \d x
+	-
+	\int_0^1
+		w \d x
+&=
+	0
+\end{align}
+\(x=1\)ではディリクレ境界条件を与えているので、重み関数は0としてよい。
+\begin{align}
+	w(1) = 0
+\end{align}
+従って、
+\begin{align}
+	w(0) \frac{\d f}{\d x}(0)
+	+
+	\int_0^1
+		\frac{\d w}{\d x} \frac{\d f}{\d x} \d x
+	+
+	\int_0^1
+		w \d x
+&=
+	0 \\
+%
+%
+	-\frac{1}{2} w(0)
+	+
+	\int_0^1
+		\frac{\d w}{\d x} \frac{\d f}{\d x} \d x
+	+
+	\int_0^1
+		w \d x
+&=
+	0
+\end{align}
+
+<p>
+次に、基底関数\(\phi_i,\psi_i\)と\(f(x)\)のディリクレ境界条件を満たす関数\(f_0(x)\)を
+用いて\(w,f\)を近似する。
+\begin{align}
+	w(x)
+&=
+	\sum_{i=1}^n w_i \phi_i(x) &
+%
+%
+	f(x)
+&=
+	f_0(x)
+	+
+	\sum_{i=1}^n f_i \psi_i(x) &
+%
+%
+	f_0(x)
+&=
+	0
+\end{align}
+ここで\(w_i,f_i\)は定数である。
+今回は基底関数\(\phi_i\)と\(\psi_i\)は同じものを用い、次のような一次要素を用いる。
+(ここで、ディリクレ境界では基底関数は全て0となるようにとる)
+<div align="center">
+<img src="image/FEM_1D4/BasisFunctionsGraph.png"
+ alt="基底関数の概形"
+ title="基底関数の概形"
+ width="70%"
+ height="70%">
+</div>
+
+<p>
+この基底関数を使って近似すると、弱形式は連立方程式に変形できる。
+\begin{align}
+	-\frac{1}{2} w_1
+	+
+	\int_0^1
+		\left(
+			\sum_{i=1}^n
+				w_i \frac{\d\phi_i}{\d x}
+		\right)
+		\left(
+			\sum_{j=1}^n
+				f_j \frac{\d\phi_j}{\d x}
+		\right)
+		\d x
+	+
+	\int_0^1
+		\left(
+			\sum_{i=1}^n w_i \phi_i \d x
+		\right)
+&=
+	0
+\end{align}
+\begin{align}
+%
+%
+	\sum_{j=1}^n
+		\left(
+			\int_0^1
+				\frac{\d\phi_i}{\d x} \frac{\d\phi_j}{\d x} \d x
+		\right)
+			f_j
+&=
+	\frac{1}{2} \delta_{1i}
+	-
+	\int_0^1 \phi_i \d x
+	\qquad
+		\left(
+			i = 1,2,\cdots,n
+		\right)
+\end{align}
+\begin{align}
+	a_{ij}
+&=
+	\int_0^1
+		\frac{\d\phi_i}{\d x}\frac{\d\phi_j}{\d x} \d x &
+%
+	b_{i}
+&=
+	\frac{1}{2} \delta_{1i}
+	-
+	\int_0^1 \phi_i \d x
+\end{align}
+\begin{align}
+	A\bm{f}
+&=
+	\bm{b}
+\end{align}
+
+<p>
+後は行列の各要素の積分を計算して、連立方程式を解くだけである。
+\(n=9\)として行列要素の積分を計算すると、
+\begin{align}
+	9
+		\left[
+		\begin{array}{ccccc}
+			1 & -1 & 0 & \cdots & 0 \\
+			-1 & 2 & -1 & \ddots & \vdots \\
+			0 & -1 & 2 & \ddots & 0 \\
+			\vdots & \ddots & \ddots & \ddots & -1 \\
+			0 & \cdots & 0 & -1 & 2
+		\end{array}
+		\right]
+		\bm{f}
+&=
+	\frac{1}{2}
+		\left[
+		\begin{array}{c}
+			1 \\ 0 \\ \vdots \\ 0
+		\end{array}
+		\right]
+	-
+	\frac{1}{18}
+		\left[
+		\begin{array}{c}
+			1 \\ 2 \\ \vdots \\ 2
+		\end{array}
+		\right] \\
+%
+%
+	\bm{f}
+&=
+	\frac{1}{162}
+		\left[
+		\begin{array}{c}
+			0 \\ -8 \\ -14 \\ -18 \\ -20 \\ -20 \\ -18 \\ -14 \\ -8
+		\end{array}
+		\right]
+\end{align}
+
+<p>
+得られた数値解と理論解を比較してみたものが次のグラフである。
+(理論解が同じなので当然だが、ディリクレ条件のみのときに見た結果と合致している)
+<div align="center">
+<img src="image/FEM_1D4/NeumannBC_NumericalAndTheoreticalSolution.png"
+ alt="ノイマン境界条件を持つ方程式を一次要素で解いて得られた数値解と理論解の比較"
+ title="ノイマン境界条件を持つ方程式を一次要素で解いて得られた数値解と理論解の比較"
+ width="70%"
+ height="70%">
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
