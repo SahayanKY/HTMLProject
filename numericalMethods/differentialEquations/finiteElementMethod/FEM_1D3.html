@@ -58,15 +58,243 @@
 \end{align}
 が得られた。次はこの連立方程式を解くことになる。そこで、係数行列\([a_{ij}]\)と右辺のベクトル
 \([b_i]\)の各要素の積分値を計算する必要がある。この値は基底関数\(\phi_i,\psi_i\)による。そこで
-まずは簡単な例として、基底関数に一次要素を用いる場合を見ていく。
+まずは簡単な例として、基底関数\(\phi_i,\psi_i\)のどちらにも同じ一次要素を用いる場合を見ていく。
 
+<h2>一次要素とは</h2>
+さて、まずは一次要素とは何なのかを説明していく。
 
+<p>
+端的に言って、次のような形をした関数である。
+<div align="center">
+<img src="image/FEM_1D3/PrimaryElementGraph.png"
+ alt="1次元一次要素の形"
+ title="1次元一次要素の形"
+ width="70%"
+ height="70%">
+</div>
+つまり、区分的に1次関数であり、ある1点においては関数値は1、他の点においては
+関数値は0であるような関数である。
 
+<h2>領域を分割する</h2>
+次に、計算領域の\(\left[0,1\right]\)を複数の領域に(ただし被らないように)分割する。
+<p>
+なぜ分割するのか。
+上の図の\(\phi_i\)は\(x\leq x_{i-1}\)、\(x_{i-1}\leq x\leq x_{i}\)、
+\(x_{i}\leq x\leq x_{i+1}\)、\(x_{i+1}\leq x\)の4つの領域の中では1つの一次関数で
+表される。しかし、全領域で考えると、一つの一次関数では表すことができない。
+そのため、最初にでた積分計算がそのままでは少々やりにくい。
+\begin{align}
+	a_{ij}
+&=
+	\int_0^1 \frac{\d\psi_i}{\d x} \frac{\d\phi_j}{\d x} \d x &
+	b_i
+&=
+	-\int_0^1 \psi_i \d x
+\end{align}
+<p>
+そこで、\(x_{i-1}\)、\(x_{i}\)、\(x_{i+1}\)のような、基底関数の形状が変わる点で
+領域(積分領域)を分割すれば、積分計算が非常にやりやすくなる。
+\begin{align}
+	b_i
+&=
+	-\int_0^1 \psi_i \d x \\
+%
+%
+&=
+	-\int_{x_{i-1}}^{x_i} \psi_i \d x
+	-\int_{x_i}^{x_{i+1}} \psi_i \d x \\
+%
+%
+&=
+	-\frac{x_i -x_{i-1}}{2}
+	-\frac{x_{i+1} -x_i}{2} \\
+%
+%
+&=
+	-\frac{x_{i+1} -x_{i-1}}{2}
+\end{align}
+<p>
+\(a_{ij}\)の計算について考える。\(\psi_i=\phi_i\)であるから、
+\begin{align}
+	a_{ij}
+&=
+	\int_0^1 \frac{\d\psi_i}{\d x} \frac{\d\phi_j}{\d x} \d x \\
+%
+%
+&=
+	\int_0^1 \frac{\d\phi_i}{\d x} \frac{\d\psi_j}{\d x} \d x \\
+%
+%
+&=
+	a_{ji}
+\end{align}
+である。
+<p>
+\(a_{ij}\)は、全領域において\(\phi_i\)と\(\phi_j\)の一方の傾きが0であれば
+0になるので、\(|i-j|\geq 2\)においては\(a_{ij}\)=0となる。
+<div align="center">
+<img src="image/FEM_1D3/CalcMatrix_Pattern1.png"
+ alt="領域分割を意識した行列要素の計算パターン1"
+ title="領域分割を意識した行列要素の計算パターン1"
+ width="70%"
+ height="70%">
+</div>
 
+<p>
+\(|i-j|=1\)でも同様に考え、(\(j=i+1\)とすると(\(i=j+1\)でも同様))
+\begin{align}
+	a_{ij}
+&=
+	\int_0^1 \frac{\d\psi_i}{\d x} \frac{\d\phi_j}{\d x} \d x \\
+%
+%
+&=
+	\int_{x_i}^{x_{i+1}} \left(-\frac{1}{(x_{i+1}-x_i)^2}\right) \d x \\
+%
+%
+&=
+	-\frac{1}{(x_{i+1} -x_i)}
+\end{align}
+<div align="center">
+<img src="image/FEM_1D3/CalcMatrix_Pattern2.png"
+ alt="領域分割を意識した行列要素の計算パターン2"
+ title="領域分割を意識した行列要素の計算パターン2"
+ width="70%"
+ height="70%">
+</div>
 
+<p>
+最後のパターンとして、\(i=j\)の場合は、
+\begin{align}
+	a_{ij}
+&=
+	\int_0^1 \frac{\d\psi_i}{\d x} \frac{\d\phi_j}{\d x} \d x \\
+%
+%
+&=
+	\int_{x_{i-1}}^{x_i} \frac{\d\phi_i}{\d x} \frac{\d\phi_i}{\d x} \d x
+	+
+	\int_{x_i}^{x_{i+1}} \frac{\d\phi_i}{\d x} \frac{\d\phi_i}{\d x} \d x \\
+%
+%
+&=
+	\int_{x_{i-1}}^{x_i} \left(\frac{1}{(x_i -x_{i-1})^2}\right) \d x
+	+
+	\int_{x_i}^{x_{i+1}} \left(\frac{1}{(x_{i+1} -x_i)^2}\right) \d x \\
+%
+%
+&=
+	\frac{1}{x_i -x_{i-1}}
+	+
+	\frac{1}{x_{i+1} -x_i}
+\end{align}
+<div align="center">
+<img src="image/FEM_1D3/CalcMatrix_Pattern3.png"
+ alt="領域分割を意識した行列要素の計算パターン3"
+ title="領域分割を意識した行列要素の計算パターン3"
+ width="70%"
+ height="70%">
+</div>
 
+<p>
+さて、領域全体を\(n\)点で等間隔に分割する時、\(i=1,2,\cdots,n\)まであり、
+\begin{align}
+	a_{ij}
+&=
+	\left\{
+	\begin{array}{ll}
+		0 & (|i-j|\geq 2) \\
+		-\frac{1}{x_{i+1}-x_i} & (j=i+1) \\
+		-\frac{1}{x_{i}-x_{i-1}} & (j=i-1) \\
+		\frac{1}{x_i-x_{i-1}} +\frac{1}{x_{i+1}-x_i} & (j=i)
+	\end{array}
+	\right. \\
+%
+%
+&=
+	\left\{
+	\begin{array}{ll}
+		0 & (|i-j|\geq 2) \\
+		-n-1 & (j=i+1) \\
+		-n-1 & (j=i-1) \\
+		2n+2 & (j=i)
+	\end{array}
+	\right. \\
+%
+%
+&\quad (x_i = \frac{i}{n+1}) \\
+%
+%
+	b_i
+&=
+	-\frac{1}{n+1}
+\end{align}
+<div align="center">
+<img src="image/FEM_1D3/Domain1DDivision.png"
+ alt="領域分割"
+ title="領域分割"
+ width="70%"
+ height="70%">
+</div>
 
+<p>
+従って、解くべき連立方程式は次のようになる。
+\begin{align}
+	A
+&=
+	(n+1)
+	\left[
+	\begin{array}{ccccc}
+		2 & -1 & 0 & \cdots & 0 \\
+		-1 & 2 & -1 & \ddots & \vdots \\
+		0 & -1 & 2 & \ddots & 0 \\
+		\vdots & \ddots & \ddots & \ddots & -1 \\
+		0 & \cdots & 0 & -1 & 2
+	\end{array}
+	\right] &
+%
+%
+	\bm{b}
+&=
+	\frac{-1}{n+1}
+	\left[
+	\begin{array}{c}
+		1 \\ 1 \\ \vdots \\ 1
+	\end{array}
+	\right]
+\end{align}
+\begin{align}
+	A\bm{f}
+&=
+	\bm{b}
+\end{align}
 
+<p>
+\(n=8\)のときの計算結果は
+\begin{align}
+	\bm{f}
+&=
+	-\frac{1}{81}
+	\left[
+	\begin{array}{c}
+		4 \\ 7 \\ 9 \\ 10 \\ 10 \\ 9 \\ 7 \\ 4
+	\end{array}
+	\right]
+\end{align}
+であり、得られた数値解と理論解をプロットすると次のようになる。
+<div align="center">
+<img src="image/FEM_1D3/NumericalAndTheoreticalSolution.png"
+ alt="一次要素で得られた数値解と理論解の比較"
+ title="一次要素で得られた数値解と理論解の比較"
+ width="70%"
+ height="70%">
+</div>
+
+<p>
+確かに理論解に近い値が得られていることが分かる。
+
+<p>
+以上が有限要素法で問題を解く一連の流れである。
 
 
 </body>
