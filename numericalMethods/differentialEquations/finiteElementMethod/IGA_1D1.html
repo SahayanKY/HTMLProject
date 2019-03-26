@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>アイソジオメトリック解析--1次元の有限要素法</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<h2>基底関数としてNURBSを用いる</h2>
+今までの例では基底関数には一次要素を用いてきた。
+しかし、実際にはこの基底関数の選び方は自由であり、もっと別のものを選んでも良い。
+
+<p>
+他の基底関数の選び方の1つとして、NURBS(Non-Uniform Rational B-Spline)を用いることがある。
+
+<p>
+NURBSはCADなどで曲線を表現するのによく用いられるものである。
+
+<p>
+例えばCADで設計した形状に対して解析を行いたい時に、
+CADでの表現をそのまま有限要素解析に用いることができるので、
+有限要素解析のために形状表現を翻訳する必要がなく、
+その実装・実行の時間が省ける。
+
+<p>
+そして、多次元の領域を細かく分割する際に機械的に分割できるため、
+メッシュ切りの難しく、時間のかかるアルゴリズムを実装・実行する手間が小さくなる。
+
+<p>
+このようにNURBSを用いて有限要素解析を適用する手法を特に、アイソジオメトリック解析と呼ぶ。
+
+<p>
+NURBSについては既に<a href="../../approximationMethodsOfFunction/NURBS/overview/BSplinesOverview.html">このページ</a>
+で詳しく説明しているので、こちらを当たって欲しい。
+
+
+<h2>NURBSを用いた例</h2>
+NURBSを用いていても基本的な方針は変わらない。
+ただし、基底関数の定数係数\(NURBSのコントロールポイント\)は
+節点(メッシュの角)の値とは一致しなくなるので違和感はあるかもしれない。
+また、メッシュはNURBS基底関数のノットベクトルに対応する。
+詳しくは次の例を見てみる。
+
+<p>
+
+
+
+
+
+</body>
+</html>
