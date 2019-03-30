@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>境界条件と連立方程式の導出の関係--1次元の有限要素法</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<h2>境界条件の与え方で連立方程式はどう変化するのか</h2>
+今回は少々議論を抽象的にして、境界条件を具体的に与えずに連立方程式を導出してみる。
+どうなるだろうか。
+
+<h2>記号の定義</h2>
+まず、微分方程式の定義域を\(\Omega\)とする。
+そして、領域\(\Omega\)の境界(端)を\(\Gamma\)とする。
+今までの例で言えば、
+\begin{align}
+	\Omega
+&=
+	\left[
+		0,1
+	\right] \\
+%
+&=
+	\left\{
+		x \mid 0\leq x\leq 1
+	\right\} \\
+%
+%
+	\Gamma
+&=
+	\left\{
+		0,1
+	\right\}
+\end{align}
+境界\(\Gamma\)の中でもディリクレ境界を\(\Gamma_1\),
+ノイマン境界を\(\Gamma_2\)とする。
+
+<p>
+次のような集合も定義する。
+\begin{align}
+	\Phi
+&=
+	\left\{
+		\phi_i
+	\right\} \\
+%
+%
+	O(A;\Phi)
+&=
+	\left\{
+		f \in \Phi \mid
+		\forall x \in A \subset \mathbb{R}, f(x) = 0
+	\right\}
+\end{align}
+即ち、前者は基底関数\(\phi_i\)の集合であり、
+後者はそれら基底関数\(\phi_i\)の中でも領域\(A\)において常に0になる
+関数の集合を指している。次の例を見てもらえば分かり易いだろうか。
+<div align="center">
+<img src="image/FEM_1D3/Domain1DDivision.png"
+ alt="基底関数群"
+ title="基底関数群"
+ width="70%"
+ height="70%">
+</div>
+この図の基底関数を例にとる。その場合、
+\begin{align}
+	\Phi
+&=
+	\left\{
+		\phi_1,\phi_2,\cdots,\phi_n
+	\right\}
+\end{align}
+であるし、\(A=\{0\}\)とすれば、
+\begin{align}
+	O(\{0\};\Phi)
+&=
+	\left\{
+		\phi_1,\phi_2,\cdots,\phi_n
+	\right\}
+\end{align}
+となる。または、\(A=[x_1,x_2]\)とすれば
+\begin{align}
+	O([x_1,x_2];\Phi)
+&=
+	\left\{
+		\phi_3,\phi_4,\cdots,\phi_n
+	\right\}
+\end{align}
+となる。
+
+<h2>本題</h2>
+では、今までと同じ微分方程式を例にとる。
+ただし、境界条件はまだ与えない。
+\begin{align}
+	\frac{\d^2 f}{\d x^2} = 1
+\end{align}
+重み関数を\(w\)として、これの弱形式は
+\begin{align}
+	\left[
+		w \frac{\d f}{\d x}
+	\right]_0^1
+	-
+	\int_0^1
+		\frac{\d w}{\d x} \frac{\d f}{\d x} \d x
+	-
+	\int_0^1
+		w \d x
+&=
+	0
+\end{align}
+である。さて、基底関数\(\phi_i,\psi_i\)を用いて\(w,f\)を近似すると、
+\begin{align}
+	w^h
+&=
+	\sum_{i:\text{all}} w_i \phi_i
+=
+	\sum_{i:\phi_i \in O(\Gamma_1)} w_i \phi_i
+	+
+	\sum_{i:\phi_i \notin O(\Gamma_1)} w_i \phi_i \\
+%
+%
+	f^h
+&=
+	\sum_{i:\text{all}} f_i \psi_i
+=
+	\sum_{i:\psi_i \in O(\Gamma_1)} f_i \psi_i
+	+
+	\sum_{i:\psi_i \notin O(\Gamma_1)} f_i \psi_i
+\end{align}
+ここで、ディリクレ境界\(\Gamma_1\)では重み関数\(w\)は0であるから、
+\begin{align}
+	w_i
+&=
+	0 &
+%
+	(\phi_i \notin O(\Gamma_1))
+\end{align}
+\begin{align}
+	w^h
+&=
+	\sum_{i:\phi_i \in O(\Gamma_1)} w_i \phi_i
+\end{align}
+つまり、ディリクレ境界で0にならない基底関数の係数を全て0にすれば
+重み関数はディリクレ境界では常に0になる、ということである。
+さて、弱形式に代入すると、
+\begin{align}
+	\left[
+		w^h \frac{\d f^h}{\d x}
+	\right]_0^1
+	-
+	\int_0^1
+		\frac{\d w^h}{\d x} \frac{\d f^h}{\d x} \d x
+	-
+	\int_0^1
+		w^h \d x
+&=
+	0 \\
+%
+%
+	\sum_{i:\phi_i \in O(\Gamma_1)}
+		w_i
+			\left\{
+				\left[
+					\phi_i \frac{\d f^h}{\d x}
+				\right]_0^1
+				-
+				\sum_{j:\text{all}}
+					\left(
+						\int_0^1
+							\frac{\d \phi_i}{\d x} \frac{\d \psi_j}{\d x} \d x
+					\right)
+						f_j
+				-
+				\int_0^1
+					\phi_i \d x
+			\right\}
+&=
+	0
+\end{align}
+\begin{align}
+	\sum_{j:\text{all}}
+		\left(
+			\int_0^1
+				\frac{\d \phi_i}{\d x} \frac{\d \psi_j}{\d x} \d x
+		\right)
+			f_j
+&=
+	-
+	\int_0^1 \phi_i \d x
+	+
+	\left[
+		\phi_i \frac{\d f^h}{\d x}
+	\right]_0^1 &
+	(i:\phi_i \in O(\Gamma_1))
+\end{align}
+右辺第2項について考えてみる。これは
+\begin{align}
+	\phi_i \frac{\d f^h}{\d x}
+\qquad
+	(i:\phi_i \in O(\Gamma_1))
+\end{align}
+の\(\Gamma_1\)、\(\Gamma_2\)での
+値を計算する訳だが、
+\(\Gamma_1\)での値は\(\phi_i=0\)なので0となる。
+また、\(\Gamma_2\)での値は、\(\phi_i \notin O(\Gamma_2)\)
+であれば非ゼロとなる。そして、\(\Gamma_2\)は
+ノイマン境界であるから、\(\frac{\d f^h}{\d x}\)は
+条件として与えた値を使えばよい。
+
+<p>
+つまり、ノイマン境界条件を与えたい時は、
+連立方程式の右辺項ベクトルに\(\phi_i \notin O(\Gamma_2)\)となる行に
+\begin{align}
+	\left[
+		\phi_i \frac{\d f^h}{\d x}
+	\right]_0^1
+\end{align}
+を加えることで実現できる。
+
+<p>
+次は左辺について考えてみる。
+\begin{align}
+	\sum_{j:\text{all}}
+		\left(
+			\int_0^1
+				\frac{\d \phi_i}{\d x} \frac{\d \psi_j}{\d x} \d x
+		\right)
+			f_j
+=
+	\sum_{j:\text{all}}
+		a_{ij} f_j
+\qquad
+	(i:\phi_i \in O(\Gamma_1))
+\end{align}
+よくよく見ると、これでは\(\{a_{ij}\}\)は正方行列になっていない。
+これに関してはディリクレ境界条件を考慮することで解決する。
+\(f_g\)を既知関数として、ディリクレ境界条件を次のように決める。
+\begin{align}
+	f(x)
+=
+	f_g(x)
+\qquad (\forall x \in \Gamma_1)
+\end{align}
+\(f\)の近似関数\(f^h\)で置き換えると、
+\begin{align}
+	f^h(x)
+=
+	\sum_{i:\psi_i \notin O(\Gamma_1)}
+		f_i \psi_i(x)
+=
+	f_g(x)
+\qquad (x \in \Gamma_1)
+\end{align}
+つまり、ディリクレ境界条件によって、
+\(f_i\;(i:\psi_i \notin O(\Gamma_1))\)の分は既に与えられているのだ。
+(逆に\(f_i\;(i:\psi_i \in O(\Gamma_1))\)の分は連立方程式を解いて求められなければならない。)
+方程式の左辺を変形すると、
+\begin{align}
+	\sum_{j:\text{all}}
+		a_{ij} f_j
+&=
+	\sum_{j:\psi_j \notin O(\Gamma_1;\Psi)}
+		a_{ij} f_j
+	+
+	\sum_{j:\psi_j \in O(\Gamma_1;\Psi)}
+		a_{ij} f_j
+\qquad
+	(i:\phi_i \in O(\Gamma_1;\Phi))
+\end{align}
+\(O(\Gamma_1;\Phi)\)の要素の数だけ方程式が存在し、
+\(O(\Gamma_1;\Psi)\)の要素の数だけ未知数が存在するので、
+一意に求まるためにはそれらの数が等しくならなければならない。
+<!--
+	ディリクレ境界で重み関数がゼロになるならば、
+	w_i(i:\phi_i\notin O(\Gamma_1)) = 0
+	は論理としておかしい。
+
+	例えば、安定化有限要素法で用いるような重み関数であれば、
+	そのように処理すれば、連立方程式が正しく導出できなくなることを確認している
+ -->
+
+
+
+
+
+
+</body>
+</html>
