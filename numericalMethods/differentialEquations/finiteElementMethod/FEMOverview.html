@@ -35,30 +35,35 @@ $$
 <h2>1章　1次元の有限要素法</h2>
 1次元の簡単な、手計算で解ける微分方程式を解く問題から始める。
 <dl>
-	<dt><a href="chapter1/FEM_1D.html">弱形式の導出--1次元の有限要素法</a>
+	<dt><a href="chapter1/FEM1D_DeriveWeakFormulation.html">弱形式の導出--1次元の有限要素法</a>
 	<dd>
 		有限要素法の第1歩、弱形式を導出していく。
 	</dd>
-	<dt><a href="chapter1/FEM_1D2.html">連立方程式の導出--1次元の有限要素法</a>
+	<dt><a href="chapter1/FEM1D_ConvertWeakFormulationToLinearEq.html">連立方程式の導出--1次元の有限要素法</a>
 	<dd>
 		解の関数を基底関数で近似し、弱形式を連立方程式へと変形していく。
 	</dd>
-	<dt><a href="chapter1/FEM_1D3.html">一次要素による有限要素法--1次元の有限要素法</a>
+	<dt><a href="chapter1/FEM1D_FindSolutionByGalerkinFirstOrderElement.html">一次要素による有限要素法--1次元の有限要素法</a>
 	<dd>
 		基底関数として一次要素を用いる。一次要素を用いるとどんな風に関数が近似されるのかを見る。そして、
 		有限"要素"で領域を分割して、積分を計算する。
 	</dd>
-	<dt><a href="chapter1/FEM_1D4.html">ノイマン境界条件の取り扱い--1次元の有限要素法</a>
+	<dt><a href="chapter1/FEM1D_HowToHandleNeumannBoundaryCondition.html">ノイマン境界条件の取り扱い--1次元の有限要素法</a>
 	<dd>
 		ノイマン境界条件の扱い方について見る。
 	</dd>
-	<dt><a href="chapter1/FEM_1D5.html">境界条件と連立方程式の導出の関係--1次元の有限要素法</a>
+	<dt><a href="chapter1/FEM1D_StabilizedFEM.html">移流拡散方程式と安定化有限要素法--1次元の有限要素法</a>
+	<dd>
+		ある方程式はここまでに見た離散化の仕方では上手く解を得ることができない。
+		そこで考案された「安定化有限要素法」を見ていく。
+	</dd>
+	<dt><a href="chapter1/FEM1D_RelationBetweenBCandLE.html">境界条件と連立方程式の導出の関係--1次元の有限要素法</a>
 	<dd>
 		境界条件の与え方で導出される連立方程式がどうなるのかを考える。
 		少しだけ抽象的な議論になるが、有限要素法の強み、
 		「境界条件の扱いの楽さ」が分かることと思う。
 	</dd>
-	<dt><a href="chapter1/IGA_1D1.html">アイソジオメトリック解析--1次元の有限要素法</a>
+	<dt><a href="chapter1/IGA1D_Introduction.html">アイソジオメトリック解析--1次元の有限要素法</a>
 	<dd>
 		基底関数としてNURBSを用いた解析、アイソジオメトリック解析(IGA)について見る。連立方程式の導出、実装について説明する。
 	</dd>
