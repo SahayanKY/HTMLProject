@@ -129,8 +129,20 @@ MathJax.Hub.Config({
 \end{align}
 
 <p>
-複数の\(n\)と\(\frac{a}{\mu}\)の組み合わせで解いた結果を示す。
-
+複数の\(n\)と\(\frac{a}{\mu}\)の組み合わせで解き、
+それぞれの結果の厳密解との差(L2ノルム)を図に示す。
+ここで、グラフの縦軸は領域の分割数\(n\)、
+横軸は\(\frac{a}{\mu}\)である。そして、グラフの値(\(z\)値)は
+L2ノルムの常用対数をとったものである。
+例えば、\(n=70\)、\(\frac{a}{\mu}=50\)での誤差は
+1.30E-05である。
+<div align="center">
+<img src="image/FEM1D_StabilizedFEM/L2NormOfResultOfCDeqGalerkin.png"
+ alt="ガラーキン法による移流拡散方程式の数値解と厳密解の誤差(L2ノルム)"
+ title="ガラーキン法による移流拡散方程式の数値解と厳密解の誤差(L2ノルム)"
+ width="70%"
+ height="70%">
+</div>
 
 
 
