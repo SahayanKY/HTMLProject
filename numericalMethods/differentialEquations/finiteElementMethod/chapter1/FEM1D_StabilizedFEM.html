@@ -153,7 +153,74 @@ L2ノルムの常用対数をとったものである。
 </div>
 
 <p>
-このことから、
+このことから、移流が卓越しているときは
+要素を細かく刻まないと誤差が酷く大きくなることが分かる。
+計算時間や誤差のことを考えれば、できれば要素がある程度
+大きい状態でいい近似解を得たい。
+
+<p>
+この問題を解決するために、開発された手法がSUPG法である。
+これまでは、重み関数\(w\)と解関数\(f\)を近似する際は
+同じ基底関数を用いた。つまり、次の通りである。
+\begin{align}
+	w^h
+&=
+	\sum_i
+		w_i \phi_i \\
+%
+%
+	f^h
+&=
+	\sum_i
+		f_i \phi_i
+\end{align}
+このように、2つともに同じ基底関数を用いる手法を
+Galerkin法という。
+
+<p>
+一方で、SUPG(Streamline-Upwind/Petrov-Galerkin)法は
+次のような重み関数\(\tilde{w}^h\)を用いる。
+\begin{align}
+	\tilde{w}^h
+&=
+	w^h
+	+
+	\tau a \frac{\d w^h}{\d x} \\
+%
+%
+	w^h
+&=
+	\sum_i
+		w_i \phi_i \\
+%
+%
+	f^h
+&=
+	\sum_i
+		f_i \phi_i
+\end{align}
+ここで\(\tau\)は要素毎に決められる
+パラメータである。
+\(\tau\)の選び方は様々だが、例えば
+http://www2.yukawa.kyoto-u.ac.jp/~non-equilibrium/research/femhtml/femnote/Site3/107DEEB0-1821-4BF4-813E-985360CC1D7E_files/FEM-2.pdf
+\begin{align}
+	\tau
+&=
+	\left[
+		\left(
+			\frac{2}{\Delta t}
+		\right)^2
+		+
+		\left(
+			\frac{2\left|\bar{u}_e\right|}{h_e}
+		\right)^2
+		+
+		\left(
+			\frac{4}{Reh_e^2}
+		\right)^2
+	\right]^{-\frac{1}{2}}
+\end{align}
+(次元が釣り合わない)
 
 
 
