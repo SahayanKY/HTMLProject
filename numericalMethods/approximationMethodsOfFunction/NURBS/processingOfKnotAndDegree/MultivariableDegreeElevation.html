@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>多変数Bスプラインの次数の上げ方</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+  "HTML-CSS": {
+    styles: {".MathJax_Preview": {visibility: "hidden"}}
+  },
+  tex2jax: {inlineMath: [["\\(","\\)"]]},
+  TeX: {extensions: ["AMSmath.js","AMSsymbols.js","http://sonoisa.github.io/xyjax_ext/xypic.js"]}
+});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+</head>
+<body>
+\(
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\d}{{\rm d}}
+\newcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+\newcommand{\e}[1]{\bm{e}_{#1}}
+\newcommand{\pard}[3]{\frac{\partial^{#2} #3}{\partial #1^{#2}}}
+\newcommand{\T}{^{\rm T}}
+\newcommand{\l}{&lt;}
+\newcommand{\g}{&gt;}
+\)
+<p>
+今回は、これまで見てきた1変数のBスプライン曲線の次数上げの手法を応用して、
+多変数のBスプライン関数の次数上げのアルゴリズムを紹介する。
+(とはいっても、単純に多次元化しただけ。)
+
+<p>
+まず、多変数のBスプライン関数\(\bm{F}(\bm{t})\)は次のように書ける。
+\begin{align}
+	\bm{F}
+&=
+	\sum_{i_0}
+	\sum_{i_1}
+	\cdots
+	\sum_{i_{m-1}}
+		N_{i_0,p_0}(t_0)
+		N_{i_1,p_1}(t_1)
+		\cdots
+		N_{i_{m-1},p_{m-1}}(t_{m-1})
+		\bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+\end{align}
+ここで、\(N_{i_l,p_l}\)の次数を\(p_l\)から\(q\)に上げることを考える。
+上式は
+\begin{align}
+	\bm{F}
+&=
+	\sum_{i_0} \cdots \sum_{i_{l-1}}
+	\sum_{i_{l+1}} \cdots \sum_{i_{m-1}}
+		N_{i_0,p_0}(t_0) \cdots
+			N_{i_{l-1},p_{l-1}}(t_{l-1})
+			N_{i_{l+1},p_{l+1}}(t_{l+1}) \cdots
+			N_{i_{m-1},p_{m-1}}(t_{m-1})
+			\left(
+				\sum_{i_l}
+					N_{i_l,p_l} \bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+			\right)
+\end{align}
+のように書けることから、
+\begin{align}
+	\bm{C}_{i_0,\cdots,i_{l-1},i_{l+1},i_{m-1}}
+&=
+	\sum_{i_l} N_{i_l,p_l} \bm{P}_{i_0,i_1,\cdots,i_{m-1}}
+\end{align}
+で各\(i_1,\cdots,i_{l-1},i_{l+1},\cdots,i_{m-1}\)に対して
+1変数の時と同様の処理をすればよいことが分かる。
+
+<p>
+これを一般化すると、次のようなアルゴリズムが得られる。
+
+
+
+
+
+</body>
+</html>
